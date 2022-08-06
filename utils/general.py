@@ -825,6 +825,53 @@ def print_mutation(results, hyp, save_dir, bucket, prefix=colorstr('evolve: ')):
         os.system(f'gsutil cp {evolve_csv} {evolve_yaml} gs://{bucket}')  # upload
 
 
+# update
+def box_iou_v5(box1, box2, x1y1x2y2=True):
+    # https://github.com/pytorch/vision/blob/master/torchvision/ops/boxes.py
+    """
+    Return intersection-over-union (Jaccard index) of boxes.
+    Both sets of boxes are expected to be in (x1, y1, x2, y2) format.
+    Arguments:
+        box1 (Tensor[N, 4])
+        box2 (Tensor[M, 4])
+    Returns:
+        iou (Tensor[N, M]): the NxM matrix containing the pairwise
+            IoU values for every element in boxes1 and boxes2
+    """
+
+    def box_area(box, x1y1x2y2=True):
+        # box = 4xn
+        if x1y1x2y2:
+            return (box[2] - box[0]) * (box[3] - box[1])
+        else:
+            b_x1, b_x2 = box[0] - box[2] / 2, box[0] + box[2] / 2
+            b_y1, b_y2 = box[1] - box[3] / 2, box[1] + box[3] / 2
+            return (b_x2 - b_x1) * (b_y2 - b_y1)
+    area1 = box_area(box1.T, x1y1x2y2)
+    area2 = box_area(box2.T, x1y1x2y2)
+
+    # inter(N,M) = (rb(N,M,2) - lt(N,M,2)).clamp(0).prod(2)
+    inter = (torch.min(box1[:, None, 2:], box2[:, 2:]) - torch.max(box1[:, None, :2], box2[:, :2])).clamp(0).prod(2)
+    return inter / (area1[:, None] + area2 - inter)  # iou = inter / (area1 + area2 - inter)
+
+def Wasserstein(box1, box2, x1y1x2y2=True):
+    box2 = box2.T
+    if x1y1x2y2:
+        b1_cx, b1_cy = (box1[0] + box1[2]) / 2, (box1[1] + box1[3]) / 2
+        b1_w, b1_h = box1[2] - box1[0], box1[3] - box1[1]
+        b2_cx, b2_cy = (box2[0] + box2[0]) / 2, (box2[1] + box2[3]) / 2
+        b1_w, b1_h = box2[2] - box2[0], box2[3] - box2[1]
+    else:
+        b1_cx, b1_cy, b1_w, b1_h = box1[0], box1[1], box1[2], box1[3]
+        b2_cx, b2_cy, b2_w, b2_h = box2[0], box2[1], box2[2], box2[3]
+    cx_L2Norm = torch.pow((b1_cx - b2_cx), 2)
+    cy_L2Norm = torch.pow((b1_cy - b2_cy), 2)
+    p1 = cx_L2Norm + cy_L2Norm
+    w_FroNorm = torch.pow((b1_w - b2_w)/2, 2)
+    h_FroNorm = torch.pow((b1_h - b2_h)/2, 2)
+    p2 = w_FroNorm + h_FroNorm
+    return p1 + p2
+
 def apply_classifier(x, model, img, im0):
     # Apply a second stage classifier to YOLO outputs
     # Example model = torchvision.models.__dict__['efficientnet_b0'](pretrained=True).to(device).eval()
