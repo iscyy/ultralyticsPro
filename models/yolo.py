@@ -274,9 +274,13 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
-        elif m is Contract:
+        elif m is Contract: # no
             c2 = ch[f] * args[0] ** 2
-        elif m is Expand:
+        elif m is MobileOne:
+            c1, c2 = ch[f], args[0]
+            c2 = make_divisible(c2 * gw, 8)
+            args = [c1, c2, n, *args[1:]]
+        elif m is Expand: # no
             c2 = ch[f] // args[0] ** 2
         else:
             c2 = ch[f]
