@@ -377,8 +377,9 @@ class ComputeNWDLoss:
         lrep = 0.01 * lrepGT / 3.0 + 0.1 * lrepBox / 3.0
         bs = tobj.shape[0]  # batch size, gpu
         
+        # no lrep, loss
         loss = lbox + lobj + lcls + lrep
-        return loss * bs, torch.cat((lbox, lobj, lcls, lrep, loss)).detach()
+        return loss * bs, torch.cat((lbox, lobj, lcls)).detach()
 
     def build_targets(self, p, targets):
         # Build targets for compute_loss(), input targets(image,class,x,y,w,h)
@@ -434,3 +435,4 @@ class ComputeNWDLoss:
             tcls.append(c)  # class
 
         return tcls, tbox, indices, anch
+
