@@ -10,6 +10,9 @@ import argparse
 import sys
 from copy import deepcopy
 from pathlib import Path
+from models.yolox import DetectX, DetectYoloX
+from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeXLoss
+
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # YOLOv5 root directory
@@ -103,9 +106,13 @@ class Model(nn.Module):
         self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
         self.names = [str(i) for i in range(self.yaml['nc'])]  # default names
         self.inplace = self.yaml.get('inplace', True)
+        self.loss_category = self.yaml.get('loss', None)
+        # if self.loss_category is not None:
+        #     self.loss_category = eval(self.loss_category) if isinstance(self.loss_category, str) else None  # eval strings
 
         # Build strides, anchors
         m = self.model[-1]  # Detect()
+        self.model_type = 'yolov5'
         if isinstance(m, Detect):
             s = 256  # 2x min stride
             m.inplace = self.inplace
@@ -114,6 +121,12 @@ class Model(nn.Module):
             check_anchor_order(m)
             self.stride = m.stride
             self._initialize_biases()  # only run once
+        elif isinstance(m, (DetectX, DetectYoloX)):
+            m.inplace = self.inplace
+            self.stride = torch.tensor(m.stride)
+            m.initialize_biases()  # only run once
+            self.model_type = 'yolox'
+            self.loss_category = ComputeXLoss # use ComputeXLoss
 
         # Init weights, biases
         initialize_weights(self)
@@ -181,7 +194,8 @@ class Model(nn.Module):
         return y
 
     def _profile_one_layer(self, m, x, dt):
-        c = isinstance(m, Detect)  # is final layer, copy input as inplace fix
+        # c = isinstance(m, Detect)  # update is final layer, copy input as inplace fix
+        c = isinstance(m, (Detect, DetectX, DetectYoloX))  # copy input as inplace fix
         o = thop.profile(m, inputs=(x.copy() if c else x,), verbose=False)[0] / 1E9 * 2 if thop else 0  # FLOPs
         t = time_sync()
         for _ in range(10):
@@ -274,6 +288,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
+        elif m in {DetectX, DetectYoloX}:
+            args.append([ch[x] for x in f])
         elif m is Contract: # no
             c2 = ch[f] * args[0] ** 2
         elif m is MobileOne:

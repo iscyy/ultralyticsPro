@@ -189,13 +189,30 @@ def run(data,
         t2 = time_sync()
         dt[0] += t2 - t1
 
-        # Inference
-        out, train_out = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
+        ''' YOLOv5_v6.1-origin version
+        # # Inference
+        # out, train_out = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
+        # dt[1] += time_sync() - t2
+
+        # # Loss
+        # if compute_loss:
+        #     loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+        ... update
+        NMS
+        '''
+        # reference:https://gitee.com/SearchSource/yolov5_yolox/blob/master/val.py
+        # ValueError: not enough values to unpack (expected 2, got 1)
+        outputs = model(im, augment=augment)  # inference and training outputs
+        # t1 += time_sync() - t
         dt[1] += time_sync() - t2
 
-        # Loss
-        if compute_loss:
-            loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+        if len(outputs) >= 2:
+            out, train_out = outputs[:2]
+            # Compute loss
+            if compute_loss:
+                loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+        else:
+            out = outputs[0]
 
         # NMS
         targets[:, 2:] *= torch.Tensor([width, height, width, height]).to(device)  # to pixels

@@ -1,4 +1,5 @@
 *.pyc
 *.DS_Store
 yolov5s.pt
-note.md
+log_model
+runs
