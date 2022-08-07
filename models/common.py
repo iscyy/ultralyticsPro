@@ -33,6 +33,10 @@ from models.Models.research import CARAFE, MP, SPPCSPC, RepConv, BoT3, \
 from models.Models.Litemodel import CBH, ES_Bottleneck, DWConvblock, ADD, RepVGGBlock, LC_Block, \
     Dense, conv_bn_relu_maxpool, Shuffle_Block, stem, MBConvBlock, mobilev3_bneck
 
+from models.Models.muitlbackbone import conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
+    ShuffleNetV2_InvertedResidual, Conv_maxpool, ConvNeXt, RepLKNet_Stem, RepLKNet_stage1, RepLKNet_stage2, \
+        RepLKNet_stage3, RepLKNet_stage4, CoT3
+
 def autopad(k, p=None):  # kernel, padding
     # Pad to 'same'
     if p is None:

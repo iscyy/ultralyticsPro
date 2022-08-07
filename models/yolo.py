@@ -368,19 +368,26 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
-            Shuffle_Block, stem, mobilev3_bneck]:
+            Shuffle_Block, stem, mobilev3_bneck, conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
+                ShuffleNetV2_InvertedResidual, Conv_maxpool, CoT3]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
-            if m in [C3]:
+            if m in [CoT3]:
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
+        elif m is ConvNeXt:
+            c2 = args[0]
+            args = args[1:]
+        elif m in [RepLKNet_Stem, RepLKNet_stage1, RepLKNet_stage2, RepLKNet_stage3, RepLKNet_stage4]:
+            c2 = args[0]
+            args = args[1:]
         elif m is ADD:
             c2 = sum([ch[x] for x in f])//2
         elif m is Concat_bifpn:
