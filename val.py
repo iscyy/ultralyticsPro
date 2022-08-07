@@ -189,30 +189,13 @@ def run(data,
         t2 = time_sync()
         dt[0] += t2 - t1
 
-        ''' YOLOv5_v6.1-origin version
-        # # Inference
-        # out, train_out = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
-        # dt[1] += time_sync() - t2
-
-        # # Loss
-        # if compute_loss:
-        #     loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
-        ... update
-        NMS
-        '''
-        # reference:https://gitee.com/SearchSource/yolov5_yolox/blob/master/val.py
-        # ValueError: not enough values to unpack (expected 2, got 1)
-        outputs = model(im, augment=augment)  # inference and training outputs
-        # t1 += time_sync() - t
+        # Inference
+        out, train_out = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
         dt[1] += time_sync() - t2
 
-        if len(outputs) >= 2:
-            out, train_out = outputs[:2]
-            # Compute loss
-            if compute_loss:
-                loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
-        else:
-            out = outputs[0]
+        # Loss
+        if compute_loss:
+            loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
 
         # NMS
         targets[:, 2:] *= torch.Tensor([width, height, width, height]).to(device)  # to pixels
@@ -337,7 +320,7 @@ def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='dataset.yaml path')
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov5s.pt', help='model.pt path(s)')
-    parser.add_argument('--batch-size', type=int, default=32, help='batch size')
+    parser.add_argument('--batch-size', type=int, default=2, help='batch size')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.001, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.6, help='NMS IoU threshold')
