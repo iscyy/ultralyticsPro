@@ -526,7 +526,7 @@ class ComputeXLoss:
         )
         return loss, torch.hstack((iou_loss, obj_loss, cls_loss)).detach()
 
-#YOLOv7
+# yolov7
 class ComputeLossOTA:
     # Compute losses
     def __init__(self, model, autobalance=False):
@@ -546,12 +546,9 @@ class ComputeLossOTA:
         if g > 0:
             BCEcls, BCEobj = FocalLoss(BCEcls, g), FocalLoss(BCEobj, g)
 
-        det = de_parallel(model).model[-1]  # Detect() module
+        det = model.module.model[-1] if is_parallel(model) else model.model[-1]  # Detect() module
         self.balance = {3: [4.0, 1.0, 0.4]}.get(det.nl, [4.0, 1.0, 0.25, 0.06, .02])  # P3-P7
         self.ssi = list(det.stride).index(16) if autobalance else 0  # stride 16 index
-        print('🚀')
-        print(model.gr)
-        print('🚀')
         self.BCEcls, self.BCEobj, self.gr, self.hyp, self.autobalance = BCEcls, BCEobj, model.gr, h, autobalance
         for k in 'na', 'nc', 'nl', 'anchors', 'stride':
             setattr(self, k, getattr(det, k))
@@ -580,7 +577,7 @@ class ComputeLossOTA:
                 pbox = torch.cat((pxy, pwh), 1)  # predicted box
                 selected_tbox = targets[i][:, 2:6] * pre_gen_gains[i]
                 selected_tbox[:, :2] -= grid
-                iou = bbox_iou(pbox, selected_tbox, CIoU=True)[0] # iou(prediction, target)
+                iou = bbox_iou(pbox.T, selected_tbox, x1y1x2y2=False, CIoU=True)  # iou(prediction, target)
                 lbox += (1.0 - iou).mean()  # iou loss
 
                 # Objectness
@@ -611,6 +608,7 @@ class ComputeLossOTA:
 
         loss = lbox + lobj + lcls
         return loss * bs, torch.cat((lbox, lobj, lcls)).detach()
+        # return loss * bs, torch.cat((lbox, lobj, lcls, loss)).detach()
 
     def build_targets(self, p, targets, imgs):
         
@@ -752,12 +750,20 @@ class ComputeLossOTA:
                 matching_anchs[i].append(all_anch[layer_idx])
 
         for i in range(nl):
-            matching_bs[i] = torch.cat(matching_bs[i], dim=0)
-            matching_as[i] = torch.cat(matching_as[i], dim=0)
-            matching_gjs[i] = torch.cat(matching_gjs[i], dim=0)
-            matching_gis[i] = torch.cat(matching_gis[i], dim=0)
-            matching_targets[i] = torch.cat(matching_targets[i], dim=0)
-            matching_anchs[i] = torch.cat(matching_anchs[i], dim=0)
+            if matching_targets[i] != []:
+                matching_bs[i] = torch.cat(matching_bs[i], dim=0)
+                matching_as[i] = torch.cat(matching_as[i], dim=0)
+                matching_gjs[i] = torch.cat(matching_gjs[i], dim=0)
+                matching_gis[i] = torch.cat(matching_gis[i], dim=0)
+                matching_targets[i] = torch.cat(matching_targets[i], dim=0)
+                matching_anchs[i] = torch.cat(matching_anchs[i], dim=0)
+            else:
+                matching_bs[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
+                matching_as[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
+                matching_gjs[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
+                matching_gis[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
+                matching_targets[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
+                matching_anchs[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
 
         return matching_bs, matching_as, matching_gjs, matching_gis, matching_targets, matching_anchs           
 
@@ -765,7 +771,7 @@ class ComputeLossOTA:
         # Build targets for compute_loss(), input targets(image,class,x,y,w,h)
         na, nt = self.na, targets.shape[0]  # number of anchors, targets
         indices, anch = [], []
-        gain = torch.ones(7, device=targets.device).long()   # normalized to gridspace gain
+        gain = torch.ones(7, device=targets.device).long()  # normalized to gridspace gain
         ai = torch.arange(na, device=targets.device).float().view(na, 1).repeat(1, nt)  # same as .repeat_interleave(nt)
         targets = torch.cat((targets.repeat(na, 1, 1), ai[:, :, None]), 2)  # append anchor indices
 
@@ -835,7 +841,7 @@ class ComputeLossBinOTA:
         if g > 0:
             BCEcls, BCEobj = FocalLoss(BCEcls, g), FocalLoss(BCEobj, g)
 
-        det = de_parallel(model).model[-1]  # Detect() module
+        det = model.module.model[-1] if is_parallel(model) else model.model[-1]  # Detect() module
         self.balance = {3: [4.0, 1.0, 0.4]}.get(det.nl, [4.0, 1.0, 0.25, 0.06, .02])  # P3-P7
         self.ssi = list(det.stride).index(16) if autobalance else 0  # stride 16 index
         self.BCEcls, self.BCEobj, self.gr, self.hyp, self.autobalance = BCEcls, BCEobj, model.gr, h, autobalance
@@ -893,8 +899,9 @@ class ComputeLossBinOTA:
                 pbox = torch.cat((px.unsqueeze(1), py.unsqueeze(1), pw.unsqueeze(1), ph.unsqueeze(1)), 1).to(device)  # predicted box
 
                 
-               
-                iou = bbox_iou(pbox, selected_tbox, CIoU=True)[0] # iou(prediction, target)
+                
+                
+                iou = bbox_iou(pbox.T, selected_tbox, x1y1x2y2=False, CIoU=True)  # iou(prediction, target)
                 lbox += (1.0 - iou).mean()  # iou loss
 
                 # Objectness
@@ -924,7 +931,7 @@ class ComputeLossBinOTA:
         bs = tobj.shape[0]  # batch size
 
         loss = lbox + lobj + lcls
-        return loss * bs, torch.cat((lbox, lobj, lcls)).detach()
+        return loss * bs, torch.cat((lbox, lobj, lcls, loss)).detach()
 
     def build_targets(self, p, targets, imgs):
         
@@ -1070,7 +1077,6 @@ class ComputeLossBinOTA:
                 matching_anchs[i].append(all_anch[layer_idx])
 
         for i in range(nl):
-            
             if matching_targets[i] != []:
                 matching_bs[i] = torch.cat(matching_bs[i], dim=0)
                 matching_as[i] = torch.cat(matching_as[i], dim=0)
@@ -1085,14 +1091,14 @@ class ComputeLossBinOTA:
                 matching_gis[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
                 matching_targets[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
                 matching_anchs[i] = torch.tensor([], device='cuda:0', dtype=torch.int64)
-                
+
         return matching_bs, matching_as, matching_gjs, matching_gis, matching_targets, matching_anchs       
 
     def find_3_positive(self, p, targets):
         # Build targets for compute_loss(), input targets(image,class,x,y,w,h)
         na, nt = self.na, targets.shape[0]  # number of anchors, targets
         indices, anch = [], []
-        gain = torch.ones(7, device=targets.device).long()   # normalized to gridspace gain
+        gain = torch.ones(7, device=targets.device).long()  # normalized to gridspace gain
         ai = torch.arange(na, device=targets.device).float().view(na, 1).repeat(1, nt)  # same as .repeat_interleave(nt)
         targets = torch.cat((targets.repeat(na, 1, 1), ai[:, :, None]), 2)  # append anchor indices
 
@@ -1140,7 +1146,7 @@ class ComputeLossBinOTA:
             anch.append(anchors[a])  # anchors
 
         return indices, anch
-        
+
 
 class ComputeLossAuxOTA:
     # Compute losses
@@ -1161,7 +1167,7 @@ class ComputeLossAuxOTA:
         if g > 0:
             BCEcls, BCEobj = FocalLoss(BCEcls, g), FocalLoss(BCEobj, g)
 
-        det = de_parallel(model).model[-1]  # Detect() module
+        det = model.module.model[-1] if is_parallel(model) else model.model[-1]  # Detect() module
         self.balance = {3: [4.0, 1.0, 0.4]}.get(det.nl, [4.0, 1.0, 0.25, 0.06, .02])  # P3-P7
         self.ssi = list(det.stride).index(16) if autobalance else 0  # stride 16 index
         self.BCEcls, self.BCEobj, self.gr, self.hyp, self.autobalance = BCEcls, BCEobj, model.gr, h, autobalance
@@ -1175,7 +1181,7 @@ class ComputeLossAuxOTA:
         bs, as_, gjs, gis, targets, anchors = self.build_targets(p[:self.nl], targets, imgs)
         pre_gen_gains_aux = [torch.tensor(pp.shape, device=device)[[3, 2, 3, 2]] for pp in p[:self.nl]] 
         pre_gen_gains = [torch.tensor(pp.shape, device=device)[[3, 2, 3, 2]] for pp in p[:self.nl]] 
-
+    
 
         # Losses
         for i in range(self.nl):  # layer index, layer predictions
@@ -1197,7 +1203,7 @@ class ComputeLossAuxOTA:
                 pbox = torch.cat((pxy, pwh), 1)  # predicted box
                 selected_tbox = targets[i][:, 2:6] * pre_gen_gains[i]
                 selected_tbox[:, :2] -= grid
-                iou = bbox_iou(pbox,selected_tbox, CIoU=True)[0] # iou(prediction, target)
+                iou = bbox_iou(pbox.T, selected_tbox, x1y1x2y2=False, CIoU=True)  # iou(prediction, target)
                 lbox += (1.0 - iou).mean()  # iou loss
 
                 # Objectness
@@ -1224,7 +1230,7 @@ class ComputeLossAuxOTA:
                 pbox_aux = torch.cat((pxy_aux, pwh_aux), 1)  # predicted box
                 selected_tbox_aux = targets_aux[i][:, 2:6] * pre_gen_gains_aux[i]
                 selected_tbox_aux[:, :2] -= grid_aux
-                iou_aux = bbox_iou(pbox_aux, selected_tbox_aux, CIoU=True)[0] # iou(prediction, target)
+                iou_aux = bbox_iou(pbox_aux.T, selected_tbox_aux, x1y1x2y2=False, CIoU=True)  # iou(prediction, target)
                 lbox += 0.25 * (1.0 - iou_aux).mean()  # iou loss
 
                 # Objectness
@@ -1251,8 +1257,7 @@ class ComputeLossAuxOTA:
         bs = tobj.shape[0]  # batch size
 
         loss = lbox + lobj + lcls
-        return (lbox + lobj + lcls) * bs, torch.cat((lbox, lobj, lcls)).detach()
-
+        return loss * bs, torch.cat((lbox, lobj, lcls)).detach()
 
     def build_targets(self, p, targets, imgs):
         

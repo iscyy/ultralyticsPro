@@ -76,7 +76,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     (w.parent if evolve else w).mkdir(parents=True, exist_ok=True)  # make dir
     last, best = w / 'last.pt', w / 'best.pt'
 
-    # compute_loss_ota=None
+    compute_loss_ota=None
     # Hyperparameters
     if isinstance(hyp, str):
         with open(hyp, errors='ignore') as f:
@@ -281,10 +281,12 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     scheduler.last_epoch = start_epoch - 1  # do not move
     scaler = amp.GradScaler(enabled=cuda)
     stopper = EarlyStopping(patience=opt.patience)
-    # if opt.auxotaloss:
-    #     compute_loss_ota = ComputeLossAuxOTA(model)  # init loss class 
-    # elif otaloss:
-    #     compute_loss_ota = ComputeLossOTA(model)
+    if opt.auxotaloss:
+        compute_loss_ota = ComputeLossAuxOTA(model)  # init loss class
+        compute_loss = ComputeLoss(model) 
+    elif opt.otaloss:
+        compute_loss_ota = ComputeLossOTA(model)
+        compute_loss = ComputeLoss(model)
     if loss_category is None:
         compute_loss = ComputeLoss(model)  # init loss class
     else:
@@ -313,10 +315,11 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
                 detect.use_l1 = True
             mloss = torch.zeros(3, device=device)  # mean losses
             LOGGER.info(('\n' + '%10s' * 7) % ('Epoch', 'gpu_mem', 'box', 'obj', 'cls', 'labels', 'img_size'))
+        # elif opt.auxotaloss:
+        #     mloss = torch.zeros(4, device=device)  # mean losses
         else:
             mloss = torch.zeros(3, device=device)  # mean losses
             LOGGER.info(('\n' + '%10s' * 7) % ('Epoch', 'gpu_mem', 'box', 'obj', 'cls', 'labels', 'img_size'))
-
         # Update image weights (optional, single-GPU only)
         if opt.image_weights:
             cw = model.class_weights.cpu().numpy() * (1 - maps) ** 2 / nc  # class weights
@@ -362,8 +365,11 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
             # Forward
             with amp.autocast(enabled=cuda):
                 pred = model(imgs)  # forward
+                if compute_loss_ota is not None:
+                    loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs)
                 # loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs) if (compute_loss_ota is not None )else compute_loss(pred, targets.to(device)) # loss scaled by batch_siz
-                loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
+                else:
+                    loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
                 if RANK != -1:
                     loss *= WORLD_SIZE  # gradient averaged between devices in DDP mode
                 if opt.quad:
@@ -493,7 +499,7 @@ def parse_opt(known=False):
     parser.add_argument('--cfg', type=str, default='', help='model.yaml path')
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='dataset.yaml path')
     parser.add_argument('--hyp', type=str, default=ROOT / 'data/hyps/hyp.scratch-low.yaml', help='hyperparameters path')
-    parser.add_argument('--epochs', type=int, default=2)
+    parser.add_argument('--epochs', type=int, default=1)
 
     parser.add_argument('--loss', type=str, default='origin', help='')
     parser.add_argument('--auxotaloss', action='store_true', help='swin not use half to train/Val')
