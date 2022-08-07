@@ -37,6 +37,9 @@ from models.Models.muitlbackbone import conv_bn_hswish, MobileNetV3_InvertedResi
     ShuffleNetV2_InvertedResidual, Conv_maxpool, ConvNeXt, RepLKNet_Stem, RepLKNet_stage1, RepLKNet_stage2, \
         RepLKNet_stage3, RepLKNet_stage4, CoT3
 
+from models.Models.yolov4 import SPPCSP, BottleneckCSP2
+
+
 def autopad(k, p=None):  # kernel, padding
     # Pad to 'same'
     if p is None:
