@@ -27,6 +27,8 @@ from utils.general import (LOGGER, check_requirements, check_suffix, check_versi
 from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import copy_attr, time_sync
 from models.Models.FaceV2 import MultiSEAM, C3RFEM, SEAM
+from models.Models.research import CARAFE, MP, SPPCSPC, RepConv, BoT3, \
+PatchEmbed, SwinTransformer_Layer, LayerNorm, GAM_Attention, CA, CBAM, Concat_bifpn, Involution
 
 
 def autopad(k, p=None):  # kernel, padding

@@ -11,6 +11,7 @@ import sys
 from copy import deepcopy
 from pathlib import Path
 from models.yolox import DetectX, DetectYoloX
+from models.Detect.MuitlHead import Decoupled_Detect, ASFF_Detect, IDetect, IAuxDetect
 from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeXLoss
 
 
@@ -121,13 +122,40 @@ class Model(nn.Module):
             check_anchor_order(m)
             self.stride = m.stride
             self._initialize_biases()  # only run once
-        elif isinstance(m, (DetectX, DetectYoloX)):
+        if isinstance(m, (DetectX, DetectYoloX)):
             m.inplace = self.inplace
             self.stride = torch.tensor(m.stride)
             m.initialize_biases()  # only run once
             self.model_type = 'yolox'
             self.loss_category = ComputeXLoss # use ComputeXLoss
-
+        if isinstance(m, Decoupled_Detect)or isinstance(m, ASFF_Detect) :
+            s = 256  # 2x min stride
+            m.inplace = self.inplace
+            m.stride = torch.tensor([s / x.shape[-2] for x in self.forward(torch.zeros(1, ch, s, s))])  # forward
+            m.anchors /= m.stride.view(-1, 1, 1)
+            check_anchor_order(m)
+            self.stride = m.stride
+            try :
+                self._initialize_biases()  # only run once    
+                LOGGER.info('initialize_biases done') 
+            except :
+                LOGGER.info('decoupled no biase ') 
+        if isinstance(m, IDetect):
+            s = 256  # 2x min stride
+            m.stride = torch.tensor([s / x.shape[-2] for x in self.forward(torch.zeros(1, ch, s, s))])  # forward
+            m.anchors /= m.stride.view(-1, 1, 1)
+            check_anchor_order(m)
+            self.stride = m.stride
+            self._initialize_biases()  # only run once
+        if isinstance(m, IAuxDetect):
+            s = 256  # 2x min stride
+            m.stride = torch.tensor([s / x.shape[-2] for x in self.forward(torch.zeros(1, ch, s, s))[:4]])  # forward
+            #print(m.stride)
+            m.anchors /= m.stride.view(-1, 1, 1)
+            check_anchor_order(m)
+            self.stride = m.stride
+            self._initialize_aux_biases()  # only run once
+            # print('Strides: %s' % m.stride.tolist())
         # Init weights, biases
         initialize_weights(self)
         self.info()
@@ -195,7 +223,7 @@ class Model(nn.Module):
 
     def _profile_one_layer(self, m, x, dt):
         # c = isinstance(m, Detect)  # update is final layer, copy input as inplace fix
-        c = isinstance(m, (Detect, DetectX, DetectYoloX))  # copy input as inplace fix
+        c = isinstance(m, (Detect, DetectX, DetectYoloX)) or isinstance(m, ASFF_Detect)or isinstance(m, Decoupled_Detect)  # copy input as inplace fix
         o = thop.profile(m, inputs=(x.copy() if c else x,), verbose=False)[0] / 1E9 * 2 if thop else 0  # FLOPs
         t = time_sync()
         for _ in range(10):
@@ -216,6 +244,20 @@ class Model(nn.Module):
             b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
             b.data[:, 5:] += math.log(0.6 / (m.nc - 0.999999)) if cf is None else torch.log(cf / cf.sum())  # cls
             mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
+    
+    def _initialize_aux_biases(self, cf=None):  # initialize biases into Detect(), cf is class frequency
+        # https://arxiv.org/abs/1708.02002 section 3.3
+        # cf = torch.bincount(torch.tensor(np.concatenate(dataset.labels, 0)[:, 0]).long(), minlength=nc) + 1.
+        m = self.model[-1]  # Detect() module
+        for mi, mi2, s in zip(m.m, m.m2, m.stride):  # from
+            b = mi.bias.view(m.na, -1)  # conv.bias(255) to (3,85)
+            b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
+            b.data[:, 5:] += math.log(0.6 / (m.nc - 0.99)) if cf is None else torch.log(cf / cf.sum())  # cls
+            mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
+            b2 = mi2.bias.view(m.na, -1)  # conv.bias(255) to (3,85)
+            b2.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
+            b2.data[:, 5:] += math.log(0.6 / (m.nc - 0.99)) if cf is None else torch.log(cf / cf.sum())  # cls
+            mi2.bias = torch.nn.Parameter(b2.view(-1), requires_grad=True)
 
     def _print_biases(self):
         m = self.model[-1]  # Detect() module
@@ -236,6 +278,12 @@ class Model(nn.Module):
                 m.conv = fuse_conv_and_bn(m.conv, m.bn)  # update conv
                 delattr(m, 'bn')  # remove batchnorm
                 m.forward = m.forward_fuse  # update forward
+            elif isinstance(m, RepConv):
+                #print(f" fuse_repvgg_block")
+                m.fuse_repvgg_block()
+            elif isinstance(m, (IDetect, IAuxDetect)): ##add fuse layers
+                m.fuse()
+                m.forward = m.fuseforward
         self.info()
         return self
 
@@ -246,7 +294,7 @@ class Model(nn.Module):
         # Apply to(), cpu(), cuda(), half() to model tensors that are not parameters or registered buffers
         self = super()._apply(fn)
         m = self.model[-1]  # Detect()
-        if isinstance(m, Detect):
+        if isinstance(m, Detect)or isinstance(m, ASFF_Detect) or isinstance(m, Decoupled_Detect) :
             m.stride = fn(m.stride)
             m.grid = list(map(fn, m.grid))
             if isinstance(m.anchor_grid, list):
@@ -280,14 +328,38 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             if m in [BottleneckCSP, C3, C3TR, C3Ghost, C3RFEM]:
                 args.insert(2, n)  # number of repeats
                 n = 1
+        # add module
+        elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution]:
+            c1, c2 = ch[f], args[0]
+            if c2 != no:  # if not output
+                c2 = make_divisible(c2 * gw, 8)
+
+            args = [c1, c2, *args[1:]]
+            if m in [C3RFEM, SPPCSPC, BoT3]:
+                args.insert(2, n)  # number of repeats
+                n = 1
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
+        elif m is Concat_bifpn:
+            c2 = max([ch[x] for x in f])
         elif m is Detect:
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
+        elif m is ASFF_Detect :
+            args.append([ch[x] for x in f])
+            if isinstance(args[1], int):  # number of anchors
+                args[1] = [list(range(args[1] * 2))] * len(f)
+        elif m is Decoupled_Detect :
+            args.append([ch[x] for x in f])
+            if isinstance(args[1], int):  # number of anchors
+                args[1] = [list(range(args[1] * 2))] * len(f)
+        elif m in [IDetect, IAuxDetect]:    
+            args.append([ch[x] for x in f])
+            if isinstance(args[1], int):  # number of anchors
+                args[1] = [list(range(args[1] * 2))] * len(f) 
         elif m in {DetectX, DetectYoloX}:
             args.append([ch[x] for x in f])
         elif m is Contract: # no
