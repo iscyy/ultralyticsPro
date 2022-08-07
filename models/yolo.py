@@ -284,6 +284,35 @@ class Model(nn.Module):
             elif isinstance(m, (IDetect, IAuxDetect)): ##add fuse layers
                 m.fuse()
                 m.forward = m.fuseforward
+            if type(m) is RepVGGBlock:
+                if hasattr(m, 'rbr_1x1'):
+                    # print(m)
+                    kernel, bias = m.get_equivalent_kernel_bias()
+                    rbr_reparam = nn.Conv2d(in_channels=m.rbr_dense.conv.in_channels,
+                                            out_channels=m.rbr_dense.conv.out_channels,
+                                            kernel_size=m.rbr_dense.conv.kernel_size,
+                                            stride=m.rbr_dense.conv.stride,
+                                            padding=m.rbr_dense.conv.padding, dilation=m.rbr_dense.conv.dilation,
+                                            groups=m.rbr_dense.conv.groups, bias=True)
+                    rbr_reparam.weight.data = kernel
+                    rbr_reparam.bias.data = bias
+                    for para in self.parameters():
+                        para.detach_()
+                    m.rbr_dense = rbr_reparam
+                    # m.__delattr__('rbr_dense')
+                    m.__delattr__('rbr_1x1')
+                    if hasattr(self, 'rbr_identity'):
+                        m.__delattr__('rbr_identity')
+                    if hasattr(self, 'id_tensor'):
+                        m.__delattr__('id_tensor')
+                    m.deploy = True
+                    delattr(m, 'se')
+                    m.forward = m.fusevggforward  # update forward
+            if type(m) is CBH and hasattr(m, 'bn'):
+                m.conv = fuse_conv_and_bn(m.conv, m.bn)  # update conv
+                delattr(m, 'bn')  # remove batchnorm
+                m.forward = m.fuseforward  # update forward
+
         self.info()
         return self
 
@@ -338,10 +367,22 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             if m in [C3RFEM, SPPCSPC, BoT3]:
                 args.insert(2, n)  # number of repeats
                 n = 1
+        elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
+            Shuffle_Block, stem, mobilev3_bneck]:
+            c1, c2 = ch[f], args[0]
+            if c2 != no:  # if not output
+                c2 = make_divisible(c2 * gw, 8)
+
+            args = [c1, c2, *args[1:]]
+            if m in [C3]:
+                args.insert(2, n)  # number of repeats
+                n = 1
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
+        elif m is ADD:
+            c2 = sum([ch[x] for x in f])//2
         elif m is Concat_bifpn:
             c2 = max([ch[x] for x in f])
         elif m is Detect:
