@@ -190,12 +190,20 @@ def run(data,
         dt[0] += t2 - t1
 
         # Inference
-        out, train_out = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
+        outputs = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
         dt[1] += time_sync() - t2
 
+        if len(outputs) >= 2:
+            out, train_out = outputs[:2]
+            # Compute loss
+            if compute_loss:
+                loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+        else:
+            out = outputs[0]
+
         # Loss
-        if compute_loss:
-            loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+        # if compute_loss:
+        #     loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
 
         # NMS
         targets[:, 2:] *= torch.Tensor([width, height, width, height]).to(device)  # to pixels
