@@ -357,14 +357,15 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             if m in [BottleneckCSP, C3, C3TR, C3Ghost, C3RFEM]:
                 args.insert(2, n)  # number of repeats
                 n = 1
-        # add module
-        elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution]:
+        # add module research
+        elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, \
+            ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
-            if m in [C3RFEM, SPPCSPC, BoT3]:
+            if m in [C3RFEM, SPPCSPC, BoT3, ResCSPC, ResCSPB, ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC]:
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
@@ -378,16 +379,18 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             if m in [CoT3]:
                 args.insert(2, n)  # number of repeats
                 n = 1
-        # yolo
-        elif m in [SPPCSP, BottleneckCSP2]:
+        # yolov4, r
+        elif m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
-            if m in [SPPCSP, BottleneckCSP2]:
+            if m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF]:
                 args.insert(2, n)  # number of repeats
                 n = 1
+        elif m in [ReOrg, DWT]: 
+            c2 = ch[f] * 4
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
