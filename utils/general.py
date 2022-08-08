@@ -829,7 +829,8 @@ def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=Non
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
-        i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS
+        i = NMS(boxes, scores, iou_thres)  # NMS
+        # i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS
         if i.shape[0] > max_det:  # limit detections
             i = i[:max_det]
         if merge and (1 < n < 3E3):  # Merge NMS (boxes merged using weighted mean)
@@ -847,6 +848,17 @@ def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=Non
 
     return output
 
+def NMS(boxes, scores, iou_thres, GIoU=False, DIoU=False, CIoU=True,  EIoU=False, SIoU=False):
+    B = torch.argsort(scores, dim=-1, descending=True)
+    keep = []
+    while B.numel() > 0:
+        index = B[0]
+        keep.append(index)
+        if B.numel() == 1: break
+        iou = bbox_iou(boxes[index, :], boxes[B[1:], :], GIoU=GIoU, DIoU=DIoU, CIoU=CIoU, EIoU=EIoU, SIoU=SIoU)
+        inds = torch.nonzero(iou <= iou_thres).reshape(-1)
+        B = B[inds + 1]
+    return torch.tensor(keep)
 
 def strip_optimizer(f='best.pt', s=''):  # from utils.general import *; strip_optimizer()
     # Strip optimizer from 'f' to finalize training, optionally save as 's'
