@@ -1084,3 +1084,71 @@ class CoT(nn.Module):
         k2=k2.view(bs,c,h,w)
         
         return k1+k2
+
+from torchvision import models
+
+# https://github.com/rglkt/yolov5-with-more-backbone/blob/master/models/common.py
+class RegNet1(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.regnet_y_400mf()
+        modules = list(model.children())
+        self.model = nn.Sequential(modules[0], *modules[1][:2])
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class RegNet2(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.regnet_y_400mf()
+        modules = list(model.children())
+        modules = modules[1][2]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class RegNet3(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.regnet_y_400mf()
+        modules = list(model.children())
+        modules = modules[1][3]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+class Efficient1(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.efficientnet_b0()
+        modules = list(model.children())
+        modules = modules[0][:4]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)
+    
+class Efficient2(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.efficientnet_b0()
+        modules = list(model.children())
+        modules = modules[0][4:6]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)
+    
+class Efficient3(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.efficientnet_b0()
+        modules = list(model.children())
+        modules = modules[0][6:]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)
+    
