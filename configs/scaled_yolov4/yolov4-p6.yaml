@@ -1,0 +1,65 @@
+# parameters
+nc: 80  # number of classes
+depth_multiple: 1.0  # expand model depth
+width_multiple: 1.0  # expand layer channels
+
+# anchors
+anchors:
+  - [13,17,  31,25,  24,51, 61,45]  # P3/8
+  - [61,45,  48,102,  119,96, 97,189]  # P4/16
+  - [97,189,  217,184,  171,384, 324,451]  # P5/32
+  - [324,451, 545,357, 616,618, 1024,1024]  # P6/64
+
+# csp-p6 backbone
+backbone:
+  # [from, number, module, args]
+  [[-1, 1, Conv, [32, 3, 1]],  # 0
+   [-1, 1, Conv, [64, 3, 2]],  # 1-P1/2
+   [-1, 1, BottleneckCSP, [64]],
+   [-1, 1, Conv, [128, 3, 2]],  # 3-P2/4
+   [-1, 3, BottleneckCSP, [128]],
+   [-1, 1, Conv, [256, 3, 2]],  # 5-P3/8
+   [-1, 15, BottleneckCSP, [256]],
+   [-1, 1, Conv, [512, 3, 2]],  # 7-P4/16
+   [-1, 15, BottleneckCSP, [512]],
+   [-1, 1, Conv, [1024, 3, 2]], # 9-P5/32
+   [-1, 7, BottleneckCSP, [1024]],
+   [-1, 1, Conv, [1024, 3, 2]], # 11-P6/64
+   [-1, 7, BottleneckCSP, [1024]],  # 12
+  ]
+
+# yolov4-p6 head
+# na = len(anchors[0])
+head:
+  [[-1, 1, SPPCSP, [512]], # 13
+   [-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [-6, 1, Conv, [512, 1, 1]], # route backbone P5
+   [[-1, -2], 1, Concat, [1]],
+   [-1, 3, BottleneckCSP2, [512]], # 18 
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [-13, 1, Conv, [256, 1, 1]], # route backbone P4
+   [[-1, -2], 1, Concat, [1]],
+   [-1, 3, BottleneckCSP2, [256]], # 23
+   [-1, 1, Conv, [128, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [-20, 1, Conv, [128, 1, 1]], # route backbone P3
+   [[-1, -2], 1, Concat, [1]],
+   [-1, 3, BottleneckCSP2, [128]], # 28
+   [-1, 1, Conv, [256, 3, 1]],
+   [-2, 1, Conv, [256, 3, 2]],
+   [[-1, 23], 1, Concat, [1]],  # cat
+   [-1, 3, BottleneckCSP2, [256]], # 32
+   [-1, 1, Conv, [512, 3, 1]],
+   [-2, 1, Conv, [512, 3, 2]],
+   [[-1, 18], 1, Concat, [1]],  # cat
+   [-1, 3, BottleneckCSP2, [512]], # 36
+   [-1, 1, Conv, [1024, 3, 1]],
+   [-2, 1, Conv, [512, 3, 2]],
+   [[-1, 13], 1, Concat, [1]],  # cat
+   [-1, 3, BottleneckCSP2, [512]], # 40
+   [-1, 1, Conv, [1024, 3, 1]],
+
+   [[29,33,37,41], 1, Detect, [nc, anchors]],   # Detect(P3, P4, P5, P6)
+  ]
