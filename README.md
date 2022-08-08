@@ -55,11 +55,21 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀支持更多Backbone
 
-- Backbone包含CSPDarkNet、ConvNext、RepBlock系列，ResNet系列、Transformer系列、以及轻量化网络ShuffleNet系列、Ghost系列、MobileNet系列等网络结构。
+- `CSPDarkNet系列`、(多种)
+`ResNet系列`、(多种)
+`ShuffleNet系列`、(多种)
+`Ghost系列`、(多种)
+`MobileNet系列`、(多种)
+`ConvNext系列`、
+`RepLKNet系列`、
+`RepBlock系列`、(多种)
+`自注意力Transformer系列`、(多种)
+持续更新中🎈
 
 🚀支持更多Neck
 
 - neck包含FPN、PANet、BiFPN等主流结构。
+ 持续更新中🎈
 
 🚀支持更多检测头Head  
 -  YOLOv4、YOLOv5 Head检测头、
@@ -74,18 +84,18 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀支持更多IoU损失函数
 - CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数；  
-[详情](https://github.com/iscyy/yoloair/blob/main/docs/document/iou_nms.md)
+[详情](https://blog.csdn.net/qq_38668236?type=blog)
 
 🚀支持更多NMS  
-- NMS、Merge-NMS、DIoU-NMS、Soft-NMS等;  
-[详情](https://github.com/iscyy/yoloair/blob/main/docs/document/iou_nms.md)
+- NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS等;  
+[详情](https://blog.csdn.net/qq_38668236?type=blog)
 
 🚀支持更多数据增强
 - Mosaic、Copy paste、Random affine(Rotation, Scale, Translation and Shear)、MixUp、Augment HSV(Hue, Saturation, Value、Random horizontal flip
 
 🚀支持更多Loss
 - ComputeLoss、ComputeNWDLoss、ComputeXLoss、ComputeLossAuxOTA(v7)、ComputeLossOTA(v7)等
-[详情](https://github.com/iscyy/yoloair/blob/main/docs/document/loss.md)
+[详情](https://blog.csdn.net/qq_38668236?type=blog)
 
 🚀支持加权框融合(WBF)
 
@@ -101,7 +111,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv6、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、PPYOLO、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件汇总
 
-[多种内置yaml网络模型配置(推荐🌟🌟🌟🌟🌟)](https://github.com/iscyy/yoloair/blob/main/docs/document/model_yaml.md)
+[多种内置yaml网络模型配置(推荐🌟🌟🌟🌟🌟)](https://blog.csdn.net/qq_38668236/article/details/126237396)
 
 🚀用户可自行改进网络
 
@@ -150,7 +160,43 @@ $ python wbf.py
 ### Benchmark
 Updating...
 
-### 教程✨
+### YOLO网络模型具体改进方式教程及原理
+
+- 1.[改进YOLOv5系列：1.YOLOv5_CBAM注意力机制修改(其他注意力机制同理)](https://blog.csdn.net/qq_38668236/article/details/126086716)
+
+- 2.[改进YOLOv5系列：2.PicoDet结构的修改🍀](https://blog.csdn.net/qq_38668236/article/details/126087343?spm=1001.2014.3001.5502)
+
+- 3.[改进YOLOv5系列：3.Swin Transformer结构的修改](https://blog.csdn.net/qq_38668236/article/details/126122888?spm=1001.2014.3001.5502)
+
+- 4.[改进YOLOv5系列：4.YOLOv5_最新MobileOne结构换Backbone修改🍀](https://blog.csdn.net/qq_38668236/article/details/126157859)
+
+- 5.[改进YOLOv5系列：5.CotNet Transformer结构的修改](https://blog.csdn.net/qq_38668236/article/details/126226726)
+
+- 1.[手把手带你调参Yolo v5 (v6.1)（一）](https://blog.csdn.net/weixin_43694096/article/details/124378167)🌟强烈推荐
+
+- 2.[手把手带你调参Yolo v5 (v6.1)（二）](https://blog.csdn.net/weixin_43694096/article/details/124411509?spm=1001.2014.3001.5502)🚀
+
+- 3.[如何快速使用自己的数据集训练Yolov5模型](https://blog.csdn.net/weixin_43694096/article/details/124457787)
+
+- 4.[手把手带你Yolov5 (v6.1)添加注意力机制(一)（并附上30多种顶会Attention原理图）](https://blog.csdn.net/weixin_43694096/article/details/124443059?spm=1001.2014.3001.5502)🌟
+
+- 5.[手把手带你Yolov5 (v6.1)添加注意力机制(二)（在C3模块中加入注意力机制）](https://blog.csdn.net/weixin_43694096/article/details/124695537)
+
+- 6.[Yolov5如何更换激活函数？](https://blog.csdn.net/weixin_43694096/article/details/124413941?spm=1001.2014.3001.5502)
+
+- 7.[Yolov5 (v6.1)数据增强方式解析](https://blog.csdn.net/weixin_43694096/article/details/124741952?spm=1001.2014.3001.5502)
+
+- 8.[Yolov5更换上采样方式( 最近邻 / 双线性 / 双立方 / 三线性 / 转置卷积)](https://blog.csdn.net/weixin_43694096/article/details/125416120)🍀
+
+- 9.[Yolov5如何更换EIOU / alpha IOU / SIoU？](https://blog.csdn.net/weixin_43694096/article/details/124902685)🍀
+
+- 10.[Yolov5更换主干网络之《旷视轻量化卷积神经网络ShuffleNetv2》](https://blog.csdn.net/weixin_43694096/article/details/126109839?spm=1001.2014.3001.5501)
+
+- 11.[YOLOv5应用轻量级通用上采样算子CARAFE](https://blog.csdn.net/weixin_43694096/article/details/126148795)
+
+更多模块详细解释持续更新中。。。
+
+### YOLOv5官方教程✨
 与YOLOv5框架同步
 
 - [训练自定义数据](https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data)  🚀 推荐
@@ -202,7 +248,7 @@ ______________________________________________________________________
 [https://github.com/Krasjet-Yu/YOLO-FaceV2](https://github.com/Krasjet-Yu/YOLO-FaceV2)  
 [https://github.com/positive666/yolov5_research/](https://github.com/positive666/yolov5_research)  
 [https://github.com/ppogg/YOLOv5-Lite](https://github.com/ppogg/YOLOv5-Lite)  
-[https://github.com/Gumpest/YOLOv5-Multibackbone-Compression](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression) 
+[https://github.com/Gumpest/YOLOv5-Multibackbone-Compression](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression)  
 [https://github.com/cv516Buaa/tph-yolov5](https://github.com/cv516Buaa/tph-yolov5)
 
 
