@@ -829,8 +829,8 @@ def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=Non
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
-        i = NMS(boxes, scores, iou_thres)  # NMS
-        # i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS
+        # i = NMS(boxes, scores, iou_thres, class_nms='SIoU')  # NMS
+        i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS
         if i.shape[0] > max_det:  # limit detections
             i = i[:max_det]
         if merge and (1 < n < 3E3):  # Merge NMS (boxes merged using weighted mean)
@@ -848,7 +848,19 @@ def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=Non
 
     return output
 
-def NMS(boxes, scores, iou_thres, GIoU=False, DIoU=False, CIoU=True,  EIoU=False, SIoU=False):
+def NMS(boxes, scores, iou_thres, class_nms='CIoU'):
+    # class_nms=class_nms
+    GIoU=CIoU=DIoU=EIoU=SIoU=False
+    if class_nms == 'CIoU':
+        CIoU=True
+    elif class_nms == 'DIoU':
+        DIoU=True
+    elif class_nms == 'GIoU':
+        GIoU=True
+    elif class_nms == 'EIoU':
+        EIoU=True
+    else :
+        SIoU=True
     B = torch.argsort(scores, dim=-1, descending=True)
     keep = []
     while B.numel() > 0:
