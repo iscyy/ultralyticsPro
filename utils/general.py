@@ -681,7 +681,6 @@ def soft_nms(prediction, conf_thres=0.25, iou_thres=0.45, multi_label=False):
     """
 
     nc = prediction.shape[2] - 5  # number of classes
-    # xc = prediction[..., 4] > conf_thres  # candidates
 
     # Checks
     assert 0 <= conf_thres <= 1, f'Invalid Confidence threshold {conf_thres}, valid values are between 0.0 and 1.0'
@@ -701,13 +700,10 @@ def soft_nms(prediction, conf_thres=0.25, iou_thres=0.45, multi_label=False):
         x = x[(x[:, 2:4] > min_wh).all(1) & (x[:, 2:4] < max_wh).all(1)]
         if len(x) == 0:
             continue
-
         # Compute conf
         x[:, 5:] *= x[:, 4:5]  # conf = obj_conf * cls_conf
-
         # Box (center x, center y, width, height) to (x1, y1, x2, y2)
         box = xywh2xyxy(x[:, :4])
-
         # Detections matrix nx6 (xyxy, conf, cls)
         if multi_label:
             i, j = (x[:, 5:] > conf_thres).nonzero(as_tuple=False).T
@@ -715,16 +711,12 @@ def soft_nms(prediction, conf_thres=0.25, iou_thres=0.45, multi_label=False):
         else:  # best class only
             conf, j = x[:, 5:].max(1)
             x = torch.cat((box, conf.unsqueeze(1), j.float().unsqueeze(1)), 1)[conf.view(-1) > conf_thres]
-
         if len(x) == 0:
             continue
-
         x = x[x[:, 4].argsort(descending=True)]  # sort by confidence
-
         # Batched NMS
         det_max = []
         cls = x[:, -1]   # classes
-
         for c in cls.unique():
             dc = x[cls == c]
             n = len(dc)
@@ -751,7 +743,6 @@ def soft_nms(prediction, conf_thres=0.25, iou_thres=0.45, multi_label=False):
         if (time.time() - t) > time_limit:
             print(f'WARNING: NMS time limit {time_limit}s exceeded')
             break  # time limit exceeded
-
     return output
 
 def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=None, agnostic=False, multi_label=False,
@@ -829,7 +820,7 @@ def non_max_suppression(prediction, conf_thres=0.25, iou_thres=0.45, classes=Non
         # Batched NMS
         c = x[:, 5:6] * (0 if agnostic else max_wh)  # classes
         boxes, scores = x[:, :4] + c, x[:, 4]  # boxes (offset by class), scores
-        # i = NMS(boxes, scores, iou_thres, class_nms='SIoU')  # NMS
+        # i = NMS(boxes, scores, iou_thres, class_nms='EIoU')  # NMS
         i = torchvision.ops.nms(boxes, scores, iou_thres)  # NMS
         if i.shape[0] > max_det:  # limit detections
             i = i[:max_det]
