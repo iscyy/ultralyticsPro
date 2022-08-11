@@ -74,7 +74,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 🚀支持更多检测头Head  
 -  YOLOv4、YOLOv5 Head检测头、
 -  YOLOvR 隐式学习Head检测头、
--  YOLOX的解耦合检测头Decoupled Head、
+-  YOLOX的解耦合检测头Decoupled Head、DetectX Head
 -  自适应空间特征融合 检测头ASFF Head、
 -  YOLOv7检测头IAuxDetect Head, IDetect Head等；
 
@@ -160,7 +160,7 @@ $ python wbf.py
 ### Benchmark
 Updating...
 
-### YOLO网络模型具体改进方式教程及原理
+### YOLO网络模型具体改进方式教程及原理参考
 
 - 1.[改进YOLOv5系列：1.YOLOv5_CBAM注意力机制修改(其他注意力机制同理)](https://blog.csdn.net/qq_38668236/article/details/126086716)
 
