@@ -776,7 +776,7 @@ class ACmix(nn.Module):
         h_out, w_out = h//self.stride, w//self.stride
 
 
-# ### att
+        # ### att
         # ## positional encoding
         pe = self.conv_p(position(h, w, x.is_cuda))
 
@@ -799,7 +799,7 @@ class ACmix(nn.Module):
         out_att = self.unfold(self.pad_att(v_att)).view(b*self.head, self.head_dim, self.kernel_att*self.kernel_att, h_out, w_out)
         out_att = (att.unsqueeze(1) * out_att).sum(2).view(b, self.out_planes, h_out, w_out)
 
-## conv
+        ## conv
         f_all = self.fc(torch.cat([q.view(b, self.head, self.head_dim, h*w), k.view(b, self.head, self.head_dim, h*w), v.view(b, self.head, self.head_dim, h*w)], 1))
         f_conv = f_all.permute(0, 2, 1, 3).reshape(x.shape[0], -1, x.shape[-2], x.shape[-1])
         
