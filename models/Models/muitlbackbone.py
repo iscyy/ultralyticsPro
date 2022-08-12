@@ -17,6 +17,7 @@ import torch.nn as nn
 from PIL import Image
 from torch.cuda import amp
 import torch.nn.functional as F
+from torchvision import models
 
 import torch.utils.checkpoint as checkpoint
 import sys
@@ -1085,7 +1086,7 @@ class CoT(nn.Module):
         
         return k1+k2
 
-from torchvision import models
+# from torchvision import models
 
 # https://github.com/rglkt/yolov5-with-more-backbone/blob/master/models/common.py
 class RegNet1(nn.Module):
@@ -1152,3 +1153,36 @@ class Efficient3(nn.Module):
     def forward(self, x):
         return self.model(x)
     
+class MobileNet1(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.mobilenet_v3_small(pretrained=True)
+        modules = list(model.children())
+        modules = modules[0][:4]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class MobileNet2(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.mobilenet_v3_small(pretrained=True)
+        modules = list(model.children())
+        modules = modules[0][4:9]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class MobileNet3(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.mobilenet_v3_small(pretrained=True)
+        modules = list(model.children())
+        modules = modules[0][9:]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)

@@ -445,6 +445,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = args[0]
         elif m is Efficient1 or m is Efficient2 or m is Efficient3:
             c2 = args[0]
+        elif m is MobileNet1 or m is MobileNet2 or m is MobileNet3:
+            c2 = args[0]
         elif m is Expand: # no
             c2 = ch[f] // args[0] ** 2
         else:
