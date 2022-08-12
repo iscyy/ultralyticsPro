@@ -23,7 +23,7 @@ import torch.utils.checkpoint as checkpoint
 import sys
 import os
 
-# from models.Models.swin import SwinTransformerLayer
+from models.Models.SwinTransformer import SwinTransformerLayer
 
 LOGGER = logging.getLogger(__name__)
 
