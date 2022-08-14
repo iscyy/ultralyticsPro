@@ -14,7 +14,7 @@ YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合�
 
 基于 YOLOv5 代码框架，并同步适配 **稳定的YOLOv5_v6.1更新**, 同步v6.1部署生态。使用这个项目之前, 您可以先了解YOLOv5库。  
 
-简体中文 | [English](./README_EN.md)
+简体中文 | [English]()
 
 [特性🚀](#Mainfeatures) • [使用🍉](#Usage) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new)
 
@@ -23,7 +23,6 @@ YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合�
 #### 支持
 ![](https://img.shields.io/badge/Support-YOLOv5-red) ![](https://img.shields.io/badge/Support-YOLOv7-brightgreen) ![](https://img.shields.io/badge/Support-YOLOX-yellow) ![](https://img.shields.io/badge/Support-YOLOv4-green) ![](https://img.shields.io/badge/Support-Scaled_YOLOv4-ff96b4)
 ![](https://img.shields.io/badge/Support-YOLOv3-yellowgreen) ![](https://img.shields.io/badge/Support-YOLOR-lightgrey) ![](https://img.shields.io/badge/Support-Transformer-9cf) ![](https://img.shields.io/badge/Support-Attention-green)
-
 
 项目地址: https://github.com/iscyy/yoloair
 
@@ -164,11 +163,11 @@ Updating...
 
 - 1.[改进YOLOv5系列：1.YOLOv5_CBAM注意力机制修改(其他注意力机制同理)](https://blog.csdn.net/qq_38668236/article/details/126086716)
 
-- 2.[改进YOLOv5系列：2.PicoDet结构的修改🍀](https://blog.csdn.net/qq_38668236/article/details/126087343?spm=1001.2014.3001.5502)
+- 2.[改进YOLOv5系列：2.PicoDet结构的修改](https://blog.csdn.net/qq_38668236/article/details/126087343?spm=1001.2014.3001.5502)
 
 - 3.[改进YOLOv5系列：3.Swin Transformer结构的修改](https://blog.csdn.net/qq_38668236/article/details/126122888?spm=1001.2014.3001.5502)
 
-- 4.[改进YOLOv5系列：4.YOLOv5_最新MobileOne结构换Backbone修改🍀](https://blog.csdn.net/qq_38668236/article/details/126157859)
+- 4.[改进YOLOv5系列：4.YOLOv5_最新MobileOne结构换Backbone修改](https://blog.csdn.net/qq_38668236/article/details/126157859)
 
 - 5.[改进YOLOv5系列：5.CotNet Transformer结构的修改](https://blog.csdn.net/qq_38668236/article/details/126226726)
 
@@ -176,29 +175,11 @@ Updating...
 
 - 7.[改进YOLOv5系列：7.修改DIoU-NMS,SIoU-NMS,EIoU-NMS,CIoU-NMS,GIoU-NMS](https://blog.csdn.net/qq_38668236/article/details/126243834)
 
-- 1.[手把手带你调参Yolo v5 (v6.1)（一）](https://blog.csdn.net/weixin_43694096/article/details/124378167)🌟强烈推荐
+- 8.[改进YOLOv5系列：8.增加ACmix结构的修改,自注意力和卷积集成](https://blog.csdn.net/qq_38668236/article/details/126302599)
 
-- 2.[手把手带你调参Yolo v5 (v6.1)（二）](https://blog.csdn.net/weixin_43694096/article/details/124411509?spm=1001.2014.3001.5502)🚀
+- 9.[改进YOLOv5系列：9.BoTNet Transformer结构的修改](https://blog.csdn.net/qq_38668236/article/details/126333061)
 
-- 3.[如何快速使用自己的数据集训练Yolov5模型](https://blog.csdn.net/weixin_43694096/article/details/124457787)
-
-- 4.[手把手带你Yolov5 (v6.1)添加注意力机制(一)（并附上30多种顶会Attention原理图）](https://blog.csdn.net/weixin_43694096/article/details/124443059?spm=1001.2014.3001.5502)🌟
-
-- 5.[手把手带你Yolov5 (v6.1)添加注意力机制(二)（在C3模块中加入注意力机制）](https://blog.csdn.net/weixin_43694096/article/details/124695537)
-
-- 6.[Yolov5如何更换激活函数？](https://blog.csdn.net/weixin_43694096/article/details/124413941?spm=1001.2014.3001.5502)
-
-- 7.[Yolov5 (v6.1)数据增强方式解析](https://blog.csdn.net/weixin_43694096/article/details/124741952?spm=1001.2014.3001.5502)
-
-- 8.[Yolov5更换上采样方式( 最近邻 / 双线性 / 双立方 / 三线性 / 转置卷积)](https://blog.csdn.net/weixin_43694096/article/details/125416120)🍀
-
-- 9.[Yolov5如何更换EIOU / alpha IOU / SIoU？](https://blog.csdn.net/weixin_43694096/article/details/124902685)🍀
-
-- 10.[Yolov5更换主干网络之《旷视轻量化卷积神经网络ShuffleNetv2》](https://blog.csdn.net/weixin_43694096/article/details/126109839?spm=1001.2014.3001.5501)
-
-- 11.[YOLOv5应用轻量级通用上采样算子CARAFE](https://blog.csdn.net/weixin_43694096/article/details/126148795)
-
-更多模块详细解释持续更新中。。。
+更多模块详细解释教程持续更新中。CSDN博客搜索🔍【芒果汁没有芒果】🥭
 
 ### YOLOv5官方教程✨
 与YOLOv5框架同步
