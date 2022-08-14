@@ -1051,6 +1051,7 @@ class DetectYoloX(nn.Module):
         return (
             loss,
             reg_weight * loss_iou,
+            loss_iou,
             loss_obj,
             loss_cls,
             loss_l1,

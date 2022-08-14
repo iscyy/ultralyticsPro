@@ -19,7 +19,7 @@ class Detectv6(nn.Module):
         else:
             self.na = anchors
         self.anchors = anchors
-        self.head_layers = build_effidehead_layer(channels_list, self.anchors, self.nc)
+        
         self.grid = [torch.zeros(1)] * num_layers
         self.prior_prob = 1e-2
         self.inplace = inplace
@@ -61,7 +61,6 @@ class Detectv6(nn.Module):
 
     def forward(self, x):
         z = []
-        features_size = [80, 40, 20]
         for i in range(self.nl):
             x[i] = self.stems[i](x[i])
             cls_x = x[i]
@@ -96,7 +95,7 @@ class Detectv6(nn.Module):
                     y = torch.cat((xy, wh, y[..., 4:]), -1)
                 z.append(y.view(bs, -1, self.no))
             
-        return x if self.training else (torch.cat(z, 1),)
+        return x if self.training else (torch.cat(z, 1))
 
 
 def build_effidehead_layer(channels_list, num_anchors, num_classes):
