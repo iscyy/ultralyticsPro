@@ -1,3 +1,4 @@
+# YOLOv5 🚀 by YOLOAir, GPL-3.0 license
 # parameters
 nc: 80  # number of classes
 depth_multiple: 1.0  # model depth multiple

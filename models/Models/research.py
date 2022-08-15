@@ -1367,6 +1367,7 @@ class CA(nn.Module):
 
         return out   
         
+# BoT
 class MHSA(nn.Module):
     def __init__(self, n_dims, width=14, height=14, heads=4,pos_emb=False):
         super(MHSA, self).__init__()
@@ -1460,10 +1461,7 @@ class GAM_Attention(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(int(c1 / rate), c1)
         )
-        
-        
         self.spatial_attention = nn.Sequential(
-            
             nn.Conv2d(c1, c1//rate, kernel_size=7, padding=3,groups=rate)if group else nn.Conv2d(c1, int(c1 / rate), kernel_size=7, padding=3), 
             nn.BatchNorm2d(int(c1 /rate)),
             nn.ReLU(inplace=True),
@@ -1472,7 +1470,6 @@ class GAM_Attention(nn.Module):
         )
 
     def forward(self, x):
-        
         b, c, h, w = x.shape
         x_permute = x.permute(0, 2, 3, 1).view(b, -1, c)
         x_att_permute = self.channel_attention(x_permute).view(b, h, w, c)

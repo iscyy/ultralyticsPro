@@ -281,7 +281,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     scheduler.last_epoch = start_epoch - 1  # do not move
     scaler = amp.GradScaler(enabled=cuda)
     stopper = EarlyStopping(patience=opt.patience)
-    if opt.auxotaloss:
+    if opt.auxotaloss: # https://github.com/iscyy/yoloair
         compute_loss_ota = ComputeLossAuxOTA(model)  # init loss class
         compute_loss = ComputeLoss(model) 
     elif opt.otaloss:

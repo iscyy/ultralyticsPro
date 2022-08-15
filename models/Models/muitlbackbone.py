@@ -397,6 +397,7 @@ class TransformerLayer(nn.Module):
 
 class TransformerBlock(nn.Module):
     # Vision Transformer https://arxiv.org/abs/2010.11929
+    # https://github.com/iscyy/yoloair
     def __init__(self, c1, c2, num_heads, num_layers):
         super().__init__()
         self.conv = None
@@ -538,6 +539,7 @@ class SPP(nn.Module):
 
 
 class SPPF(nn.Module):
+    # https://github.com/iscyy/yoloair
     # Spatial Pyramid Pooling - Fast (SPPF) layer for YOLOv5 by Glenn Jocher
     def __init__(self, c1, c2, k=5, e=0.5):  # equivalent to SPP(k=(5, 9, 13))
         super().__init__()
@@ -1033,7 +1035,7 @@ class CoT3(nn.Module):
         return self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), dim=1))
 
 class CoTBottleneck(nn.Module):
-    # Standard bottleneck
+    # Standard bottleneck https://github.com/iscyy/yoloair
     def __init__(self, c1, c2, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, shortcut, groups, expansion
         super(CoTBottleneck, self).__init__()
         c_ = int(c2 * e)  # hidden channels

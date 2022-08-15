@@ -95,7 +95,7 @@ class MobileOneBlock(nn.Module):
         x = id_out + x_conv_1x1 + sum(x_conv_3x3)
         x = self.nonlinearity(self.se(x))
 
-         # 1x1 conv
+         # 1x1 conv # https://github.com/iscyy/yoloair
         if self.pw_bn_layer is None:
             id_out = 0
         else:

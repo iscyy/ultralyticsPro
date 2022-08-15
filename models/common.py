@@ -35,11 +35,10 @@ from models.Models.Litemodel import CBH, ES_Bottleneck, DWConvblock, ADD, RepVGG
 from models.Models.muitlbackbone import conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
     ShuffleNetV2_InvertedResidual, Conv_maxpool, ConvNeXt, RepLKNet_Stem, RepLKNet_stage1, RepLKNet_stage2, \
         RepLKNet_stage3, RepLKNet_stage4, CoT3, RegNet1, RegNet2, RegNet3, Efficient1, Efficient2, Efficient3, \
-            MobileNet1,MobileNet2,MobileNet3
+            MobileNet1,MobileNet2,MobileNet3, C3STR
 from models.Models.yolov4 import SPPCSP, BottleneckCSP2
 from models.Models.yolov4 import RepVGGBlockv6, SimSPPF, SimConv, RepBlock
 from models.Models.yolor import ReOrg, DWT, DownC, BottleneckCSPF
-
 
 
 def autopad(k, p=None):  # kernel, padding
@@ -406,7 +405,7 @@ class DetectMultiBackend(nn.Module):
                 interpreter.allocate_tensors()  # allocate
                 input_details = interpreter.get_input_details()  # inputs
                 output_details = interpreter.get_output_details()  # outputs
-            elif tfjs:
+            elif tfjs: # https://github.com/iscyy/yoloair
                 raise Exception('ERROR: YOLOv5 TF.js inference is not supported')
         self.__dict__.update(locals())  # assign all variables to self
 
@@ -451,7 +450,7 @@ class DetectMultiBackend(nn.Module):
             im = im.permute(0, 2, 3, 1).cpu().numpy()  # torch BCHW to numpy BHWC shape(1,320,192,3)
             if self.saved_model:  # SavedModel
                 y = (self.model(im, training=False) if self.keras else self.model(im)[0]).numpy()
-            elif self.pb:  # GraphDef
+            elif self.pb:  # GraphDef# https://github.com/iscyy/yoloair
                 y = self.frozen_func(x=self.tf.constant(im)).numpy()
             else:  # Lite or Edge TPU
                 input, output = self.input_details[0], self.output_details[0]
@@ -510,7 +509,7 @@ class AutoShape(nn.Module):
 
     def _apply(self, fn):
         # Apply to(), cpu(), cuda(), half() to model tensors that are not parameters or registered buffers
-        self = super()._apply(fn)
+        self = super()._apply(fn)# https://github.com/iscyy/yoloair
         if self.pt:
             m = self.model.model.model[-1] if self.dmb else self.model.model[-1]  # Detect()
             m.stride = fn(m.stride)
@@ -612,7 +611,7 @@ class Detections:
         crops = []
         for i, (im, pred) in enumerate(zip(self.imgs, self.pred)):
             s = f'image {i + 1}/{len(self.pred)}: {im.shape[0]}x{im.shape[1]} '  # string
-            if pred.shape[0]:
+            if pred.shape[0]:# https://github.com/iscyy/yoloair
                 for c in pred[:, -1].unique():
                     n = (pred[:, -1] == c).sum()  # detections per class
                     s += f"{n} {self.names[int(c)]}{'s' * (n > 1)}, "  # add to string
@@ -777,7 +776,7 @@ class ACmix(nn.Module):
 
 
         # ### att
-        # ## positional encoding
+        # ## positional encoding https://github.com/iscyy/yoloair
         pe = self.conv_p(position(h, w, x.is_cuda))
 
         q_att = q.view(b*self.head, self.head_dim, h, w) * scaling
@@ -857,6 +856,7 @@ class ScaledDotProductAttention(nn.Module):
         :param attention_mask: Mask over attention values (b_s, h, nq, nk). True indicates masking.
         :param attention_weights: Multiplicative weights for attention values (b_s, h, nq, nk).
         :return:
+        # https://github.com/iscyy/yoloair
         '''
         b_s, nq = queries.shape[:2]
         nk = keys.shape[1]

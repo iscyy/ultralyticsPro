@@ -54,17 +54,12 @@ class Detectv6(nn.Module):
             b.data.fill_(-math.log((1 - self.prior_prob) / self.prior_prob))
             conv.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
 
-    # def _make_grid(self, ny, nx, d):
-    #     yv, xv = torch.meshgrid([torch.arange(ny).to(d), torch.arange(nx).to(d)])
-    #     grid = torch.stack((xv, yv), 2).view(1, self.na, ny * nx, 2).float()
-    #     return grid
-
     def forward(self, x):
         z = []
         for i in range(self.nl):
             x[i] = self.stems[i](x[i])
             cls_x = x[i]
-            reg_x = x[i]
+            reg_x = x[i] # https://github.com/iscyy/yoloair
             cls_feat = self.cls_convs[i](cls_x)
             cls_output = self.cls_preds[i](cls_feat)
             reg_feat = self.reg_convs[i](reg_x)
@@ -121,7 +116,7 @@ def build_effidehead_layer(channels_list, num_anchors, num_classes):
             kernel_size=3,
             stride=1
         ),
-        # cls_pred0
+        # cls_pred0 https://github.com/iscyy/yoloair
         nn.Conv2d(
             in_channels=channels_list[0],
             out_channels=num_classes * num_anchors,
