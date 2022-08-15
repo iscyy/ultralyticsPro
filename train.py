@@ -52,7 +52,7 @@ from utils.general import (LOGGER, check_dataset, check_file, check_git_status, 
                            print_args, print_mutation, strip_optimizer)
 from utils.loggers import Loggers
 from utils.loggers.wandb.wandb_utils import check_wandb_resume
-from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeLossOTA, ComputeLossAuxOTA, ComputeLossBinOTA, Computev6Loss
+from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeLossOTA, ComputeLossAuxOTA, ComputeLossBinOTA
 from utils.metrics import fitness
 from utils.plots import plot_evolve, plot_labels
 from utils.torch_utils import EarlyStopping, ModelEMA, de_parallel, is_parallel, select_device, torch_distributed_zero_first
@@ -293,8 +293,6 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
         compute_loss = loss_category(model)# loss class
     if opt.loss == 'nwd':
         compute_loss = ComputeNWDLoss(model)  #  nwdloss class
-    if opt.v6:
-        compute_loss = Computev6Loss()
     LOGGER.info(f'Image sizes {imgsz} train, {imgsz} val\n'
                 f'Using {train_loader.num_workers * WORLD_SIZE} dataloader workers\n'
                 f"Logging results to {colorstr('bold', save_dir)}\n"
