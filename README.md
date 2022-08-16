@@ -6,9 +6,7 @@ YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合�
     <img src='docs/image/logo1.png' width='500px'>
 </div>
 
-内置YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、Scaled_YOLOv4、YOLOv3、YOLOv4、YOLO-Facev2、TPH-YOLOv5、YOLOv5Lite、PicoDet等模型网络结构(更新中)...
-
-点🌟Star, 不迷路, 版本持续更新
+内置YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、Scaled_YOLOv4、YOLOv3、YOLOv4、YOLO-Facev2、TPH-YOLOv5、YOLOv5Lite、PicoDet等模型网络结构(持续更新中🚀)...
 
 **模块组件化**：帮助用户自定义快速组合Backbone、Neck、Head，使得网络模型多样化，助力科研改进检测算法、模型改进，网络排列组合🏆。构建强大的网络模型。
 
@@ -40,29 +38,18 @@ YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合�
 
 项目地址: https://github.com/iscyy/yoloair
 
-部分改进网络教程演示：[CSDN芒果汁没有芒果](https://blog.csdn.net/qq_38668236?type=blog)
+部分改进说明演示: [芒果汁没有芒果](https://blog.csdn.net/qq_38668236?type=blog)
 
 ### 主要特性🚀
 
 🚀支持更多的YOLO系列算法模型改进(持续更新...)
 
 YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集成多种模型: 
-- 内置集成 YOLOv5 模型网络结构
-- 内置集成 YOLOR 模型网络结构
-- 内置集成 YOLOX 模型网络结构
-- 内置集成 YOLOv7 模型网络结构
-- 内置集成 Scaled_YOLOv4 模型网络结构
-- 内置集成 YOLOv4 模型网络结构
-- 内置集成 YOLOv3 模型网络结构
-- 以及优秀的部分改进模型
-- YOLO-FaceV2模型网络结构
-- TPH-YOLOv5模型网络结构
-- YOLOv5-Lite模型网络结构
-- PicoDet模型网络结构
-更新中
-...
+- 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOR 模型网络结构、YOLOX 模型网络结构、Scaled_YOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
 
 以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
+
+🔥🔥🔥 重磅！！！作为注意力机制的开源项目补充，强烈推荐一个6300+🌟Star的注意力机制算法代码库👉[External-Attention-pytorch](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，里面汇总整理很全面，包含各种Attention、Self-Attention等代码，代码简洁易读，一行代码实现Attention机制。欢迎大家来玩呀！
 
 🚀支持加载YOLOv3、YOLOv4、YOLOv5、YOLOv7、YOLOR等网络的官方预训练权重进行迁移学习
 
@@ -92,23 +79,20 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 -  YOLOv7检测头IAuxDetect Head, IDetect Head等；
 
 🚀支持更多即插即用的注意力机制
-- 在网络任何部分即插即用式使用注意力机制，例如SE、CBAM、CA、GAM、ECA...等多种主流注意力机制  
-[详情](https://github.com/iscyy/yoloair/blob/main/docs/document/attention.md)
+- 在网络任何部分即插即用式使用注意力机制
+例如 Self Attention、Contextual Transformer、Bottleneck Transformer、S2-MLP Attention、SK Attention、CBAM Attention、SE Attention、Coordinate attention、NAM Attention、GAM attention、ECA Attention、Shuffle Attention、DANet Attention 等多种主流注意力机制
 
 🚀支持更多IoU损失函数
 - CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数；  
-[详情](https://blog.csdn.net/qq_38668236?type=blog)
 
 🚀支持更多NMS  
 - NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS等;  
-[详情](https://blog.csdn.net/qq_38668236?type=blog)
 
 🚀支持更多数据增强
 - Mosaic、Copy paste、Random affine(Rotation, Scale, Translation and Shear)、MixUp、Augment HSV(Hue, Saturation, Value、Random horizontal flip
 
 🚀支持更多Loss
 - ComputeLoss、ComputeNWDLoss、ComputeXLoss、ComputeLossAuxOTA(v7)、ComputeLossOTA(v7)等
-[详情](https://blog.csdn.net/qq_38668236?type=blog)
 
 🚀支持加权框融合(WBF)
 
@@ -122,13 +106,17 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 ### 内置网络模型配置支持✨
 
-🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv6、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、PPYOLO、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件汇总
-
-[多种内置yaml网络模型配置(推荐🌟🌟🌟🌟🌟)](https://blog.csdn.net/qq_38668236/article/details/126237396)
-
-🚀用户可自行改进网络
+🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv6、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件汇总(推荐🌟🌟🌟🌟🌟)
 
 YOLOv7官方仓库目前一直在更新
+
+### 技术交流 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
+
+- 最新科研论文 推荐FightingCV公众号，分享最新论文解析和科技前沿动态！
+<img src='docs/image/fightingcv.jpg'  width = "200" />
+
+- 欢迎加入FightingCV微信交流群（关注并回复小助手“加群”）
+公众号每天都会进行论文、算法和代码的干货分享哦~
 
 ## 使用🍉
 
@@ -192,8 +180,7 @@ Updating...
 - 2.[改进YOLOv5系列：2.PicoDet结构的修改](https://blog.csdn.net/qq_38668236/article/details/126087343?spm=1001.2014.3001.5502)
 
 - 1.[改进YOLOv5系列：1.YOLOv5_CBAM注意力机制修改(其他注意力机制同理)](https://blog.csdn.net/qq_38668236/article/details/126086716)
-
-更多模块详细解释教程持续更新中。CSDN博客搜索🔍【芒果汁没有芒果】🥭
+更多模块详细解释教程持续更新中...
 
 ### YOLOv5官方教程✨
 与YOLOv5框架同步
