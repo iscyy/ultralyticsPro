@@ -55,15 +55,18 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀支持更多Backbone
 
-- `CSPDarkNet系列`、(多种)
-`ResNet系列`、(多种)
-`ShuffleNet系列`、(多种)
-`Ghost系列`、(多种)
-`MobileNet系列`、(多种)
+- `CSPDarkNet系列`、
+`ResNet系列`、
+`RepBlock系列`、
+`ShuffleNet系列`、
+`Ghost系列`、
+`MobileNet系列`、
 `ConvNext系列`、
 `RepLKNet系列`、
-`RepBlock系列`、(多种)
-`自注意力Transformer系列`、(多种)
+`RegNet 系列`、
+`EfficientNet系列`、
+`自注意力Transformer系列`、
+`CNN 和 Transformer混合、：BoTNet、CoTNet、Acmix等`
 持续更新中🎈
 
 🚀支持更多Neck
@@ -73,7 +76,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀支持更多检测头Head  
 -  YOLOv4、YOLOv5 Head检测头、
--  YOLOvR 隐式学习Head检测头、
+-  YOLOR 隐式学习Head检测头、
 -  YOLOX的解耦合检测头Decoupled Head、DetectX Head
 -  自适应空间特征融合 检测头ASFF Head、
 -  YOLOv7检测头IAuxDetect Head, IDetect Head等；
@@ -86,13 +89,15 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 - CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数；  
 
 🚀支持更多NMS  
-- NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS等;  
+- NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS、Soft-SIoUNMS、Soft-CIoUNMS、Soft-DIoUNMS、Soft-EIoUNMS、Soft-GIoUNMS等;  
 
 🚀支持更多数据增强
 - Mosaic、Copy paste、Random affine(Rotation, Scale, Translation and Shear)、MixUp、Augment HSV(Hue, Saturation, Value、Random horizontal flip
 
 🚀支持更多Loss
-- ComputeLoss、ComputeNWDLoss、ComputeXLoss、ComputeLossAuxOTA(v7)、ComputeLossOTA(v7)等
+- ComputeLoss、ComputeNWDLoss、ComputeLoss(X)、ComputeLoss(v6)、ComputeLossAuxOTA(v7)、ComputeLossOTA(v7)等
+
+🚀支持Anchor-base和Anchor-Free
 
 🚀支持加权框融合(WBF)
 
