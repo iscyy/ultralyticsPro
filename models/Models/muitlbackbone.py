@@ -231,7 +231,7 @@ class Conv_maxpool(nn.Module):
     def forward(self, x):  
         return self.maxpool(self.conv(x))
 
-class ShuffleNetV2_InvertedResidual(nn.Module):
+class ShuffleNetV2_Model(nn.Module):
     def __init__(self, inp, oup, stride):  # ch_in, ch_out, stride
         super().__init__()
 
