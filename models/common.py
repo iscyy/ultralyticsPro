@@ -41,6 +41,9 @@ from models.Models.yolov4 import RepVGGBlockv6, SimSPPF, SimConv, RepBlock
 from models.Models.yolor import ReOrg, DWT, DownC, BottleneckCSPF
 from models.Models.Attention.ShuffleAttention import ShuffleAttention
 from models.Models.Attention.CrissCrossAttention import CrissCrossAttention
+from models.Models.Attention.SimAM import SimAM
+from models.Models.Attention.NAMAttention import NAMAttention
+
 
 
 
