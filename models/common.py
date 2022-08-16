@@ -39,6 +39,9 @@ from models.Models.muitlbackbone import conv_bn_hswish, MobileNetV3_InvertedResi
 from models.Models.yolov4 import SPPCSP, BottleneckCSP2
 from models.Models.yolov4 import RepVGGBlockv6, SimSPPF, SimConv, RepBlock
 from models.Models.yolor import ReOrg, DWT, DownC, BottleneckCSPF
+from models.Models.Attention.ShuffleAttention import ShuffleAttention
+from models.Models.Attention.CrissCrossAttention import CrissCrossAttention
+
 
 
 def autopad(k, p=None):  # kernel, padding
