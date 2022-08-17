@@ -14,7 +14,6 @@ from models.yolox import DetectX, DetectYoloX
 from models.Detect.MuitlHead import Decoupled_Detect, ASFF_Detect, IDetect, IAuxDetect
 from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeXLoss
 
-
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
@@ -127,19 +126,19 @@ class Model(nn.Module):
             self.stride = torch.tensor(m.stride)
             m.initialize_biases()  # only run once
             self.model_type = 'yolox'
-            self.loss_category = ComputeXLoss # use ComputeXLoss
-        if isinstance(m, Decoupled_Detect)or isinstance(m, ASFF_Detect) :
+            self.loss_category = ComputeXLoss  # use ComputeXLoss
+        if isinstance(m, Decoupled_Detect) or isinstance(m, ASFF_Detect):
             s = 256  # 2x min stride
             m.inplace = self.inplace
             m.stride = torch.tensor([s / x.shape[-2] for x in self.forward(torch.zeros(1, ch, s, s))])  # forward
             m.anchors /= m.stride.view(-1, 1, 1)
             check_anchor_order(m)
             self.stride = m.stride
-            try :
+            try:
                 self._initialize_biases()  # only run once    
-                LOGGER.info('initialize_biases done') 
-            except :
-                LOGGER.info('decoupled no biase ') 
+                LOGGER.info('initialize_biases done')
+            except:
+                LOGGER.info('decoupled no biase ')
         if isinstance(m, IDetect):
             s = 256  # 2x min stride
             m.stride = torch.tensor([s / x.shape[-2] for x in self.forward(torch.zeros(1, ch, s, s))])  # forward
@@ -150,7 +149,7 @@ class Model(nn.Module):
         if isinstance(m, IAuxDetect):
             s = 256  # 2x min stride
             m.stride = torch.tensor([s / x.shape[-2] for x in self.forward(torch.zeros(1, ch, s, s))[:4]])  # forward
-            #print(m.stride)
+            # print(m.stride)
             m.anchors /= m.stride.view(-1, 1, 1)
             check_anchor_order(m)
             self.stride = m.stride
@@ -223,7 +222,8 @@ class Model(nn.Module):
 
     def _profile_one_layer(self, m, x, dt):
         # c = isinstance(m, Detect)  # update is final layer, copy input as inplace fix
-        c = isinstance(m, (Detect, DetectX, DetectYoloX)) or isinstance(m, ASFF_Detect)or isinstance(m, Decoupled_Detect)  # copy input as inplace fix
+        c = isinstance(m, (Detect, DetectX, DetectYoloX)) or isinstance(m, ASFF_Detect) or isinstance(m,
+                                                                                                      Decoupled_Detect)  # copy input as inplace fix
         o = thop.profile(m, inputs=(x.copy() if c else x,), verbose=False)[0] / 1E9 * 2 if thop else 0  # FLOPs
         t = time_sync()
         for _ in range(10):
@@ -244,7 +244,7 @@ class Model(nn.Module):
             b.data[:, 4] += math.log(8 / (640 / s) ** 2)  # obj (8 objects per 640 image)
             b.data[:, 5:] += math.log(0.6 / (m.nc - 0.999999)) if cf is None else torch.log(cf / cf.sum())  # cls
             mi.bias = torch.nn.Parameter(b.view(-1), requires_grad=True)
-    
+
     def _initialize_aux_biases(self, cf=None):  # initialize biases into Detect(), cf is class frequency
         # https://arxiv.org/abs/1708.02002 section 3.3
         # cf = torch.bincount(torch.tensor(np.concatenate(dataset.labels, 0)[:, 0]).long(), minlength=nc) + 1.
@@ -279,9 +279,9 @@ class Model(nn.Module):
                 delattr(m, 'bn')  # remove batchnorm
                 m.forward = m.forward_fuse  # update forward
             elif isinstance(m, RepConv):
-                #print(f" fuse_repvgg_block")
+                # print(f" fuse_repvgg_block")
                 m.fuse_repvgg_block()
-            elif isinstance(m, (IDetect, IAuxDetect)): ##add fuse layers
+            elif isinstance(m, (IDetect, IAuxDetect)):  ##add fuse layers
                 m.fuse()
                 m.forward = m.fuseforward
             if type(m) is RepVGGBlock:
@@ -323,7 +323,7 @@ class Model(nn.Module):
         # Apply to(), cpu(), cuda(), half() to model tensors that are not parameters or registered buffers
         self = super()._apply(fn)
         m = self.model[-1]  # Detect()
-        if isinstance(m, Detect)or isinstance(m, ASFF_Detect) or isinstance(m, Decoupled_Detect) :
+        if isinstance(m, Detect) or isinstance(m, ASFF_Detect) or isinstance(m, Decoupled_Detect):
             m.stride = fn(m.stride)
             m.grid = list(map(fn, m.grid))
             if isinstance(m.anchor_grid, list):
@@ -359,7 +359,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 n = 1
         # add module research
         elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, \
-            ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC]:
+                   ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
+                   ASPP, BasicRFB, SPPCSPC_group]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -369,8 +370,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
-            Shuffle_Block, stem, mobilev3_bneck, conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
-                ShuffleNetV2_Model, Conv_maxpool, CoT3]:
+                   Shuffle_Block, stem, mobilev3_bneck, conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
+                   ShuffleNetV2_Model, Conv_maxpool, CoT3]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -389,7 +390,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             if m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF]:
                 args.insert(2, n)  # number of repeats
                 n = 1
-        elif m in [ReOrg, DWT]: 
+        elif m in [ReOrg, DWT]:
             c2 = ch[f] * 4
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
@@ -402,7 +403,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = args[0]
             args = args[1:]
         elif m is ADD:
-            c2 = sum([ch[x] for x in f])//2
+            c2 = sum([ch[x] for x in f]) // 2
         elif m is Concat_bifpn:
             c2 = max([ch[x] for x in f])
         elif m is RepBlock:
@@ -412,21 +413,21 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
-        elif m is ASFF_Detect :
+        elif m is ASFF_Detect:
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
-        elif m is Decoupled_Detect :
+        elif m is Decoupled_Detect:
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
-        elif m in [IDetect, IAuxDetect]:    
+        elif m in [IDetect, IAuxDetect]:
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
-                args[1] = [list(range(args[1] * 2))] * len(f) 
+                args[1] = [list(range(args[1] * 2))] * len(f)
         elif m in {DetectX, DetectYoloX}:
             args.append([ch[x] for x in f])
-        elif m is Contract: # no
+        elif m is Contract:  # no
             c2 = ch[f] * args[0] ** 2
         elif m is MobileOne:
             c1, c2 = ch[f], args[0]
@@ -439,7 +440,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = args[0]
         elif m is MobileNet1 or m is MobileNet2 or m is MobileNet3:
             c2 = args[0]
-        elif m is Expand: # no
+        elif m is Expand:  # no
             c2 = ch[f] // args[0] ** 2
         else:
             c2 = ch[f]
@@ -459,7 +460,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='yolov5s.yaml', help='model.yaml')
+    parser.add_argument('--cfg', type=str, default='yolov5s.yaml',
+                        help='model.yaml')
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--profile', action='store_true', help='profile model speed')
     parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')
