@@ -38,7 +38,6 @@ Based on the YOLOv5 code framework, and synchronously adapt to the **stable YOLO
 
 Project address: https://github.com/iscyy/yoloair
 
-Some improvements to the tutorial description: [CSDN](https://blog.csdn.net/qq_38668236?type=blog)
 
 ### Main features🚀
 
@@ -55,18 +54,18 @@ The above multiple detection algorithms use a unified model code framework, whic
 
 🚀 Support more Backbone
 
-- `CSPDarkNet series`、
-`ResNet series`、
-`RepBlock series`、
-`ShuffleNet series`、
-`Ghost series`、
-`MobileNet series`、
-`ConvNext series`、
-`RepLKNet series`、
-`RegNet series`、
-`EfficientNet series`、
-`Transformer series`、
-`CNN 和 Transformer、：BoTNet、CoTNet、Acmix等`
+- `CSPDarkNet series`
+`ResNet series`
+`RepBlock series`
+`ShuffleNet series`
+`Ghost series`
+`MobileNet series`
+`ConvNext series`
+`RepLKNet series`
+`RegNet series`
+`EfficientNet series`
+`Transformer series`
+`CNN and Transformer、：BoTNet、CoTNet、Acmix, etc.`
 Continuously updated 🎈
 
 🚀 Support more Necks
@@ -87,6 +86,9 @@ E.g Self Attention、Contextual Transformer、Bottleneck Transformer、S2-MLP At
 
 🚀Support for more IoU loss functions
 - Loss functions such as CIoU, DIoU, GIoU, EIoU, SIoU, alpha IOU;  
+
+🚀 More spatial pyramid pooling structures  
+- SPP / SPPF / ASPP / RFB / SPPCSPC, etc.;  
 
 🚀Support more NMS
 - NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS、Soft-SIoUNMS、Soft-CIoUNMS、Soft-DIoUNMS、Soft-EIoUNMS、Soft-GIoUNMS, etc.;  
@@ -163,7 +165,6 @@ Updating...
 
 ### YOLO network model specific improvement method tutorial and principle reference
 
-- [CSDN](https://blog.csdn.net/qq_38668236)
 More module improvement explanation tutorials are continuously updated...
 
 ### YOLOv5 official tutorial ✨
@@ -222,9 +223,6 @@ ______________________________________________________________________
 [https://github.com/ppogg/YOLOv5-Lite](https://github.com/ppogg/YOLOv5-Lite)  
 [https://github.com/Gumpest/YOLOv5-Multibackbone-Compression](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression)  
 [https://github.com/cv516Buaa/tph-yolov5](https://github.com/cv516Buaa/tph-yolov5)
-
-
-Paper:
-[https://arxiv.org/abs/2208.02019](https://arxiv.org/abs/2208.02019)  
+Paper:[https://arxiv.org/abs/2208.02019](https://arxiv.org/abs/2208.02019)  
 
 </details>
