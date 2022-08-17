@@ -38,7 +38,7 @@ YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合�
 
 项目地址: https://github.com/iscyy/yoloair
 
-部分改进说明演示: [芒果汁没有芒果](https://blog.csdn.net/qq_38668236?type=blog)
+部分改进说明演示: [芒果汁没有芒果](https://blog.csdn.net/qq_38668236?type=blog)______________________________________________________________________
 
 ### 主要特性🚀
 
@@ -86,7 +86,10 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 例如 Self Attention、Contextual Transformer、Bottleneck Transformer、S2-MLP Attention、SK Attention、CBAM Attention、SE Attention、Coordinate attention、NAM Attention、GAM attention、ECA Attention、Shuffle Attention、DANet Attention 等多种主流注意力机制
 
 🚀支持更多IoU损失函数
-- CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数；  
+- CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数;  
+
+🚀更多空间金字塔池化结构  
+- SPP / SPPF / ASPP / RFB / SPPCSPC等;  
 
 🚀支持更多NMS  
 - NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS、Soft-SIoUNMS、Soft-CIoUNMS、Soft-DIoUNMS、Soft-EIoUNMS、Soft-GIoUNMS等;  
@@ -115,6 +118,8 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 YOLOv7官方仓库目前一直在更新
 
+______________________________________________________________________
+
 ### 技术交流 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
 
 - 最新科研论文 推荐FightingCV公众号，分享最新论文解析和科技前沿动态！
@@ -122,6 +127,7 @@ YOLOv7官方仓库目前一直在更新
 
 - 欢迎加入FightingCV微信交流群（关注并回复小助手“加群”）
 公众号每天都会进行论文、算法和代码的干货分享哦~
+______________________________________________________________________
 
 ## 使用🍉
 
@@ -162,9 +168,11 @@ $ python detect.py --source 0  # 网络摄像头
 ```bash
 $ python wbf.py
 ```
+______________________________________________________________________
 
 ### Benchmark
 Updating...
+______________________________________________________________________
 
 ### YOLO网络模型具体改进方式教程及原理参考
 
@@ -184,8 +192,17 @@ Updating...
 
 - 2.[改进YOLOv5系列：2.PicoDet结构的修改](https://blog.csdn.net/qq_38668236/article/details/126087343?spm=1001.2014.3001.5502)
 
-- 1.[改进YOLOv5系列：1.YOLOv5_CBAM注意力机制修改(其他注意力机制同理)](https://blog.csdn.net/qq_38668236/article/details/126086716)
+- 1.[改进YOLOv5系列：1.多种注意力机制修改](https://blog.csdn.net/qq_38668236/article/details/126086716)
+
+- [1.空间金字塔池化改进 SPP / SPPF / ASPP / RFB / SPPCSPC](https://blog.csdn.net/weixin_43694096/article/details/126354660)
+
+- [2.Yolov5更换激活函数](https://blog.csdn.net/weixin_43694096/article/details/124413941)
+
+- [3.Yolov5更换上采样方式](https://blog.csdn.net/weixin_43694096/article/details/125416120)
+
 更多模块详细解释教程持续更新中...
+
+______________________________________________________________________
 
 ### YOLOv5官方教程✨
 与YOLOv5框架同步
@@ -241,9 +258,6 @@ ______________________________________________________________________
 [https://github.com/ppogg/YOLOv5-Lite](https://github.com/ppogg/YOLOv5-Lite)  
 [https://github.com/Gumpest/YOLOv5-Multibackbone-Compression](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression)  
 [https://github.com/cv516Buaa/tph-yolov5](https://github.com/cv516Buaa/tph-yolov5)
-
-
-Paper:
-[https://arxiv.org/abs/2208.02019](https://arxiv.org/abs/2208.02019)  
+Paper:[https://arxiv.org/abs/2208.02019](https://arxiv.org/abs/2208.02019)  
 
 </details>
