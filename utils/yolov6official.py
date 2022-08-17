@@ -12,7 +12,7 @@ import numpy as np
 import torch.nn.functional as F
 
 
-class Computev6Loss:
+class ComputeLoss_meituanv6:
     '''Loss computation func.
     This func contains SimOTA and siou loss.
     '''
@@ -41,7 +41,7 @@ class Computev6Loss:
         # Define criteria
         self.l1_loss = nn.L1Loss(reduction="none")
         self.bcewithlog_loss = nn.BCEWithLogitsLoss(reduction="none")
-        self.iou_loss = IOUv6loss(iou_type=iou_type, reduction="none")
+        self.iou_loss = IOUloss_meituanv6(iou_type=iou_type, reduction="none")
 
     def __call__(
         self,
@@ -411,7 +411,7 @@ class Computev6Loss:
 
         return num_fg, gt_matched_classes, pred_ious_this_matching, matched_gt_inds
 
-class IOUv6loss:
+class IOUloss_meituanv6:
     """ Calculate IoU loss.
     """
     def __init__(self, box_format='xywh', iou_type='ciou', reduction='none', eps=1e-7):

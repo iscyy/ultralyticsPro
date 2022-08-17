@@ -11,7 +11,6 @@ import sys
 from copy import deepcopy
 from pathlib import Path
 from models.yolox import DetectX, DetectYoloX
-from models.yolov6 import Detectv6
 from models.Detect.MuitlHead import Decoupled_Detect, ASFF_Detect, IDetect, IAuxDetect
 from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeXLoss
 
@@ -129,10 +128,6 @@ class Model(nn.Module):
             m.initialize_biases()  # only run once
             self.model_type = 'yolox'
             self.loss_category = ComputeXLoss # use ComputeXLoss
-        if isinstance(m, Detectv6):
-            m.inplace = self.inplace
-            self.stride = torch.tensor(m.stride)
-            m.initialize_biases()     # only run once
         if isinstance(m, Decoupled_Detect)or isinstance(m, ASFF_Detect) :
             s = 256  # 2x min stride
             m.inplace = self.inplace
@@ -431,9 +426,6 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 args[1] = [list(range(args[1] * 2))] * len(f) 
         elif m in {DetectX, DetectYoloX}:
             args.append([ch[x] for x in f])
-        elif m in [Detectv6]:
-            args.append([ch[x] for x in f])
-            args = args[:2]
         elif m is Contract: # no
             c2 = ch[f] * args[0] ** 2
         elif m is MobileOne:
