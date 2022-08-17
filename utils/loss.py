@@ -11,7 +11,6 @@ import numpy as np
 from utils.metrics import bbox_iou, box_iou, bbox_alpha_iou
 from utils.torch_utils import de_parallel, is_parallel
 from utils.general import xywh2xyxy
-from utils.yolov6official import Computev6Loss
 import torch.nn.functional as F
 
 def smooth_BCE(eps=0.1):  # https://github.com/ultralytics/yolov3/issues/238#issuecomment-598028441
