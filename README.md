@@ -49,7 +49,11 @@ ______________________________________________________________________
 YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集成多种模型: 
 - 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOR 模型网络结构、YOLOX 模型网络结构、Scaled_YOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
 
-以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
+|||
+:-------------------------:|:-------------------------:
+<img src='docs/image/test.jpg' width='500px'>  |  <img src='docs/image/zebra.jpg' width='500px'>
+
+- 以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
 
 🔥🔥🔥 重磅！！！作为注意力机制的开源项目补充，强烈推荐一个6300+🌟Star的注意力机制算法代码库👉[External-Attention-pytorch](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，里面汇总整理很全面，包含各种Attention、Self-Attention等代码，代码简洁易读，一行代码实现Attention机制。欢迎大家来玩呀！
 
@@ -57,23 +61,17 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀支持更多Backbone
 
-- `CSPDarkNet系列`、
-`ResNet系列`、
-`RepBlock系列`、
-`ShuffleNet系列`、
-`Ghost系列`、
-`MobileNet系列`、
-`ConvNext系列`、
-`RepLKNet系列`、
-`RegNet 系列`、
-`EfficientNet系列`、
-`自注意力Transformer系列`、
-`CNN 和 Transformer混合、：BoTNet、CoTNet、Acmix等`
+- `CSPDarkNet系列`、`RepBlock系列`、
+`ResNet系列`、`RegNet 系列`、
+`ShuffleNet系列`、`Ghost系列`、
+`MobileNet系列`、`EfficientNet系列`、
+`ConvNext系列`、`RepLKNet系列`、
+`自注意力Transformer系列`、`CNN和Transformer结合`
 持续更新中🎈
 
 🚀支持更多Neck
 
-- neck包含FPN、PANet、BiFPN等主流结构。
+- neck包含`FPN`、`PANet`、`BiFPN`等主流结构。
  持续更新中🎈
 
 🚀支持更多检测头Head  
@@ -91,7 +89,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 - CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数;  
 
 🚀更多空间金字塔池化结构  
-- SPP / SPPF / ASPP / RFB / SPPCSPC等;  
+- SPP、SPPF、ASPP、RFB、SPPCSPC等;  
 
 🚀支持更多NMS  
 - NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS、Soft-SIoUNMS、Soft-CIoUNMS、Soft-DIoUNMS、Soft-EIoUNMS、Soft-GIoUNMS等;  
@@ -107,8 +105,8 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 🚀支持加权框融合(WBF)
 
 🚀 内置多种网络模型模块化组件
-- Conv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, GhostConv, 等
-详细代码 **./models/common.py文件** 内搜索🔍👉[对应模块链接](https://github.com/iscyy/yoloair/blob/main/models/common.py)
+- Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv, BottleneckCSP, C3, C3TR, C3SPP, C3Ghost等
+详细代码 **./models/common.py文件** 内
 
 - 👉[网络模型结构图](https://github.com/iscyy/yoloair/blob/main/docs/document/model_.md) 
 
@@ -116,10 +114,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 ### 内置网络模型配置支持✨
 
-🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件汇总(推荐🌟🌟🌟🌟🌟)
-
-YOLOv7官方仓库目前一直在更新
-
+🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件
 ______________________________________________________________________
 
 ### 技术交流 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
