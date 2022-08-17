@@ -222,8 +222,7 @@ class Model(nn.Module):
 
     def _profile_one_layer(self, m, x, dt):
         # c = isinstance(m, Detect)  # update is final layer, copy input as inplace fix
-        c = isinstance(m, (Detect, DetectX, DetectYoloX)) or isinstance(m, ASFF_Detect) or isinstance(m,
-                                                                                                      Decoupled_Detect)  # copy input as inplace fix
+        c = isinstance(m, (Detect, DetectX, DetectYoloX)) or isinstance(m, ASFF_Detect) or isinstance(m, Decoupled_Detect)  # copy input as inplace fix
         o = thop.profile(m, inputs=(x.copy() if c else x,), verbose=False)[0] / 1E9 * 2 if thop else 0  # FLOPs
         t = time_sync()
         for _ in range(10):
@@ -460,8 +459,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='yolov5s.yaml',
-                        help='model.yaml')
+    parser.add_argument('--cfg', type=str, default='yolov5s.yaml', help='model.yaml')
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--profile', action='store_true', help='profile model speed')
     parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')

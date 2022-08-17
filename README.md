@@ -111,7 +111,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 ### 内置网络模型配置支持✨
 
-🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv6、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件汇总(推荐🌟🌟🌟🌟🌟)
+🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件汇总(推荐🌟🌟🌟🌟🌟)
 
 YOLOv7官方仓库目前一直在更新
 

@@ -111,7 +111,7 @@ The above component modules use a unified model code framework, unified task for
 
 ### Built-in network model configuration support ✨
 
-🚀Including yaml configuration of YOLOv3, YOLOv4, Scaled_YOLOv4, YOLOv5, YOLOv6, YOLOv7, YOLOX, YOLOR, Transformer, YOLO-FaceV2, PicoDet, YOLOv5-Lite, TPH-YOLOv5, ** other algorithm models such as improved network structure** File Summary (Recommended 🌟🌟🌟🌟🌟)
+🚀Including yaml configuration of YOLOv3, YOLOv4, Scaled_YOLOv4, YOLOv5, YOLOv7, YOLOX, YOLOR, Transformer, YOLO-FaceV2, PicoDet, YOLOv5-Lite, TPH-YOLOv5, ** other algorithm models such as improved network structure** File Summary (Recommended 🌟🌟🌟🌟🌟)
 
 The YOLOv7 official repository is currently being updated
 
