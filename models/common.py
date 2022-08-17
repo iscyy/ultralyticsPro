@@ -28,7 +28,7 @@ from utils.plots import Annotator, colors, save_one_box
 from utils.torch_utils import copy_attr, time_sync
 from models.Models.FaceV2 import MultiSEAM, C3RFEM, SEAM
 from models.Models.research import CARAFE, MP, SPPCSPC, RepConv, BoT3, \
-    PatchEmbed, SwinTransformer_Layer, LayerNorm, GAM_Attention, CA, CBAM, Concat_bifpn, Involution, \
+    PatchEmbed, SwinTransformer_Layer, LayerNorm, CA, CBAM, Concat_bifpn, Involution, \
         Stem, ResCSPC, ResCSPB, ResXCSPC, ResXCSPB, BottleneckCSPB, BottleneckCSPC
 from models.Models.Litemodel import CBH, ES_Bottleneck, DWConvblock, ADD, RepVGGBlock, LC_Block, \
     Dense, conv_bn_relu_maxpool, Shuffle_Block, stem, MBConvBlock, mobilev3_bneck
@@ -42,7 +42,11 @@ from models.Models.yolor import ReOrg, DWT, DownC, BottleneckCSPF
 from models.Models.Attention.ShuffleAttention import ShuffleAttention
 from models.Models.Attention.CrissCrossAttention import CrissCrossAttention
 from models.Models.Attention.SimAM import SimAM
+from models.Models.Attention.GAMAttention import GAMAttention
 from models.Models.Attention.NAMAttention import NAMAttention
+from models.Models.Attention.S2Attention import S2Attention
+from models.Models.Attention.SEAttention import SEAttention
+from models.Models.Attention.SKAttention import SKAttention
 
 
 
