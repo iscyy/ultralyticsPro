@@ -46,6 +46,10 @@ Project address: https://github.com/iscyy/yoloair
 The YOLOAir algorithm library summarizes a variety of mainstream YOLO series detection models, and a set of codes integrates multiple models:
 - Built-in integrated YOLOv5 model network structure, YOLOv7 model network structure, YOLOR model network structure, YOLOX model network structure, Scaled_YOLOv4 model network structure, YOLOv4 model network structure, YOLOv3 model network structure, YOLO-FaceV2 model network structure, TPH-YOLOv5 model network structure The structure, YOLOv5-Lite model network structure, PicoDet model network structure, etc. are continuously updated...
 
+|||
+:-------------------------:|:-------------------------:
+<img src='docs/image/test.jpg' width='500px'>  |  <img src='docs/image/zebra.jpg' width='500px'>
+
 The above multiple detection algorithms use a unified model code framework, which is integrated in the YOLOAir library, with a unified task form and a unified application method. 🌟It is convenient for researchers to improve the algorithm model of the paper, compare models, and realize the diversification of network combinations. 🌟Engineering algorithms are more convenient to deploy and implement, including lightweight models and models with higher accuracy, which can be reasonably selected according to the scene, and achieve a balance between accuracy and speed. At the same time, the library supports decoupling of different structures and module components to make modules componentized. By combining different module components, users can customize and build different detection models according to different data sets or different business scenarios.
 
 🔥🔥🔥 Heavy! ! ! As a supplement to the open source project of the attention mechanism, a 6300+ 🌟Star attention mechanism algorithm code base is strongly recommended 👉[External-Attention-pytorch](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，The summary is very comprehensive, including various Attention, Self-Attention and other codes. The code is concise and easy to read, and one line of code implements the Attention mechanism. Welcome everyone to play!
