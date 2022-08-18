@@ -412,6 +412,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
+        elif m is space_to_depth:
+            c2 = 4 * ch[f]
         elif m is ASFF_Detect:
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
