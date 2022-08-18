@@ -1019,3 +1019,13 @@ class SPPCSPC_group(nn.Module):
         y1 = self.cv6(self.cv5(torch.cat([x1] + [m(x1) for m in self.m], 1)))
         y2 = self.cv2(x)
         return self.cv7(torch.cat((y1, y2), dim=1))
+
+
+class space_to_depth(nn.Module):
+    # Changing the dimension of the Tensor
+    def __init__(self, dimension=1):
+        super().__init__()
+        self.d = dimension
+
+    def forward(self, x):
+         return torch.cat([x[..., ::2, ::2], x[..., 1::2, ::2], x[..., ::2, 1::2], x[..., 1::2, 1::2]], 1)
