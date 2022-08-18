@@ -35,7 +35,7 @@ from models.Models.Litemodel import CBH, ES_Bottleneck, DWConvblock, ADD, RepVGG
 from models.Models.muitlbackbone import conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
     ShuffleNetV2_Model, Conv_maxpool, ConvNeXt, RepLKNet_Stem, RepLKNet_stage1, RepLKNet_stage2, \
         RepLKNet_stage3, RepLKNet_stage4, CoT3, RegNet1, RegNet2, RegNet3, Efficient1, Efficient2, Efficient3, \
-            MobileNet1,MobileNet2,MobileNet3, C3STR
+            MobileNet1,MobileNet2,MobileNet3, C3STR, ConvNextBlock
 from models.Models.yolov4 import SPPCSP, BottleneckCSP2
 from models.Models.yolov4 import RepVGGBlockv6, SimSPPF, SimConv, RepBlock
 from models.Models.yolor import ReOrg, DWT, DownC, BottleneckCSPF

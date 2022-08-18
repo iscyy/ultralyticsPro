@@ -607,12 +607,13 @@ class GhostBottleneck(nn.Module):
 # https://github.com/OutBreak-hui/YoloV5-Flexible-and-Inference
 
 
-class ConvNeXt(nn.Module):  # index 0~3
-    def __init__(self, index, in_chans, depths, dims, drop_path_rate=0., layer_scale_init_value=1e-6):
+class ConvNeXt(nn.Module): 
+    def __init__(self, index, depths, base_dim, in_chans=3, drop_path_rate=0., layer_scale_init_value=1e-6):
         super().__init__()
 
+        dims = [base_dim, base_dim*2, base_dim*4, base_dim*8]
         self.index = index
-        self.downsample_layers = nn.ModuleList()  # stem and 3 intermediate downsampling conv layers
+        self.downsample_layers = nn.ModuleList()  
         stem = nn.Sequential(
             nn.Conv2d(in_chans, dims[0], kernel_size=4, stride=4),
             LayerNorm_s(dims[0], data_format="channels_first")
@@ -625,12 +626,12 @@ class ConvNeXt(nn.Module):  # index 0~3
             )
             self.downsample_layers.append(downsample_layer)
 
-        self.stages = nn.ModuleList()  # 4 feature resolution stages, each consisting of multiple residual blocks
+        self.stages = nn.ModuleList()
         dp_rates = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         cur = 0
         for i in range(4):
             stage = nn.Sequential(
-                *[Block(dim=dims[i], drop_path=dp_rates[cur + j],
+                *[ConvNextBlock(dim=dims[i], drop_path=dp_rates[cur + j],
                         layer_scale_init_value=layer_scale_init_value) for j in range(depths[i])]
             )
             self.stages.append(stage)
@@ -669,14 +670,14 @@ class LayerNorm_s(nn.Module):
             x = self.weight[:, None, None] * x + self.bias[:, None, None]
             return x
 
-# todo ConvNeXt
-class Block(nn.Module):
-
+# todo ConvNextBlock
+class ConvNextBlock(nn.Module):
+    
     def __init__(self, dim, drop_path=0., layer_scale_init_value=1e-6):
         super().__init__()
         self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim)  # depthwise conv
         self.norm = LayerNorm_s(dim, eps=1e-6)
-        self.pwconv1 = nn.Linear(dim, 4 * dim)  # pointwise/1x1 convs, implemented with linear layers
+        self.pwconv1 = nn.Linear(dim, 4 * dim)  
         self.act = nn.GELU()
         self.pwconv2 = nn.Linear(4 * dim, dim)
         self.gamma = nn.Parameter(layer_scale_init_value * torch.ones((dim)),
