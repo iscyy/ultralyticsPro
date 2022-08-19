@@ -359,14 +359,14 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
         # add module research
         elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, \
                    ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
-                   ASPP, BasicRFB, SPPCSPC_group]:
+                   ASPP, BasicRFB, SPPCSPC_group, HorBlock]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
             if m in [C3RFEM, SPPCSPC, BoT3, ResCSPC, ResCSPB, ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC, \
-                ]:
+                HorBlock]:
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
@@ -438,6 +438,9 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c1, c2 = ch[f], args[0]
             c2 = make_divisible(c2 * gw, 8)
             args = [c1, c2, n, *args[1:]]
+        elif m is HorNet:
+            c2 = args[0]
+            args = args[1:]
         # torchvision
         elif m is RegNet1 or m is RegNet2 or m is RegNet3:
             c2 = args[0]
