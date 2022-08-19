@@ -61,19 +61,19 @@ The above multiple detection algorithms use a unified model code framework, whic
 
 🚀 Support more Backbone
 
-- `CSPDarkNet series`
-`ResNet series`
-`RepBlock series`
-`ShuffleNet series`
-`Ghost series`
-`MobileNet series`
-`ConvNext series`
-`RepLKNet series`
-`RegNet series`
-`EfficientNet series`
-`Transformer series`
-`CNN and Transformer, etc.`
-Continuously updated 🎈
+- `CSPDarkNet series`  
+`ResNet series`  
+`RepBlock series`  
+`ShuffleNet series`  
+`Ghost series`  
+`MobileNet series`  
+`ConvNext series`  
+`RepLKNet series`  
+`RegNet series`  
+`EfficientNet series`  
+`Transformer series`  
+`CNN and Transformer, etc.`  
+Continuously updated 🎈  
 
 🚀 Support more Necks
 
@@ -88,20 +88,20 @@ Continuously updated 🎈
 -  YOLOv7 IAuxDetect Head, IDetect Head；
 
 🚀Support for more plug-and-play attention mechanisms
-- Plug-and-play use of attention mechanisms anywhere in the network
-Self Attention、
-Contextual Transformer、
-Bottleneck Transformer、
-S2-MLP Attention、
-SK Attention、
-CBAM Attention、
-SE Attention、
-Coordinate attention、
-NAM Attention、
-GAM attention、
-ECA Attention、
-Shuffle Attention、
-DANet Attention and other mainstream attention mechanisms
+- Plug-and-play use of attention mechanisms anywhere in the network  
+Self Attention  
+Contextual Transformer  
+Bottleneck Transformer  
+S2-MLP Attention  
+SK Attention  
+CBAM Attention  
+SE Attention  
+Coordinate attention  
+NAM Attention  
+GAM attention  
+ECA Attention  
+Shuffle Attention  
+DANet Attention and other mainstream attention mechanisms  
 
 🚀Support for more IoU loss functions
 - Loss functions such as CIoU, DIoU, GIoU, EIoU, SIoU, alpha IOU, etc.  
