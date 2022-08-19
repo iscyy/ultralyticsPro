@@ -370,13 +370,13 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 n = 1
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
                    Shuffle_Block, stem, mobilev3_bneck, conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
-                   ShuffleNetV2_Model, Conv_maxpool, CoT3]:
+                   ShuffleNetV2_Model, Conv_maxpool, CoT3, ConvNextBlock]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
-            if m in [CoT3]:
+            if m in [CoT3, ConvNextBlock]:
                 args.insert(2, n)  # number of repeats
                 n = 1
         # yolov4, r
