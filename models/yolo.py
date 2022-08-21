@@ -359,14 +359,14 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
         # add module research
         elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, \
                    ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
-                   ASPP, BasicRFB, SPPCSPC_group, HorBlock]:
+                   ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
             if m in [C3RFEM, SPPCSPC, BoT3, ResCSPC, ResCSPB, ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC, \
-                HorBlock]:
+                HorBlock, CNeB]:
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
