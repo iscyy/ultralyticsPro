@@ -1249,3 +1249,11 @@ class CNeB(nn.Module):
         self.m = nn.Sequential(*(ConvNextBlock(c_) for _ in range(n)))
     def forward(self, x):
         return self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), dim=1))
+
+class SP(nn.Module):
+    def __init__(self, k=3, s=1):
+        super(SP, self).__init__()
+        self.m = nn.MaxPool2d(kernel_size=k, stride=s, padding=k // 2)
+
+    def forward(self, x):
+        return self.m(x)

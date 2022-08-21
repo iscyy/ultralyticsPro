@@ -365,12 +365,12 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
             # Forward
             with amp.autocast(enabled=cuda):
                 pred = model(imgs)  # forward
-                loss, loss_items = compute_loss(pred, targets.to(device))
-                # if compute_loss_ota is not None:
-                #     loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs)
-                # # loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs) if (compute_loss_ota is not None )else compute_loss(pred, targets.to(device)) # loss scaled by batch_siz
-                # else:
-                #     loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
+                # loss, loss_items = compute_loss(pred, targets.to(device))
+                if compute_loss_ota is not None:
+                    loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs)
+                # loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs) if (compute_loss_ota is not None )else compute_loss(pred, targets.to(device)) # loss scaled by batch_siz
+                else:
+                    loss, loss_items = compute_loss(pred, targets.to(device))  # loss scaled by batch_size
                 if RANK != -1:
                     loss *= WORLD_SIZE  # gradient averaged between devices in DDP mode
                 if opt.quad:

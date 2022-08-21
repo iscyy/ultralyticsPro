@@ -194,6 +194,8 @@ ______________________________________________________________________
 
 ### YOLO网络模型具体改进方式教程及原理参考
 
+- 11.[改进YOLOv5系列：11.ConvNeXt结合YOLO | CVPR2022 多种搭配，即插即用 | Backbone主干CNN模型](https://blog.csdn.net/qq_38668236/article/details/126454548)
+
 - 10.[改进YOLOv5系列：10.最新ECCV2022 | HorNet即插即用、Backbone主干、递归门控卷积的高效高阶空间交互](https://blog.csdn.net/qq_38668236/article/details/126410711)
 
 - 9.[改进YOLOv5系列：9.BoTNet Transformer结构的修改](https://blog.csdn.net/qq_38668236/article/details/126333061)
@@ -212,13 +214,8 @@ ______________________________________________________________________
 
 - 2.[改进YOLOv5系列：2.PicoDet结构的修改](https://blog.csdn.net/qq_38668236/article/details/126087343?spm=1001.2014.3001.5502)
 
-- 1.[改进YOLOv5系列：1.多种注意力机制修改](https://blog.csdn.net/qq_38668236/article/details/126086716)
+- 1.[改进YOLOv5系列：1.多种注意力机制结合YOLO应用](https://blog.csdn.net/qq_38668236/article/details/126086716)
 
-- [1.空间金字塔池化改进 SPP / SPPF / ASPP / RFB / SPPCSPC](https://blog.csdn.net/weixin_43694096/article/details/126354660)
-
-- [2.Yolov5更换激活函数](https://blog.csdn.net/weixin_43694096/article/details/124413941)
-
-- [3.Yolov5更换上采样方式](https://blog.csdn.net/weixin_43694096/article/details/125416120)
 
 更多模块详细解释教程持续更新中...
 
