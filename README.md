@@ -63,6 +63,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 - `CSPDarkNet系列`、
 `RepBlock系列`、
+`HorNet系列`、
 `ResNet系列`、
 `RegNet 系列`、
 `ShuffleNet系列`、
@@ -137,9 +138,11 @@ ______________________________________________________________________
 
 ### 更新 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
 
-支持 SPD-Conv✅
-支持 HorNet 网络✅
-支持 ConvNext 模块✅
+支持 SPD-Conv  
+支持 HorNet 网络  
+支持 ConvNext 模块  
+支持 CNeBlock  
+支持 C3HBLock  
 Updating...
 
 ______________________________________________________________________
