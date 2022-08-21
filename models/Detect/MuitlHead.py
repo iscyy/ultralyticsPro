@@ -146,6 +146,9 @@ class ASFF_Detect(nn.Module):   #add ASFFV5 layer and Rfb
 class IDetect(nn.Module):
     stride = None  # strides computed during build
     export = False  # onnx export
+    end2end = False
+    include_nms = False
+    concat = False
 
     def __init__(self, nc=80, anchors=(), ch=()):  # detection layer
         super(IDetect, self).__init__()
