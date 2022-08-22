@@ -28,6 +28,8 @@ The YOLOAir algorithm library is a combination toolbox of a series of YOLO detec
 
 ✨Based on the YOLOv5 code framework, and synchronously adapt to the **stable YOLOv5_v6.1 update**, synchronize the v6.1 deployment ecosystem. Before using this project, you can learn about the YOLOv5 library.
 
+______________________________________________________________________
+
 [Features🚀](#Mainfeatures) • [Usage🍉](#Usage) • [Documentation📒](https://github.com/iscyy/yoloair) • [issues🌟](https://github.com/iscyy/yoloair/issues/new)
 
 ![](https://img.shields.io/badge/News-2022-red)  ![](https://img.shields.io/badge/Update-YOLOAir-orange) ![](https://visitor-badge.glitch.me/badge?page_id=iscyy.yoloair)  
@@ -38,7 +40,8 @@ The YOLOAir algorithm library is a combination toolbox of a series of YOLO detec
 
 Project address: https://github.com/iscyy/yoloair
 
-Part of the improved tutorial: [CSDN芒果汁没有芒果](https://blog.csdn.net/qq_38668236?type=blog)
+
+______________________________________________________________________
 
 ### Main features🚀
 
@@ -56,6 +59,8 @@ The above multiple detection algorithms use a unified model code framework, whic
 🌟the library supports decoupling of different structures and module components to make modules componentized. By combining different module components, users can customize and build different detection models according to different data sets or different business scenarios.
 
 🔥🔥🔥 Heavy! ! ! As a supplement to the open source project of the attention mechanism, a 6300+ 🌟Star attention mechanism algorithm code base is strongly recommended 👉[External-Attention-pytorch](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，The summary is very comprehensive, including various Attention, Self-Attention and other codes. The code is concise and easy to read, and one line of code implements the Attention mechanism. Welcome everyone to play!
+
+______________________________________________________________________
 
 🚀Support loading the official pre-training weights of YOLOv3, YOLOv4, YOLOv5, YOLOv7, YOLOR and other networks for transfer learning
 
@@ -140,7 +145,7 @@ Support SPD-Conv✅
 Support HorNet Network ✅
 Support ConvNext module ✅
 Updating...
-
+______________________________________________________________________
 ## Usage🍉
 
 **About the code.** Follow the design principle of [YOLOv5](https://github.com/ultralytics/yolov5).  
@@ -179,9 +184,60 @@ You just need to set img path and txt path in wbf.py file.
 ```bash
 $ python wbf.py
 ```
+______________________________________________________________________
+### Performance
+| Model                                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>0.5:0.95 | mAP<sup>val<br>0.5 | Speed<br><sup>CPU b1<br>(ms) | Speed<br><sup>V100 b1<br>(ms) | Speed<br><sup>V100 b32<br>(ms) | params<br><sup>(M) | FLOPs<br><sup>@640 (B) |
+|------------------------------------------------------------------------------------------------------|-----------------------|-------------------------|--------------------|------------------------------|-------------------------------|--------------------------------|--------------------|------------------------|
+| YOLOv5n                   | 640                   | 28.0                    | 45.7               | **45**                       | **6.3**                       | **0.6**                        | **1.9**            | **4.5**                |
+| YOLOv5s                   | 640                   | 37.4                    | 56.8               | 98                           | 6.4                           | 0.9                            | 7.2                | 16.5                   |
+| YOLOv5m                   | 640                   | 45.4                    | 64.1               | 224                          | 8.2                           | 1.7                            | 21.2               | 49.0                   |
+| YOLOv5l                   | 640                   | 49.0                    | 67.3               | 430                          | 10.1                          | 2.7                            | 46.5               | 109.1                  |
+| YOLOv5x                   | 640                   | 50.7                    | 68.9               | 766                          | 12.1                          | 4.8                            | 86.7               | 205.7                  |
+|                                                                                                      |                       |                         |                    |                              |                               |                                |                    |                        |
+| YOLOv5n6                 | 1280                  | 36.0                    | 54.4               | 153                          | 8.1                           | 2.1                            | 3.2                | 4.6                    |
+| YOLOv5s6                 | 1280                  | 44.8                    | 63.7               | 385                          | 8.2                           | 3.6                            | 12.6               | 16.8                   |
+| YOLOv5m6                 | 1280                  | 51.3                    | 69.3               | 887                          | 11.1                          | 6.8                            | 35.7               | 50.0                   |
+| YOLOv5l6                 | 1280                  | 53.7                    | 71.3               | 1784                         | 15.8                          | 10.5                           | 76.8               | 111.4                  |
+| YOLOv5x6<br>+ TTA | 1280<br>1536          | 55.0<br>**55.8**        | 72.7<br>**72.7**   | 3136<br>-                    | 26.2<br>-                     | 19.4<br>-                      | 140.7<br>-         | 209.8<br>-             |
 
-### Benchmark
-Updating...
+<details><summary> <b>Expand</b> </summary>
+
+* The original version was created based on YOLOv5
+
+</details>
+
+______________________________________________________________________
+
+| Model                                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>0.5:0.95 | mAP<sup>val<br>0.5 | deconv kernel size<br><sup> | Speed<br><sup>V100 b1<br>(ms) | Speed<br><sup>V100 b32<br>(ms) | params<br><sup>(M) | FLOPs<br><sup>@640 (B) |
+|------------------------------------------------------------------------------------------------------|-----------------------|-------------------------|--------------------|------------------------------|-------------------------------|--------------------------------|--------------------|------------------------|
+| YOLOv5s                   | 640                   | 33.7                    | 52.9               | -                       | **5.6**                       | **2.2**                        | **7.23**            | **16.5**                |
+| YOLOv5s-deconv-exp1                   | 640                   | 33.4                    | 52.5               | 2                       | **5.6**                       | 2.4                        | 7.55            | 18.2                |
+| YOLOv5s-deconv-exp2                   | 640                   | **34.7**                    | **54.2**               | 4                           | 5.8                           | 2.5                            | 8.54                | 23.2                   |
+<details><summary> <b>Expand</b> </summary>
+
+* The training process depends on 4xV100 GPU
+```
+# train
+python -m torch.distributed.run --nproc_per_node 4 train.py --device 0,1,2,3 --data data/coco.yaml --hyp data/hyps/hyp.scratch-low.yaml  --cfg path/to/model.yaml --batch 512 --epochs 300 --weights ''
+# val
+python val.py --verbose --data data/coco.yaml --conf 0.001 --iou 0.65 --batch 1 --weights path/to/model.pt
+```
+</details>
+
+______________________________________________________________________
+
+| Model                                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>0.5:0.95 | mAP<sup>val<br>0.5 | params<br><sup>(M) | FLOPs<br><sup>@640 (B) |
+|------------------------------------------------------------------------------------------------------|-----------------------|-------------------------|--------------------------------|--------------------|------------------------|
+| YOLOv5s                   | 640                   | 37.4                       | 56.6                        | **7.226**            | **16.5**                |
+| YOLOv5s-decon             | 640                   | **37.8**                       | **57.1**                        | 7.232            | **16.5**                |
+
+<details><summary> <b>Expand</b> </summary>
+
+* tested the 4x4 depthwise-separable deconv by setting the groups as input_channel
+* their params number and FLOPS are nearly the same while the new model's mAP is about 0.4 higher than the origin.
+</details>
+
+______________________________________________________________________
 
 ### YOLO network model specific improvement method tutorial and principle reference
 

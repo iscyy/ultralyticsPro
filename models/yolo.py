@@ -359,7 +359,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
         # add module research
         elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, \
                    ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
-                   ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB]:
+                   ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB, nn.ConvTranspose2d]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -369,6 +369,9 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 HorBlock, CNeB]:
                 args.insert(2, n)  # number of repeats
                 n = 1
+            elif m is nn.ConvTranspose2d:
+                if len(args) >= 7:
+                    args[6] = make_divisible(args[6] * gw, 8)
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
                    Shuffle_Block, stem, mobilev3_bneck, conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
                    ShuffleNetV2_Model, Conv_maxpool, CoT3, ConvNextBlock]:
