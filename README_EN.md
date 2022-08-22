@@ -222,6 +222,8 @@ python -m torch.distributed.run --nproc_per_node 4 train.py --device 0,1,2,3 --d
 # val
 python val.py --verbose --data data/coco.yaml --conf 0.001 --iou 0.65 --batch 1 --weights path/to/model.pt
 ```
+
+* There is a gap between the mAP of YOLOv5s and the official one, here is just for comparison
 </details>
 
 ______________________________________________________________________
@@ -229,12 +231,24 @@ ______________________________________________________________________
 | Model                                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>0.5:0.95 | mAP<sup>val<br>0.5 | params<br><sup>(M) | FLOPs<br><sup>@640 (B) |
 |------------------------------------------------------------------------------------------------------|-----------------------|-------------------------|--------------------------------|--------------------|------------------------|
 | YOLOv5s                   | 640                   | 37.4                       | 56.6                        | **7.226**            | **16.5**                |
-| YOLOv5s-decon             | 640                   | **37.8**                       | **57.1**                        | 7.232            | **16.5**                |
+| YOLOv5s-deconv             | 640                   | **37.8**                       | **57.1**                        | 7.232            | **16.5**                |
 
 <details><summary> <b>Expand</b> </summary>
 
 * tested the 4x4 depthwise-separable deconv by setting the groups as input_channel
 * their params number and FLOPS are nearly the same while the new model's mAP is about 0.4 higher than the origin.
+</details>
+
+______________________________________________________________________
+
+| Model                                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>0.5:0.95 | mAP<sup>val<br>0.5 | params<br><sup>(M) | FLOPs<br><sup>@640 (B) |
+|------------------------------------------------------------------------------------------------------|-----------------------|-------------------------|--------------------------------|--------------------|------------------------|
+| YOLOv5s                   | 640                   | 37.2                       | 56.0                        | **7.2**            | **16.5**                |
+| YOLOv5s-C3GC-backbone             | 640                   | **37.7**                       | **57.3**                        | 7.5            | 16.8                |
+
+<details><summary> <b>Expand</b> </summary>
+
+* The original version was created based on YOLOv5-6.0
 </details>
 
 ______________________________________________________________________

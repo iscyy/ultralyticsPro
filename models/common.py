@@ -49,6 +49,7 @@ from models.Models.Attention.S2Attention import S2Attention
 from models.Models.Attention.SEAttention import SEAttention
 from models.Models.Attention.SKAttention import SKAttention
 from models.Models.Attention.SOCA import SOCA
+from models.Models.muitlbackbone import C3GC
 
 
 
