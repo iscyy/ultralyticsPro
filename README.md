@@ -61,24 +61,25 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 🚀支持更多Backbone
 
-- `CSPDarkNet系列`、
-`RepBlock系列`、
-`HorNet系列`、
-`ResNet系列`、
-`RegNet 系列`、
-`ShuffleNet系列`、
-`Ghost系列`、
-`MobileNet系列`、
-`EfficientNet系列`、
-`ConvNext系列`、
-`RepLKNet系列`、
-`自注意力Transformer系列`、
-`CNN和Transformer结合`
+-  CSPDarkNet系列  
+-  RepBlock系列  
+-  HorNet系列  
+-  ResNet系列  
+-  RegNet 系列  
+-  ShuffleNet系列  
+-  Ghost系列  
+-  MobileNet系列  
+-  EfficientNet系列  
+-  ConvNext系列  
+-  RepLKNet系列  
+-  自注意力Transformer系列  
+-  CNN和Transformer结合系列  
 持续更新中🎈
 
 🚀支持更多Neck
-
-- neck包含`FPN`、`PANet`、`BiFPN`等主流结构。
+- FPN  
+- PANet  
+- BiFPN等主流结构。  
  持续更新中🎈
 
 🚀支持更多检测头Head  
@@ -87,64 +88,108 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 -  YOLOX的解耦合检测头Decoupled Head、DetectX Head
 -  自适应空间特征融合 检测头ASFF Head、
 -  YOLOv7检测头IAuxDetect Head, IDetect Head等；
+-  其他不同检测头
 
-🚀支持更多即插即用的注意力机制
+🚀支持更多即插即用的注意力机制Attention
 - 在网络任何部分即插即用式使用注意力机制
-例如 Self Attention、
-Contextual Transformer、
-Bottleneck Transformer、
-S2-MLP Attention、
-SK Attention、
-CBAM Attention、
-SE Attention、
-Coordinate attention、
-NAM Attention、
-GAM attention、
-ECA Attention、
-Shuffle Attention、
-DANet Attention 等多种主流注意力机制
-
-🚀支持更多IoU损失函数
-- CIoU、DIoU、GIoU、EIoU、SIoU、alpha IOU等损失函数;  
+- Self Attention  
+- Contextual Transformer  
+- Bottleneck Transformer  
+- S2-MLP Attention  
+- SK Attention  
+- CBAM Attention  
+- SE Attention  
+- Coordinate attention  
+- NAM Attention  
+- GAM Attention  
+- ECA Attention  
+- Shuffle Attention  
+- CrissCrossAttention  
+- Coordinate attention  
+- SOCAttention  
+- SimAM Attention 
+持续更新中🎈  
 
 🚀更多空间金字塔池化结构  
-- SPP、SPPF、ASPP、RFB、SPPCSPC等;  
+- SPP
+- SPPF
+- ASPP
+- RFB
+- SPPCSPC  
+持续更新中🎈    
+
+🚀支持更多Loss   
+- ComputeLoss(v5)  
+- ComputeLoss(X)  
+- ComputeLossAuxOTA(v7)  
+- ComputeLossOTA(v7)  
+- ComputeNWDLoss  
+- 其他Loss
+
+🚀支持Anchor-base和Anchor-Free  
+
+🚀支持多种正负样本分配  
+
+🚀支持加权框融合(WBF)  
+
+🚀 内置多种网络模型模块化组件  
+Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv,BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, C3HB, C3RFEM, MultiSEAM, SEAM, C3STR, SPPCSPC, RepConv, BoT3, Air, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC, ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d, DWConvblock, RepVGGBlock, CoT3, ConvNextBlock, SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF, RepVGGBlock, ReOrg, DWT, MobileOne,HorNet...等详细代码 **./models/common.py文件** 内  
+
+🚀支持更多IoU损失函数  
+- CIoU  
+- DIoU  
+- GIoU  
+- EIoU  
+- SIoU  
+- alpha IOU  
+持续更新中🎈    
 
 🚀支持更多NMS  
-- NMS、Merge-NMS、DIoU-NMS、Soft-NMS、CIoU_NMS、DIoU_NMS、GIoU_NMS、EIoU_NMS、SIoU_NMS、Soft-SIoUNMS、Soft-CIoUNMS、Soft-DIoUNMS、Soft-EIoUNMS、Soft-GIoUNMS等;  
+- NMS  
+- Merge-NMS  
+- Soft-NMS  
+- CIoU_NMS  
+- DIoU_NMS  
+- GIoU_NMS  
+- EIoU_NMS  
+- SIoU_NMS  
+- Soft-SIoUNMS、Soft-CIoUNMS、Soft-DIoUNMS、Soft-EIoUNMS、Soft-GIoUNMS等;    
+持续更新中🎈    
 
-🚀支持更多数据增强
+🚀支持更多数据增强  
 - Mosaic、Copy paste、Random affine(Rotation, Scale, Translation and Shear)、MixUp、Augment HSV(Hue, Saturation, Value、Random horizontal flip
 
-🚀支持更多Loss
-- ComputeLoss、ComputeNWDLoss、ComputeLoss(X)、ComputeLoss(v6)、ComputeLossAuxOTA(v7)、ComputeLossOTA(v7)等
-
-🚀支持Anchor-base和Anchor-Free
-
-🚀支持加权框融合(WBF)
-
-🚀 内置多种网络模型模块化组件
-- Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv, BottleneckCSP, C3, C3TR, C3SPP, C3Ghost等
-详细代码 **./models/common.py文件** 内
-
-- 👉[网络模型结构图](https://github.com/iscyy/yoloair/blob/main/docs/document/model_.md) 
+网络模型结构图: [模型🔗](https://github.com/iscyy/yoloair/blob/main/docs/document/model_.md) 
 
 以上组件模块使用统一模型代码框架、统一任务形式、统一应用方式，**模块组件化**🚀 可以帮助用户自定义快速组合Backbone、Neck、Head，使得网络模型多样化，助力科研改进检测算法，构建更强大的网络模型。
 
 ### 内置网络模型配置支持✨
 
-🚀包括YOLOv3、YOLOv4、Scaled_YOLOv4、YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、**其他多种改进网络结构等算法模型**的yaml配置文件
+🚀包括基于 YOLOv5、YOLOv7、YOLOX、YOLOR、YOLOv3、YOLOv4、Scaled_YOLOv4、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5 等**其他多种改进网络结构等算法模型**的模型配置文件
 ______________________________________________________________________
 
-### 更新 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
+### 更新 🌟
 
 支持 SPD-Conv  
 支持 HorNet 网络  
 支持 ConvNext 模块  
 支持 CNeBlock  
 支持 C3HBLock  
-Updating...
+支持 C3GCBLock  
+支持 C3C2BLock
+持续更新中🎈 
 
+______________________________________________________________________
+
+### 技术交流 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
+
+|FightingCV公众号(论文分享)|YOLOAir目标检测交流群( 答案: yoloair )|
+:-------------------------:|:-------------------------:
+<img src='https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6f5057da9a8410fa22dcc7566548193~tplv-k3u1fbpfcp-watermark.image?' width='200px'>  |  <img src='https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1882e8cf3f804918a043d70de1b70e31~tplv-k3u1fbpfcp-watermark.image' width='200px'> 
+
+- FightingCV公众号每天分享最新论文和科技前沿动态  
+
+- YOLOAir目标检测交流群
 ______________________________________________________________________
 
 ## 使用🍉
@@ -307,7 +352,7 @@ ______________________________________________________________________
 ### 未来增强✨
 后续会持续建设和完善 YOLOAir 生态  
 完善集成更多 YOLO 系列模型，持续结合不同模块，构建更多不同网络模型  
-横向拓展和引入关联技术，如半监督学习等等  
+横向拓展和引入关联技术等等  
 跟进：YOLO-mask & YOLO-pose  
 
 ______________________________________________________________________
