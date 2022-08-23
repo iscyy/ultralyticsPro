@@ -1,3 +1,5 @@
+# YOLOv5 🚀 by YOLOAir, GPL-3.0 license
+
 # parameters
 nc: 10  # number of classes
 depth_multiple: 0.33  # model depth multiple
@@ -22,7 +24,7 @@ backbone:
    [-1, 9, C3, [512]],                     
    [-1, 1, Conv, [1024, 3, 2]],  # 7-P5/32
    [-1, 3, C3, [1024]], 
-   [-1, 1, GAMAttention, [512,512]], #9
+   [-1, 1, GAMAttention, [1024,1024]], #9
    [-1, 1, SPPF, [1024,5]], #10
   ]
 
