@@ -17,12 +17,13 @@ import torch.nn as nn
 from PIL import Image
 from torch.cuda import amp
 import torch.nn.functional as F
+from torchvision import models
 
 import torch.utils.checkpoint as checkpoint
 import sys
 import os
 
-# from models.Models.swin import SwinTransformerLayer
+from models.Models.SwinTransformer import SwinTransformerLayer
 
 LOGGER = logging.getLogger(__name__)
 
@@ -230,7 +231,7 @@ class Conv_maxpool(nn.Module):
     def forward(self, x):  
         return self.maxpool(self.conv(x))
 
-class ShuffleNetV2_InvertedResidual(nn.Module):
+class ShuffleNetV2_Model(nn.Module):
     def __init__(self, inp, oup, stride):  # ch_in, ch_out, stride
         super().__init__()
 
@@ -396,6 +397,7 @@ class TransformerLayer(nn.Module):
 
 class TransformerBlock(nn.Module):
     # Vision Transformer https://arxiv.org/abs/2010.11929
+    # https://github.com/iscyy/yoloair
     def __init__(self, c1, c2, num_heads, num_layers):
         super().__init__()
         self.conv = None
@@ -537,6 +539,7 @@ class SPP(nn.Module):
 
 
 class SPPF(nn.Module):
+    # https://github.com/iscyy/yoloair
     # Spatial Pyramid Pooling - Fast (SPPF) layer for YOLOv5 by Glenn Jocher
     def __init__(self, c1, c2, k=5, e=0.5):  # equivalent to SPP(k=(5, 9, 13))
         super().__init__()
@@ -604,12 +607,13 @@ class GhostBottleneck(nn.Module):
 # https://github.com/OutBreak-hui/YoloV5-Flexible-and-Inference
 
 
-class ConvNeXt(nn.Module):  # index 0~3
-    def __init__(self, index, in_chans, depths, dims, drop_path_rate=0., layer_scale_init_value=1e-6):
+class ConvNeXt(nn.Module): 
+    def __init__(self, index, depths, base_dim, in_chans=3, drop_path_rate=0., layer_scale_init_value=1e-6):
         super().__init__()
 
+        dims = [base_dim, base_dim*2, base_dim*4, base_dim*8]
         self.index = index
-        self.downsample_layers = nn.ModuleList()  # stem and 3 intermediate downsampling conv layers
+        self.downsample_layers = nn.ModuleList()  
         stem = nn.Sequential(
             nn.Conv2d(in_chans, dims[0], kernel_size=4, stride=4),
             LayerNorm_s(dims[0], data_format="channels_first")
@@ -622,12 +626,12 @@ class ConvNeXt(nn.Module):  # index 0~3
             )
             self.downsample_layers.append(downsample_layer)
 
-        self.stages = nn.ModuleList()  # 4 feature resolution stages, each consisting of multiple residual blocks
+        self.stages = nn.ModuleList()
         dp_rates = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         cur = 0
         for i in range(4):
             stage = nn.Sequential(
-                *[Block(dim=dims[i], drop_path=dp_rates[cur + j],
+                *[ConvNextBlock(dim=dims[i], drop_path=dp_rates[cur + j],
                         layer_scale_init_value=layer_scale_init_value) for j in range(depths[i])]
             )
             self.stages.append(stage)
@@ -666,14 +670,14 @@ class LayerNorm_s(nn.Module):
             x = self.weight[:, None, None] * x + self.bias[:, None, None]
             return x
 
-# todo ConvNeXt
-class Block(nn.Module):
-
+# todo ConvNextBlock
+class ConvNextBlock(nn.Module):
+    
     def __init__(self, dim, drop_path=0., layer_scale_init_value=1e-6):
         super().__init__()
         self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim)  # depthwise conv
         self.norm = LayerNorm_s(dim, eps=1e-6)
-        self.pwconv1 = nn.Linear(dim, 4 * dim)  # pointwise/1x1 convs, implemented with linear layers
+        self.pwconv1 = nn.Linear(dim, 4 * dim)  
         self.act = nn.GELU()
         self.pwconv2 = nn.Linear(4 * dim, dim)
         self.gamma = nn.Parameter(layer_scale_init_value * torch.ones((dim)),
@@ -722,6 +726,151 @@ def drop_path_f(x, drop_prob: float = 0., training: bool = False):
     random_tensor.floor_()  # binarize
     output = x.div(keep_prob) * random_tensor
     return output
+
+class C3GC(nn.Module):
+    # C3 Bottleneck with 3 convolutions
+    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(C3GC, self).__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.gc = ContextBlock2d(c1)
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(2 * c_, c2, 1)  # act=FReLU(c2)
+        self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        out = torch.cat((self.m(self.cv1(x)), self.cv2(self.gc(x))), dim=1)
+        out = self.cv3(out)
+        return out
+
+def constant_init(module, val, bias=0):
+    if hasattr(module, 'weight') and module.weight is not None:
+        nn.init.constant_(module.weight, val)
+    if hasattr(module, 'bias') and module.bias is not None:
+        nn.init.constant_(module.bias, bias)
+
+def kaiming_init(module,
+                 a=0,
+                 mode='fan_out',
+                 nonlinearity='relu',
+                 bias=0,
+                 distribution='normal'):
+    assert distribution in ['uniform', 'normal']
+    if hasattr(module, 'weight') and module.weight is not None:
+        if distribution == 'uniform':
+            nn.init.kaiming_uniform_(
+                module.weight, a=a, mode=mode, nonlinearity=nonlinearity)
+        else:
+            nn.init.kaiming_normal_(
+                module.weight, a=a, mode=mode, nonlinearity=nonlinearity)
+    if hasattr(module, 'bias') and module.bias is not None:
+        nn.init.constant_(module.bias, bias)
+
+def last_zero_init(m):
+    if isinstance(m, nn.Sequential):
+        constant_init(m[-1], val=0)
+        m[-1].inited = True
+    else:
+        constant_init(m, val=0)
+        m.inited = True
+
+class ContextBlock2d(nn.Module):
+    """ContextBlock2d
+    Parameters
+    ----------
+    inplanes : int
+        Number of in_channels.
+    pool : string
+        spatial att or global pooling (default:'att').
+    fusions : list
+    Reference:
+        Yue Cao, et al. "GCNet: Non-local Networks Meet Squeeze-Excitation Networks and Beyond."
+    """
+    def __init__(self, inplanes, pool='att', fusions=['channel_add', 'channel_mul']):
+        super(ContextBlock2d, self).__init__()
+        assert pool in ['avg', 'att']
+        assert all([f in ['channel_add', 'channel_mul'] for f in fusions])
+        assert len(fusions) > 0, 'at least one fusion should be used'
+        self.inplanes = inplanes
+        self.planes = inplanes // 4
+        self.pool = pool
+        self.fusions = fusions
+        if 'att' in pool:
+            self.conv_mask = nn.Conv2d(inplanes, 1, kernel_size=1)
+            self.softmax = nn.Softmax(dim=2)
+        else:
+            self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        if 'channel_add' in fusions:
+            self.channel_add_conv = nn.Sequential(
+                nn.Conv2d(self.inplanes, self.planes, kernel_size=1),
+                nn.LayerNorm([self.planes, 1, 1]),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(self.planes, self.inplanes, kernel_size=1)
+            )
+        else:
+            self.channel_add_conv = None
+        if 'channel_mul' in fusions:
+            self.channel_mul_conv = nn.Sequential(
+                nn.Conv2d(self.inplanes, self.planes, kernel_size=1),
+                nn.LayerNorm([self.planes, 1, 1]),
+                nn.ReLU(inplace=True),
+                nn.Conv2d(self.planes, self.inplanes, kernel_size=1)
+            )
+        else:
+            self.channel_mul_conv = None
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        if self.pool == 'att':
+            kaiming_init(self.conv_mask, mode='fan_in')
+            self.conv_mask.inited = True
+
+        if self.channel_add_conv is not None:
+            last_zero_init(self.channel_add_conv)
+        if self.channel_mul_conv is not None:
+            last_zero_init(self.channel_mul_conv)
+
+    def spatial_pool(self, x):
+        batch, channel, height, width = x.size()
+        if self.pool == 'att':
+            input_x = x
+            # [N, C, H * W]
+            input_x = input_x.view(batch, channel, height * width)
+            # [N, 1, C, H * W]
+            input_x = input_x.unsqueeze(1)
+            # [N, 1, H, W]
+            context_mask = self.conv_mask(x)
+            # [N, 1, H * W]
+            context_mask = context_mask.view(batch, 1, height * width)
+            # [N, 1, H * W]
+            context_mask = self.softmax(context_mask)
+            # [N, 1, H * W, 1]
+            context_mask = context_mask.unsqueeze(3)
+            # [N, 1, C, 1]
+            context = torch.matmul(input_x, context_mask)
+            # [N, C, 1, 1]
+            context = context.view(batch, channel, 1, 1)
+        else:
+            # [N, C, 1, 1]
+            context = self.avg_pool(x)
+
+        return context
+
+    def forward(self, x):
+        # [N, C, 1, 1]
+        context = self.spatial_pool(x)
+
+        if self.channel_mul_conv is not None:
+            # [N, C, 1, 1]
+            channel_mul_term = torch.sigmoid(self.channel_mul_conv(context))
+            out = x * channel_mul_term
+        else:
+            out = x
+        if self.channel_add_conv is not None:
+            # [N, C, 1, 1]
+            channel_add_term = self.channel_add_conv(context)
+            out = out + channel_add_term
+        return out 
 
 #-------------------------------------RepLKNet------------------------------------------------------
 def get_conv2d(in_channels, out_channels, kernel_size, stride, padding, dilation, groups, bias):
@@ -1032,7 +1181,7 @@ class CoT3(nn.Module):
         return self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), dim=1))
 
 class CoTBottleneck(nn.Module):
-    # Standard bottleneck
+    # Standard bottleneck https://github.com/iscyy/yoloair
     def __init__(self, c1, c2, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, shortcut, groups, expansion
         super(CoTBottleneck, self).__init__()
         c_ = int(c2 * e)  # hidden channels
@@ -1084,3 +1233,104 @@ class CoT(nn.Module):
         k2=k2.view(bs,c,h,w)
         
         return k1+k2
+
+# from torchvision import models
+
+# https://github.com/rglkt/yolov5-with-more-backbone/blob/master/models/common.py
+class RegNet1(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.regnet_y_400mf()
+        modules = list(model.children())
+        self.model = nn.Sequential(modules[0], *modules[1][:2])
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class RegNet2(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.regnet_y_400mf()
+        modules = list(model.children())
+        modules = modules[1][2]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class RegNet3(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.regnet_y_400mf()
+        modules = list(model.children())
+        modules = modules[1][3]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+class Efficient1(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.efficientnet_b0()
+        modules = list(model.children())
+        modules = modules[0][:4]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)
+    
+class Efficient2(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.efficientnet_b0()
+        modules = list(model.children())
+        modules = modules[0][4:6]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)
+    
+class Efficient3(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.efficientnet_b0()
+        modules = list(model.children())
+        modules = modules[0][6:]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)
+    
+class MobileNet1(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.mobilenet_v3_small(pretrained=True)
+        modules = list(model.children())
+        modules = modules[0][:4]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class MobileNet2(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.mobilenet_v3_small(pretrained=True)
+        modules = list(model.children())
+        modules = modules[0][4:9]
+        self.model = nn.Sequential(*modules)
+
+    def forward(self, x):
+        return self.model(x)
+
+
+class MobileNet3(nn.Module):
+    def __init__(self, ignore) -> None:
+        super().__init__()
+        model = models.mobilenet_v3_small(pretrained=True)
+        modules = list(model.children())
+        modules = modules[0][9:]
+        self.model = nn.Sequential(*modules)
+    def forward(self, x):
+        return self.model(x)

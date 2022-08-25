@@ -281,7 +281,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
     scheduler.last_epoch = start_epoch - 1  # do not move
     scaler = amp.GradScaler(enabled=cuda)
     stopper = EarlyStopping(patience=opt.patience)
-    if opt.auxotaloss:
+    if opt.auxotaloss: # https://github.com/iscyy/yoloair
         compute_loss_ota = ComputeLossAuxOTA(model)  # init loss class
         compute_loss = ComputeLoss(model) 
     elif opt.otaloss:
@@ -365,6 +365,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
             # Forward
             with amp.autocast(enabled=cuda):
                 pred = model(imgs)  # forward
+                # loss, loss_items = compute_loss(pred, targets.to(device))
                 if compute_loss_ota is not None:
                     loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs)
                 # loss, loss_items = compute_loss_ota(pred, targets.to(device), imgs) if (compute_loss_ota is not None )else compute_loss(pred, targets.to(device)) # loss scaled by batch_siz

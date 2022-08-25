@@ -99,7 +99,7 @@ class ConvSig(nn.Module):
 
 
 class ConvSqu(nn.Module):
-    # Standard convolution
+    # Standard convolution https://github.com/iscyy/yoloair
     def __init__(self, c1, c2, k=1, s=1, p=None, g=1, act=True):  # ch_in, ch_out, kernel, stride, padding, groups
         super(ConvSqu, self).__init__()
         self.conv = nn.Conv2d(c1, c2, k, s, autopad(k, p), groups=g, bias=False)
@@ -505,7 +505,7 @@ class VoVCSP(nn.Module):
 
 
 class SPP(nn.Module):
-    # Spatial pyramid pooling layer used in YOLOv3-SPP
+    # Spatial pyramid pooling layer used in YOLOv3-SPP https://github.com/iscyy/yoloair
     def __init__(self, c1, c2, k=(5, 9, 13)):
         super(SPP, self).__init__()
         c_ = c1 // 2  # hidden channels

@@ -730,7 +730,7 @@ class DetectYoloX(nn.Module):
         self.nc = self.num_classes  # number of classes
         # self.no = self.num_classes + 5  # number of outputs per anchor
         self.nl = len(cls_in_channels)  # number of detection layers
-        self.na = self.n_anchors  # number of anchors
+        self.na = self.n_anchors  # number of anchors https://github.com/iscyy/yoloair
 
         self.use_l1 = False
         self.l1_loss = nn.L1Loss(reduction="none")
@@ -1051,6 +1051,7 @@ class DetectYoloX(nn.Module):
         return (
             loss,
             reg_weight * loss_iou,
+            # loss_iou,
             loss_obj,
             loss_cls,
             loss_l1,
