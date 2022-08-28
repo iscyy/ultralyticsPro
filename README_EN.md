@@ -5,7 +5,7 @@ English | [简体中文](./README.md)
 The YOLOAir algorithm library is a combination toolbox of a series of YOLO detection algorithms based on PyTorch. Used to **combine different modules to build different networks**.  
 
 <div align='center'>
-    <img src='docs/image/logo1.png' width='500px'>
+    <img src='docs/image/logo02.jpg' width='800px' alt='ingishvcn'>
 </div>
 
 ✨Built-in model network structures such as YOLOv5, YOLOv7, YOLOX, YOLOR, Transformer, Scaled_YOLOv4, YOLOv3, YOLOv4, YOLO-Facev2, TPH-YOLOv5, YOLOv5Lite, PicoDet (continuously updated🚀)...
@@ -30,7 +30,7 @@ The YOLOAir algorithm library is a combination toolbox of a series of YOLO detec
 
 ______________________________________________________________________
 
-[Features🚀](#Mainfeatures) • [Usage🍉](#Usage) • [Documentation📒](https://github.com/iscyy/yoloair) • [issues🌟](https://github.com/iscyy/yoloair/issues/new)
+[Features🚀](#main-features) • [Usage🍉](#usage) • [Documentation📒](https://github.com/iscyy/yoloair) • [issues🌟](https://github.com/iscyy/yoloair/issues/new) • [News💪](#news-)
 
 ![](https://img.shields.io/badge/News-2022-red)  ![](https://img.shields.io/badge/Update-YOLOAir-orange) ![](https://visitor-badge.glitch.me/badge?page_id=iscyy.yoloair)  
 
@@ -139,11 +139,12 @@ The above component modules use a unified model code framework, unified task for
 
 🚀Including yaml configuration of YOLOv3, YOLOv4, Scaled_YOLOv4, YOLOv5, YOLOv7, YOLOX, YOLOR, Transformer, YOLO-FaceV2, PicoDet, YOLOv5-Lite, TPH-YOLOv5 ** other algorithm models such as improved network structure** File Summary (Recommended 🌟🌟🌟🌟🌟)
 
-### News! <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
+### News! <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="ingishvcn" width="20">
 
-Support SPD-Conv✅
-Support HorNet Network ✅
-Support ConvNext module ✅
+Support SPD-Conv✅  
+Support HorNet Network ✅  
+Support ConvNext module ✅  
+🔥Add the difference of YOLOv3, YOLOv4, YOLOv5, YOLOv7, Scaled-YOLOv4 network [pre-training weight link 🔗](https://github.com/iscyy/yoloair/releases)  
 Updating...
 ______________________________________________________________________
 ## Usage🍉

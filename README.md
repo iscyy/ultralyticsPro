@@ -1,11 +1,11 @@
-## YOLOAir: Make the improvement of the YOLO model faster, more convenient
+## YOLO Air: Make the improvement of the YOLO model faster, more convenient
 
 简体中文 | [English](./README_EN.md)
 
-YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合工具箱。用来**组合不同模块构建不同网络**。  
+**YOLOAir 算法库** 是一个基于 PyTorch 的一系列 YOLO 检测算法组合工具箱。**基于不同模块构建不同检测网络模型**。  
 
 <div align='center'>
-    <img src='docs/image/logo1.png' width='500px'>
+    <img src='docs/image/logo02.jpg'  width="850"  alt='ingishvcn'>
 </div>
 
 内置YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、Scaled_YOLOv4、YOLOv3、YOLOv4、YOLO-Facev2、TPH-YOLOv5、YOLOv5Lite、PicoDet等模型网络结构(持续更新中🚀)...
@@ -28,7 +28,7 @@ YOLOAir算法库 是一个基于 PyTorch 的一系列 YOLO 检测算法组合�
 
 基于 YOLOv5 代码框架，并同步适配 **稳定的YOLOv5_v6.1更新**, 同步v6.1部署生态。使用这个项目之前, 您可以先了解YOLOv5库。  
 
-[特性🚀](#Mainfeatures) • [使用🍉](#Usage) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new)
+[特性🚀](#主要特性) • [使用🍉](#使用) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new) • [更新💪](#更新-)
 
 ![](https://img.shields.io/badge/News-2022-red)  ![](https://img.shields.io/badge/Update-YOLOAir-orange) ![](https://visitor-badge.glitch.me/badge?page_id=iscyy.yoloair)  
 
@@ -51,7 +51,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 |||
 :-------------------------:|:-------------------------:
-<img src='docs/image/test.jpg' width='500px'>  |  <img src='docs/image/zebra.jpg' width='500px'>
+<img src='docs/image/test.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='500px'   alt='ingishvcn'>
 
 - 以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
 
@@ -170,15 +170,10 @@ ______________________________________________________________________
 
 ### 更新 🌟
 
-支持 SPD-Conv  
-支持 HorNet 网络  
-支持 ConvNext 模块  
-支持 CNeBlock  
-支持 C3HBLock  
-支持 C3GCBLock  
-支持 C3C2BLock
-持续更新中🎈 
+支持 SPD-Conv、HorNet 网络、ConvNext 模块、CNeBlock、C3HBLock、C3GCBLock、C3C2BLock  
 
+🔥添加YOLOv3、YOLOv4、YOLOv5、YOLOv7、Scaled-YOLOv4网络的不同[预训练权重链接🔗](https://github.com/iscyy/yoloair/releases)  
+持续更新中🎈 
 ______________________________________________________________________
 
 ### 技术交流 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
