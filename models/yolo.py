@@ -85,7 +85,14 @@ class Detect(nn.Module):
 
 
 class Model(nn.Module):
-    def __init__(self, cfg='yolov5s.yaml', ch=3, nc=None, anchors=None):  # model, input channels, number of classes
+    def __init__(self, cfg='yolov5s.yaml', ch=3, nc=None, anchors=None):
+        """
+        Args:
+            cfg: 模型配置文件
+            ch: input img channels 一般是3 RGB文件
+            nc: number of classes 数据集的类别个数
+            anchors: 一般是None
+        """
         super().__init__()
         if isinstance(cfg, dict):
             self.yaml = cfg  # model dict
@@ -103,7 +110,13 @@ class Model(nn.Module):
         if anchors:
             LOGGER.info(f'Overriding model.yaml anchors with anchors={anchors}')
             self.yaml['anchors'] = round(anchors)  # override yaml value
+        # ========================== #
+        # 创建网络模型
+        # ========================== #
+        # self.model:初始化的整个网络模型(包括Detect层结构)
+        # self.save:所有层结构中from不等于-1的序号，并排好序[4，6，10，14，17，20，23]
         self.model, self.save = parse_model(deepcopy(self.yaml), ch=[ch])  # model, savelist
+        # print(self.model)
         self.names = [str(i) for i in range(self.yaml['nc'])]  # default names
         self.inplace = self.yaml.get('inplace', True)
         self.loss_category = self.yaml.get('loss', None)
@@ -180,13 +193,37 @@ class Model(nn.Module):
         return torch.cat(y, 1), None  # augmented inference, train
 
     def _forward_once(self, x, profile=False, visualize=False):
+        """
+        Args:
+            x: 输入图像
+            profile: True 可以做一些性能评估
+            visualize: True 可以做一些特征可视化
+
+        Returns:
+            train: 一个tensor list 存放三个元素 [bs, anchor_num, grid_w, grid_h, xywh+c+20classes]
+                       分别是 [1, 3, 80, 80, 25] [1, 3, 40, 40, 25] [1, 3, 20, 20, 25]
+                inference: 0 [1, 19200+4800+1200, 25] = [bs, anchor_num*grid_w*grid_h, xywh+c+20classes]
+                           1 一个tensor list 存放三个元素 [bs, anchor_num, grid_w, grid_h, xywh+c+20classes]
+                             [1, 3, 80, 80, 25] [1, 3, 40, 40, 25] [1, 3, 20, 20, 25]
+
+        """
+        # y: 存放着self.save=True的每一层的输出，因为后面的层结构concat等操作要用到
+        # dt: 在profile中做性能评估时使用
         y, dt = [], []  # outputs
         for m in self.model:
+            # 前向推理每一层结构   m.i=index   m.f=from   m.type=类名   m.np=number of params
+            # if not from previous layer   m.f=当前层的输入来自哪一层的输出  s的m.f都是-1
             if m.f != -1:  # if not from previous layer
+                # 这里需要做 4个concat操作 和 1个Detect操作
+                # concat操作 例如 m.f=[-1, 6] x就有两个元素,一个是上一层的输出,另一个是index=6的层的输出,再送到x=m(x)做concat操作
+                # Detect操作 例如 m.f=[17, 20, 23] x有三个元素,分别存放第17层第20层第23层的输出 再送到x=m(x)做Detect的forward
                 x = y[m.f] if isinstance(m.f, int) else [x if j == -1 else y[j] for j in m.f]  # from earlier layers
+            # 打印日志信息  FLOPs time等
             if profile:
                 self._profile_one_layer(m, x, dt)
+            # run正向推理
             x = m(x)  # run
+            # 存放着self.save的每一层的输出，因为后面需要用来作concat等操作要用到,不在self.save层的输出就为None
             y.append(x if m.i in self.save else None)  # save output
             if visualize:
                 feature_visualization(x, m.type, m.i, save_dir=visualize)
@@ -331,30 +368,55 @@ class Model(nn.Module):
 
 
 def parse_model(d, ch):  # model_dict, input_channels(3)
+    """
+    '''用在上面Model模块中
+    parse_model模块用来解析模型文件(从Model中传来的字典形式)，并搭建网络结构。
+    Args:
+        d: model_dict 模型文件 字典形式 {dict:7}
+        ch: 记录模型每一层的输出channel 初始 ch=[3] 后面会删除
+
+    Returns:
+        nn.Sequential(*layers): 网络的每一层的层结构
+        sorted(save): 把所有层结构中from不是-1的值记下 并排序 [4, 6, 10, 14, 17, 20, 23]
+    """
     LOGGER.info(f"\n{'':>3}{'from':>18}{'n':>3}{'params':>10}  {'module':<40}{'arguments':<30}")
     anchors, nc, gd, gw = d['anchors'], d['nc'], d['depth_multiple'], d['width_multiple']
     na = (len(anchors[0]) // 2) if isinstance(anchors, list) else anchors  # number of anchors
     no = na * (nc + 5)  # number of outputs = anchors * (classes + 5)
 
+    # ============================= #
+    # 开始搭建网络
+    # ============================= #
+    # layers: 保存每一层的层结构
+    # save: 记录下所有层结构中from中不是-1的层结构序号
+    # c2: 保存当前层的输出channel
     layers, save, c2 = [], [], ch[-1]  # layers, savelist, ch out
-    for i, (f, n, m, args) in enumerate(d['backbone'] + d['head']):  # from, number, module, args
+    # from(当前层输入来自哪些层), number(当前层次数 初定), module(当前层类别), args(当前层类参数 初定)
+    for i, (f, n, m, args) in enumerate(d['backbone'] + d['head']):  # 遍历backbone和head的每一层
+        # eval(string) 得到当前层的真实类名 例如: m= Focus -> <class 'models.common.Focus'>
         m = eval(m) if isinstance(m, str) else m  # eval strings
         for j, a in enumerate(args):
             try:
                 args[j] = eval(a) if isinstance(a, str) else a  # eval strings
             except NameError:
                 pass
-
+        # ------------------- 更新当前层的args（参数）,计算c2（当前层的输出channel） -------------------
+        # depth gain 控制深度  如v5s: n*0.33   n: 当前模块的次数(间接控制深度)
         n = n_ = max(round(n * gd), 1) if n > 1 else n  # depth gain
         if m in [Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv,
                  BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, C3HB, C3RFEM, MultiSEAM, SEAM, C3STR]:
+            # c1: 当前层的输入的channel数  c2: 当前层的输出的channel数(初定)  ch: 记录着所有层的输出channel
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
+                # width gain 控制宽度  如v5s: c2*0.5  c2: 当前层的最终输出的channel数(间接控制宽度)
                 c2 = make_divisible(c2 * gw, 8)
-
+            # 在初始arg的基础上更新 加入当前层的输入channel并更新当前层
+            # [in_channel, out_channel, *args[1:]]
             args = [c1, c2, *args[1:]]
+            # 如果当前层是list中的元素, 则需要在args中加入bottleneck的个数
+            # [in_channel, out_channel, Bottleneck的个数n, bool(True表示有shortcut 默认，反之无)]
             if m in [BottleneckCSP, C3, C3TR, C3Ghost, C3HB, C3RFEM, C3STR]:
-                args.insert(2, n)  # number of repeats
+                args.insert(2, n)  # 在第二个位置插入bottleneck个数n
                 n = 1
         # add module research
         elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, NAMAttention, GAMAttention, ACmix, Involution, Stem, ResCSPC, ResCSPB, \
@@ -402,7 +464,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             args = [c1, *args[1:]]
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
-        elif m is Concat:
+        elif m is Concat: # Concat 层
+            # Concat层则将f中所有的输出累加得到这层的输出channel
             c2 = sum(ch[x] for x in f)
         elif m is ConvNeXt:
             c2 = args[0]
@@ -420,7 +483,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
         elif m is ConvNeXt:
             c2 = args[0]
             args = args[1:]
-        elif m is Detect:
+        elif m is Detect:# 在args中加入三个Detect层的输出channel
             args.append([ch[x] for x in f])
             if isinstance(args[1], int):  # number of anchors
                 args[1] = [list(range(args[1] * 2))] * len(f)
@@ -460,23 +523,28 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = ch[f] // args[0] ** 2
         else:
             c2 = ch[f]
-
+        # m_: 得到当前层module  如果n>1就创建多个m(当前层结构), 如果n=1就创建一个m
         m_ = nn.Sequential(*(m(*args) for _ in range(n))) if n > 1 else m(*args)  # module
+        # 打印当前层结构的一些基本信息
         t = str(m)[8:-2].replace('__main__.', '')  # module type
         np = sum(x.numel() for x in m_.parameters())  # number params
         m_.i, m_.f, m_.type, m_.np = i, f, t, np  # attach index, 'from' index, type, number params
         LOGGER.info(f'{i:>3}{str(f):>18}{n_:>3}{np:10.0f}  {t:<40}{str(args):<30}')  # print
-        save.extend(x % i for x in ([f] if isinstance(f, int) else f) if x != -1)  # append to savelist
+        # append to savelist  把所有层结构中from不是-1的值记下  [6, 4, 14, 10, 17, 20, 23]
+        save.extend(x % i for x in ([f] if isinstance(f, int) else f) if x != -1)
+        # 将当前层结构module加入layers中
         layers.append(m_)
-        if i == 0:
+
+        if i == 0:# 去除输入channel [3]
             ch = []
+        # 把当前层的输出channel数加入ch
         ch.append(c2)
     return nn.Sequential(*layers), sorted(save)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--cfg', type=str, default='../configs/myimprove/yolov5s.yaml', help='model.yaml')
+    parser.add_argument('--cfg', type=str, default='../configs/myimprove/yolov5s.yaml', help='model.yaml')# yolov5s_bifpn
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--profile', action='store_true', help='profile model speed')
     parser.add_argument('--test', action='store_true', help='test all yolo*.yaml')

@@ -332,6 +332,9 @@ class Concat(nn.Module):
         self.d = dimension
 
     def forward(self, x):
+        print('Concat x size: ',len(x))
+        print('Concar x size: ',x[0].shape,x[1].shape)
+        print('======================================')
         return torch.cat(x, self.d)
 
 
