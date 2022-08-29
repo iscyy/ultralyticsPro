@@ -121,6 +121,7 @@ def run(data,
         callbacks=Callbacks(),
         compute_loss=None,
         soft=False,
+        otaloss=False,
         ):
     # Initialize/load model and set device
     training = model is not None
@@ -197,7 +198,9 @@ def run(data,
         if len(outputs) >= 2:
             out, train_out = outputs[:2]
             # Compute loss
-            if compute_loss:
+            if otaloss:
+                loss += compute_loss([x.float() for x in train_out], targets)[1][:3]
+            else:
                 loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
         else:
             out = outputs[0]

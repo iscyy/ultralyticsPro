@@ -52,7 +52,8 @@ from utils.general import (LOGGER, check_dataset, check_file, check_git_status, 
                            print_args, print_mutation, strip_optimizer)
 from utils.loggers import Loggers
 from utils.loggers.wandb.wandb_utils import check_wandb_resume
-from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeLossOTA, ComputeLossAuxOTA, ComputeLossBinOTA
+from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeLossOTA_v7, ComputeLossAuxOTA, ComputeLossBinOTA
+# from utils.loss_ps import ComputeLoss_v4
 from utils.metrics import fitness
 from utils.plots import plot_evolve, plot_labels
 from utils.torch_utils import EarlyStopping, ModelEMA, de_parallel, is_parallel, select_device, torch_distributed_zero_first
@@ -285,7 +286,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
         compute_loss_ota = ComputeLossAuxOTA(model)  # init loss class
         compute_loss = ComputeLoss(model) 
     elif opt.otaloss:
-        compute_loss_ota = ComputeLossOTA(model)
+        compute_loss_ota = ComputeLossOTA_v7(model)
         compute_loss = ComputeLoss(model)
     if loss_category is None:
         compute_loss = ComputeLoss(model)  # init loss class
@@ -419,6 +420,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
                                            save_dir=save_dir,
                                            plots=False,
                                            callbacks=callbacks,
+                                           otaloss=opt.otaloss,
                                            compute_loss=compute_loss)
 
             # Update best mAP
@@ -483,6 +485,7 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
                                             verbose=True,
                                             plots=True,
                                             callbacks=callbacks,
+                                            otaloss=opt.otaloss,
                                             compute_loss=compute_loss)  # val best model with plots
                     if is_coco:
                         callbacks.run('on_fit_epoch_end', list(mloss) + list(results) + lr, epoch, best_fitness, fi)
@@ -503,8 +506,8 @@ def parse_opt(known=False):
     parser.add_argument('--epochs', type=int, default=1)
 
     parser.add_argument('--loss', type=str, default='origin', help='')
-    parser.add_argument('--auxotaloss', action='store_true', help='swin not use half to train/Val')
-    parser.add_argument('--otaloss', action='store_true', help='swin not use half to train/Val')
+    parser.add_argument('--auxotaloss', action='store_true', help='')
+    parser.add_argument('--otaloss', action='store_true', help='use yolov7')
     parser.add_argument('--batch-size', type=int, default=2, help='total batch size for all GPUs, -1 for autobatch')
     parser.add_argument('--imgsz', '--img', '--img-size', type=int, default=160, help='train, val image size (pixels)')
     parser.add_argument('--rect', action='store_true', help='rectangular training')
