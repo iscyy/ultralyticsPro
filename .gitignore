@@ -1,6 +1,6 @@
 *.pyc
 *.DS_Store
-yolov5s.pt
+#yolov5s.pt
 log_model
 runs
 *.idea
