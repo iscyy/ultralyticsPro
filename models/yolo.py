@@ -384,13 +384,13 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 args.insert(2, n)  # number of repeats
                 n = 1
         # yolov4, r
-        elif m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF, RepVGGBlockv6]:
+        elif m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF, RepVGGBlockv6, VoVGSCSP, GSConv]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
 
             args = [c1, c2, *args[1:]]
-            if m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF]:
+            if m in [SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF, VoVGSCSP]:
                 args.insert(2, n)  # number of repeats
                 n = 1
         elif m in [ReOrg, DWT]:
