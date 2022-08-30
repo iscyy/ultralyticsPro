@@ -357,7 +357,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 args.insert(2, n)  # number of repeats
                 n = 1
         # add module research
-        elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, NAMAttention, GAMAttention, ACmix, Involution, Stem, ResCSPC, ResCSPB, \
+        elif m in [CARAFE, SPPCSPC, SPPFCSPC, RepConv, BoT3, CA, CBAM, NAMAttention, GAMAttention, ACmix, Involution, Stem, ResCSPC, ResCSPB, \
                    ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
                    ASPP, BasicRFB, SPPCSPC_group, SimSPPF, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d]:
             c1, c2 = ch[f], args[0]
