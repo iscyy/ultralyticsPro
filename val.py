@@ -197,7 +197,6 @@ def run(data,
             dt[1] += time_sync() - t2
             if compute_loss:
                 if otaloss =='yolov7':
-                    print('🚀')
                     loss += compute_loss([x.float() for x in train_out], targets)[1][:3]
                 else:
                     loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
