@@ -121,7 +121,7 @@ def run(data,
         callbacks=Callbacks(),
         compute_loss=None,
         soft=False,
-        otaloss=False,
+        otaloss='origin',
         ):
     # Initialize/load model and set device
     training = model is not None
@@ -192,22 +192,23 @@ def run(data,
         dt[0] += t2 - t1
 
         # Inference
-        outputs = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
-        dt[1] += time_sync() - t2
-
-        if len(outputs) >= 2:
-            out, train_out = outputs[:2]
-            # Compute loss
-            if otaloss:
-                loss += compute_loss([x.float() for x in train_out], targets)[1][:3]
-            else:
-                loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+        if not otaloss =='yolox':
+            out, train_out = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
+            dt[1] += time_sync() - t2
+            if compute_loss:
+                if otaloss =='yolov7':
+                    print('🚀')
+                    loss += compute_loss([x.float() for x in train_out], targets)[1][:3]
+                else:
+                    loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
         else:
-            out = outputs[0]
-
-        # Loss
-        # if compute_loss:
-        #     loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+            outputs = model(im) if training else model(im, augment=augment, val=True)  # inference, loss outputs
+            dt[1] += time_sync() - t2
+            if len(outputs) >= 2:
+                out, train_out = outputs[:2]
+                loss += compute_loss([x.float() for x in train_out], targets)[1]  # box, obj, cls
+            else:
+                out = outputs[0]
 
         # NMS
         targets[:, 2:] *= torch.Tensor([width, height, width, height]).to(device)  # to pixels
