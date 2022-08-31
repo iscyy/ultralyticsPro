@@ -202,7 +202,7 @@ ______________________________________________________________________
 ### 预训练权重🚀
 
 - YOLOv5
-https://github.com/ultralytics/yolov5/releases/download/v6.1
+https://github.com/ultralytics/yolov5/releases/tag/v6.1
 
 - YOLOv4
 https://github.com/iscyy/yoloair/releases/download/v1.0
