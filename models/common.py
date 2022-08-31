@@ -775,10 +775,10 @@ def init_rate_0(tensor):
 
 
 class ACmix(nn.Module):
-    def __init__(self, in_planes, out_planes, kernel_att=7, head=4, kernel_conv=3, stride=1, dilation=1):
+    def __init__(self, in_planes, kernel_att=7, head=4, kernel_conv=3, stride=1, dilation=1):
         super(ACmix, self).__init__()
         self.in_planes = in_planes
-        self.out_planes = out_planes
+        self.out_planes = in_planes
         self.head = head
         self.kernel_att = kernel_att
         self.kernel_conv = kernel_conv
@@ -788,9 +788,9 @@ class ACmix(nn.Module):
         self.rate2 = torch.nn.Parameter(torch.Tensor(1))
         self.head_dim = self.out_planes // self.head
 
-        self.conv1 = nn.Conv2d(in_planes, out_planes, kernel_size=1)
-        self.conv2 = nn.Conv2d(in_planes, out_planes, kernel_size=1)
-        self.conv3 = nn.Conv2d(in_planes, out_planes, kernel_size=1)
+        self.conv1 = nn.Conv2d(in_planes, self.out_planes, kernel_size=1)
+        self.conv2 = nn.Conv2d(in_planes, self.out_planes, kernel_size=1)
+        self.conv3 = nn.Conv2d(in_planes, self.out_planes, kernel_size=1)
         self.conv_p = nn.Conv2d(2, self.head_dim, kernel_size=1)
 
         self.padding_att = (self.dilation * (self.kernel_att - 1) + 1) // 2
@@ -799,7 +799,7 @@ class ACmix(nn.Module):
         self.softmax = torch.nn.Softmax(dim=1)
 
         self.fc = nn.Conv2d(3*self.head, self.kernel_conv * self.kernel_conv, kernel_size=1, bias=False)
-        self.dep_conv = nn.Conv2d(self.kernel_conv * self.kernel_conv * self.head_dim, out_planes, kernel_size=self.kernel_conv, bias=True, groups=self.head_dim, padding=1, stride=stride)
+        self.dep_conv = nn.Conv2d(self.kernel_conv * self.kernel_conv * self.head_dim, self.out_planes, kernel_size=self.kernel_conv, bias=True, groups=self.head_dim, padding=1, stride=stride)
 
         self.reset_parameters()
     
@@ -1060,7 +1060,6 @@ class SPPFCSPC(nn.Module):
         y2 = self.cv2(x)
         return self.cv7(torch.cat((y1, y2), dim=1))
 
-#分组SPPCSPC 分组后参数量和计算量与原本差距不大，不知道效果怎么样
 class SPPCSPC_group(nn.Module):
     def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5, k=(5, 9, 13)):
         super(SPPCSPC_group, self).__init__()
