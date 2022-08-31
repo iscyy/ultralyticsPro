@@ -53,7 +53,7 @@ from utils.general import (LOGGER, check_dataset, check_file, check_git_status, 
 from utils.loggers import Loggers
 from utils.loggers.wandb.wandb_utils import check_wandb_resume
 from utils.loss import ComputeLoss, ComputeNWDLoss, ComputeLossOTA_v7, ComputeLossAuxOTA, ComputeLossBinOTA
-# from utils.loss_ps import ComputeLoss_v4
+from utils.loss_ps import ComputeLoss_v4
 from utils.metrics import fitness
 from utils.plots import plot_evolve, plot_labels
 from utils.torch_utils import EarlyStopping, ModelEMA, de_parallel, is_parallel, select_device, torch_distributed_zero_first
@@ -290,6 +290,8 @@ def train(hyp,  # path/to/hyp.yaml or hyp dictionary
         compute_loss = ComputeLoss(model)
     if loss_category is None:
         compute_loss = ComputeLoss(model)  # init loss class
+    elif opt.loss == 'v4':
+        compute_loss = ComputeLoss_v4(model)
     else:
         compute_loss = loss_category(model)# loss class
     if opt.loss == 'nwd':
