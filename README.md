@@ -30,7 +30,7 @@
 **统一模型代码框架、统一应用方式、统一调参、统一改进、易于模块组合、构建更强大的网络模型**。
 
 
-内置YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、Scaled_YOLOv4、YOLOv3、YOLOv4、YOLO-Facev2、TPH-YOLOv5、YOLOv5Lite、SPD-YOLO、PicoDet等模型网络结构(持续更新中🚀)...
+内置YOLOv5、YOLOv7、YOLOX、YOLOR、Transformer、Scaled_YOLOv4、YOLOv3、YOLOv4、YOLO-Facev2、TPH-YOLO、YOLOv5Lite、SPD-YOLO、SlimNeck-YOLO、PicoDet等模型网络结构(持续更新中🚀)...
 
 ```
 
@@ -44,10 +44,27 @@
 
 基于 YOLOv5 代码框架，并同步适配 **稳定的YOLOv5_v6.1更新**, 同步v6.1部署生态。使用这个项目之前, 您可以先了解YOLOv5库。  
 
+点 **Star🌟、Fork** 不迷路，同步更新。
+
 项目地址🌟: https://github.com/iscyy/yoloair
+
 
 部分改进说明教程🌟: [https://github.com/iscyy/yoloair/wiki/Improved-tutorial-presentation](https://github.com/iscyy/yoloair/wiki/Improved-tutorial-presentation)
 
+______________________________________________________________________
+
+### 🌟 To Do（不定时更新）
+🔥添加YOLOv3、YOLOv4、YOLOv5、YOLOv7、Scaled-YOLOv4网络的不同预训练权重 持续更新中🎈
+
+- 更新 **20+ 种 Transformer系列及其变种主干网络**🌟、**多种MLP网络🌟** 以及 **大部分重参数化结构模型网络** 🚀🚀🚀
+- 更新 **图神经网络**🌟 在YOLO中的应用
+- 更新 多模态🔥 在YOLO中的应用
+- 更新 30+ 种 **Attention注意力机制**🌟、
+- 更新 **多种Head检测头**
+- 更新 **YOLO系列网络模型热力图可视化**(GardCAM、GardCAM++等)支持YOLOv3、YOLOv3-SPP、YOLOv4、YOLOv5、YOLOR、YOLOv7、Scaled_YOLOv4、TPH-YOLO、SPD-YOLO以及自定义网络模型等模型
+- 其他 各种
+以上功能 Beta版本内测 已支持🔥
+...
 ______________________________________________________________________
 
 ### 主要特性🚀
@@ -55,7 +72,7 @@ ______________________________________________________________________
 🚀支持更多的YOLO系列算法模型改进(持续更新...)
 
 YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集成多种模型: 
-- 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOR 模型网络结构、YOLOX 模型网络结构、Scaled_YOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、SPD-YOLO模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
+- 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOR 模型网络结构、YOLOX 模型网络结构、Scaled_YOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、SPD-YOLO模型网络结构、SlimNeck-YOLO模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
 
 |||
 :-------------------------:|:-------------------------:
@@ -63,7 +80,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 
 - 以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
 
-🔥🔥🔥 重磅！！！作为开源项目补充，推荐一个注意力机制算法代码库[External-Attention](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，里面汇总整理很全面，包含各种Attention等代码，代码简洁易读，一行代码实现Attention机制。
+- 🔥🔥🔥 重磅！！！作为开源项目补充，推荐一个注意力算法代码库[External-Attention](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，里面汇总整理很全面，包含各种Attention等代码，代码简洁易读，一行代码实现Attention机制。
 
 🚀支持加载YOLOv3、YOLOv4、YOLOv5、YOLOv7、YOLOR、Scaled_YOLO等网络的官方预训练权重进行迁移学习
 
@@ -188,16 +205,13 @@ Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focu
 
 以上组件模块使用统一模型代码框架、统一任务形式、统一应用方式，**模块组件化**🚀 可以帮助用户自定义快速组合Backbone、Neck、Head，使得网络模型多样化，助力科研改进检测算法，构建更强大的网络模型。
 
+______________________________________________________________________
+
 ### 内置网络模型配置支持✨
 
 🚀包括基于 YOLOv5、YOLOv7、YOLOX、YOLOR、YOLOv3、YOLOv4、Scaled_YOLOv4、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、SPD-YOLO等**其他多种改进网络结构等算法模型**的模型配置文件
 ______________________________________________________________________
 
-### 更新 🌟
-
-🔥添加YOLOv3、YOLOv4、YOLOv5、YOLOv7、Scaled-YOLOv4网络的不同预训练权重
-持续更新中🎈 
-______________________________________________________________________
 
 ### 预训练权重🚀
 
@@ -205,19 +219,19 @@ ______________________________________________________________________
 https://github.com/ultralytics/yolov5/releases/tag/v6.1
 
 - YOLOv4
-https://github.com/iscyy/yoloair/releases/download/v1.0
+https://github.com/iscyy/yoloair/releases/tag/v1.0
 
 - YOLOv3
-https://github.com/iscyy/yoloair/releases/download/v1.0
+https://github.com/iscyy/yoloair/releases/tag/v1.0
 
 - YOLOR
-https://github.com/iscyy/yoloair/releases/download/v1.0
+https://github.com/iscyy/yoloair/releases/tag/v1.0
 
 - Scaled_YOLO
-https://github.com/iscyy/yoloair/releases/download/v1.0
+https://github.com/iscyy/yoloair/releases/tag/v1.0
 
 - YOLOv7
-https://github.com/iscyy/yoloair/releases/download/v1.0
+https://github.com/iscyy/yoloair/releases/tag/v1.0
 
 ______________________________________________________________________
 
@@ -376,6 +390,17 @@ ______________________________________________________________________
 跟进：YOLO-mask & YOLO-pose  
 
 ______________________________________________________________________
+
+## Citation✨
+
+```python
+@article{2022yoloair,
+  title={{YOLOAir}: Make the improvement of the YOLO model faster, more convenient},
+  author={iscyy},
+  repo={github https://github.com/iscyy/yoloair},
+  year={2022}
+}
+```
 
 ## Statement
 <details><summary> <b>Expand</b> </summary>
