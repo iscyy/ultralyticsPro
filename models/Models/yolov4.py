@@ -155,7 +155,7 @@ class BottleneckCSP2(nn.Module):
 
 
 class VoVCSP(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks # AIEAGNY
     def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
         super(VoVCSP, self).__init__()
         c_ = int(c2)  # hidden channels
