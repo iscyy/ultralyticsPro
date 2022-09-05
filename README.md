@@ -19,7 +19,7 @@
 ![](https://img.shields.io/badge/Support-YOLOv5-red) ![](https://img.shields.io/badge/Support-YOLOv7-brightgreen) ![](https://img.shields.io/badge/Support-YOLOX-yellow) ![](https://img.shields.io/badge/Support-YOLOv4-green) ![](https://img.shields.io/badge/Support-Scaled_YOLOv4-ff96b4)
 ![](https://img.shields.io/badge/Support-YOLOv3-yellowgreen) ![](https://img.shields.io/badge/Support-YOLOR-lightgrey) ![](https://img.shields.io/badge/Support-Transformer-9cf) ![](https://img.shields.io/badge/Support-Attention-green)
 
-[特性🚀](#主要特性) • [使用🍉](#使用) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new) • [更新💪](#更新-)
+[特性🚀](#主要特性) • [使用🍉](#使用) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new) • [更新💪](#-to-do不定时更新)
 
 </div>
 
@@ -54,17 +54,15 @@
 ______________________________________________________________________
 
 ### 🌟 To Do（不定时更新）
-🔥添加YOLOv3、YOLOv4、YOLOv5、YOLOv7、Scaled-YOLOv4网络的不同预训练权重 持续更新中🎈
+下列功能 YOLOAir-Beta版本内测 已支持🔥
 
-- 更新 **20+ 种 Transformer系列及其变种主干网络**🌟、**多种MLP网络🌟** 以及 **大部分重参数化结构模型网络** 🚀🚀🚀
-- 更新 **图神经网络**🌟 在YOLO中的应用
-- 更新 多模态🔥 在YOLO中的应用
-- 更新 30+ 种 **Attention注意力机制**🌟、
-- 更新 **多种Head检测头**
-- 更新 **YOLO系列网络模型热力图可视化**(GardCAM、GardCAM++等)支持YOLOv3、YOLOv3-SPP、YOLOv4、YOLOv5、YOLOR、YOLOv7、Scaled_YOLOv4、TPH-YOLO、SPD-YOLO以及自定义网络模型等模型
+- 已经完成更新 **20+ 种 Transformer系列及其变种主干网络**🌟、**多种MLP网络🌟** 以及 **大部分重参数化结构模型网络** 🚀🚀🚀
+- 已经完成更新 **图神经网络**🌟 在YOLO中的应用
+- 已经完成更新 多模态🔥 在YOLO中的应用
+- 已经完成更新 30+ 种 **Attention注意力机制**🌟、
+- 已经完成更新 **多种Head检测头**
+- 已经完成更新 **YOLO系列网络模型热力图可视化**(GardCAM、GardCAM++等)支持YOLOv3、YOLOv3-SPP、YOLOv4、YOLOv5、YOLOR、YOLOv7、Scaled_YOLOv4、TPH-YOLO、SPD-YOLO以及自定义网络模型等模型
 - 其他 各种
-以上功能 Beta版本内测 已支持🔥
-...
 ______________________________________________________________________
 
 ### 主要特性🚀
@@ -98,6 +96,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 -  RepLKNet系列  
 -  重参数化系列  
 -  RepVGG系列  
+-  RepMLP系列  
 -  ACNet系列
 -  RepConv系列  
 -  Mobileone系列  
@@ -159,6 +158,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 🚀支持更多Loss   
 - ComputeLoss  
 - ComputeLoss(v5)  
+- ComputeLoss(v6)  
 - ComputeLoss(X)  
 - ComputeLossAuxOTA(v7)  
 - ComputeLossOTA(v7)  
@@ -276,15 +276,11 @@ $ python wbf.py
 ```
 ______________________________________________________________________
 
-### 技术交流 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
+### 论文分享 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
 
-|FightingCV公众号|YOLOAir目标检测交流群( 答案:  yoloair )|
-:-------------------------:|:-------------------------:
-<img src='https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6f5057da9a8410fa22dcc7566548193~tplv-k3u1fbpfcp-watermark.image?' width='200px'>  |  <img src='https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1882e8cf3f804918a043d70de1b70e31~tplv-k3u1fbpfcp-watermark.image' width='200px'> 
-
-- FightingCV每天分享前沿论文动态(公众号回复加群, 添加小助手, 加入微信交流群)  
-
-- YOLOAir目标检测交流群
+FightingCV公众号每天分享前沿论文动态  
+(公众号回复加群,添加小助手加交流群)   
+<img src='https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b6f5057da9a8410fa22dcc7566548193~tplv-k3u1fbpfcp-watermark.image?' width='140px'>   
 ______________________________________________________________________
 
 ### Performance
@@ -415,7 +411,6 @@ ______________________________________________________________________
 <details><summary> <b>Expand</b> </summary>
 
 [https://github.com/ultralytics/yolov5](https://github.com/ultralytics/yolov5)  
-[https://github.com/AlexeyAB/darknet](https://github.com/AlexeyAB/darknet)  
 [https://github.com/ultralytics/yolov3](https://github.com/ultralytics/yolov3)  
 [https://github.com/WongKinYiu/PyTorch_YOLOv4](https://github.com/WongKinYiu/PyTorch_YOLOv4)  
 [https://github.com/WongKinYiu/ScaledYOLOv4](https://github.com/WongKinYiu/ScaledYOLOv4)   
@@ -427,8 +422,7 @@ ______________________________________________________________________
 [https://github.com/Krasjet-Yu/YOLO-FaceV2](https://github.com/Krasjet-Yu/YOLO-FaceV2)  
 [https://github.com/positive666/yolov5_research/](https://github.com/positive666/yolov5_research)  
 [https://github.com/ppogg/YOLOv5-Lite](https://github.com/ppogg/YOLOv5-Lite)  
-[https://github.com/Gumpest/YOLOv5-Multibackbone-Compression](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression)  
+[https://github.com/Gumpest/YOLOv5-Multibackbone](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression)  
 [https://github.com/cv516Buaa/tph-yolov5](https://github.com/cv516Buaa/tph-yolov5)
-Paper:[https://arxiv.org/abs/2208.02019](https://arxiv.org/abs/2208.02019)  
 
 </details>
