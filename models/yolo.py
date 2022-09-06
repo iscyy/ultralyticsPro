@@ -347,7 +347,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
 
         n = n_ = max(round(n * gd), 1) if n > 1 else n  # depth gain
         if m in [Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv,
-                 BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, C3HB, C3RFEM, MultiSEAM, SEAM, C3STR]:
+                 BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, C3HB, C3RFEM, MultiSEAM, SEAM, C3STR, MobileOneBlock]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -357,9 +357,9 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 args.insert(2, n)  # number of repeats
                 n = 1
         # add module research
-        elif m in [CARAFE, SPPCSPC, RepConv, BoT3, CA, CBAM, NAMAttention, GAMAttention, ACmix, Involution, Stem, ResCSPC, ResCSPB, \
-                   ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,EffectiveSELayer,
-                   ASPP, BasicRFB, SPPCSPC_group, SimSPPF, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d]:
+        elif m in [CARAFE, SPPCSPC, SPPFCSPC, RepConv, BoT3, CA, CBAM, NAMAttention, GAMAttention, Involution, Stem, ResCSPC, ResCSPB, \
+                   ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
+                   ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d,EffectiveSELayer]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -374,7 +374,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                     args[6] = make_divisible(args[6] * gw, 8)
         elif m in [CBH, ES_Bottleneck, DWConvblock, RepVGGBlock, LC_Block, Dense, conv_bn_relu_maxpool, \
                    Shuffle_Block, stem, mobilev3_bneck, conv_bn_hswish, MobileNetV3_InvertedResidual, DepthSepConv, \
-                   ShuffleNetV2_Model, Conv_maxpool, CoT3, ConvNextBlock]:
+                   ShuffleNetV2_Model, Conv_maxpool, CoT3, ConvNextBlock, RepBlock]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -395,7 +395,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 n = 1
         elif m in [ReOrg, DWT]:
             c2 = ch[f] * 4
-        elif m in [S2Attention, CrissCrossAttention, SOCA, ShuffleAttention, SEAttention, SimAM, SKAttention]:
+        elif m in [S2Attention, SimSPPF, ACmix, CrissCrossAttention, SOCA, ShuffleAttention, SEAttention, SimAM, SKAttention]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)

@@ -67,7 +67,7 @@ class GSConv(nn.Module):
 
 
 class GSConvns(GSConv):
-    # GSConv with a normative-shuffle https://github.com/AlanLi1997/slim-neck-by-gsconv
+    # GSConv with a normative-shuffle https://github.com/AlanLi1997/slim-neck-by-gsconv # AIEAGNY
     def __init__(self, c1, c2, k=1, s=1, g=1, act=True):
         super().__init__(c1, c2, k=1, s=1, g=1, act=True)
         c_ = c2 // 2

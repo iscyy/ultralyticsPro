@@ -59,7 +59,7 @@ class XBNConv(nn.Module):
     def fuseforward(self, x):
         return self.act(self.conv(x))
         
-# yolov5-FaceV2:https://arxiv.org/abs/2208.02019
+# yolov5-FaceV2:https://arxiv.org/abs/2208.02019 # OFUUSAE
 class TridentBlock(nn.Module):
     def __init__(self, c1, c2, stride=1, c=False, e=0.5, padding=[1, 2, 3], dilate=[1, 2, 3], bias=False):
         super(TridentBlock, self).__init__()
