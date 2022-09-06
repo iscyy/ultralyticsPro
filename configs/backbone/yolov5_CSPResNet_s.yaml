@@ -1,0 +1,42 @@
+# Parameters
+nc: 80  # number of classes
+depth_multiple: 1.0  # model depth multiple
+width_multiple: 1.0  # layer channel multiple
+anchors:
+  - [10,13, 16,30, 33,23]  # P3/8
+  - [30,61, 62,45, 59,119]  # P4/16
+  - [116,90, 156,198, 373,326]  # P5/32
+
+# PPYOLOE-S backbone
+backbone:
+  # [from, number, module, args]
+  [
+    [-1, 1, CSPResNet_CBS, [3,32,True]],  #0 /2
+    [-1, 1, CSPResNet, [32,64,1,2,'backbone']],  #1  /4
+    [-1, 1, CSPResNet, [64,128,2,2,'backbone']],  #2 cat /8 out
+    [-1, 1, CSPResNet, [128,256,1,2,'backbone']],  #3 cat  /16 out
+    [-1, 1, CSPResNet, [256,512,1,2,'backbone']],  #4  /32
+    [-1, 1, SPPF, [1024, 5]],  # 5
+  ]
+
+head:
+  [[-1, 1, Conv, [512, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 3], 1, Concat, [1]],
+   [-1, 3, C3, [512, False]],
+
+   [-1, 1, Conv, [256, 1, 1]],
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 2], 1, Concat, [1]],
+   [-1, 3, C3, [256, False]],
+
+   [-1, 1, Conv, [256, 3, 2]],
+   [[-1, 10], 1, Concat, [1]],
+   [-1, 3, C3, [512, False]],
+
+   [-1, 1, Conv, [512, 3, 2]],
+   [[-1, 6], 1, Concat, [1]],
+   [-1, 3, C3, [1024, False]],
+
+   [[13, 16, 19], 1, Detect, [nc, anchors]],
+  ]

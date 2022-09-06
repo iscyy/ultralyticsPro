@@ -359,7 +359,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
         # add module research
         elif m in [CARAFE, SPPCSPC, SPPFCSPC, RepConv, BoT3, CA, CBAM, NAMAttention, GAMAttention, Involution, Stem, ResCSPC, ResCSPB, \
                    ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC,
-                   ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d]:
+                   ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d,EffectiveSELayer]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
@@ -458,6 +458,8 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = args[0]
         elif m is Expand:  # no
             c2 = ch[f] // args[0] ** 2
+        elif m in [CSPResNet_CBS,CSPResNet,ConvBNLayer,ResSPP]:
+            c2 = args[1]
         else:
             c2 = ch[f]
 

@@ -30,7 +30,7 @@ from utils.torch_utils import copy_attr, time_sync
 from models.Models.FaceV2 import MultiSEAM, C3RFEM, SEAM
 from models.Models.research import CARAFE, MP, SPPCSPC, RepConv, BoT3, \
     PatchEmbed, SwinTransformer_Layer, CA, CBAM, Concat_bifpn, Involution, \
-        Stem, ResCSPC, ResCSPB, ResXCSPC, ResXCSPB, BottleneckCSPB, BottleneckCSPC
+        Stem, ResCSPC, ResCSPB, ResXCSPC, ResXCSPB, BottleneckCSPB, BottleneckCSPC,EffectiveSELayer
 from models.Models.Litemodel import CBH, ES_Bottleneck, DWConvblock, ADD, RepVGGBlock, LC_Block, \
     Dense, conv_bn_relu_maxpool, Shuffle_Block, stem, MBConvBlock, mobilev3_bneck
 from models.Models.muitlbackbone import conv_bn_hswish, DropPath, MobileNetV3_InvertedResidual, DepthSepConv, \
@@ -51,6 +51,7 @@ from models.Models.Attention.SKAttention import SKAttention
 from models.Models.Attention.SOCA import SOCA
 from models.Models.muitlbackbone import C3GC
 from models.Models.slimneck import GSConv, VoVGSCSP
+from models.Models.ppyolo import CSPResNet_CBS, CSPResNet, ConvBNLayer, ResSPP
 
 
 
