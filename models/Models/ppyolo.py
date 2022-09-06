@@ -2,10 +2,10 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-#基于PPYOLOE-L模型结构激活函数部分可能有出入
+#PPYOLOE-L
 class ResSPP(nn.Module):   #res SPP 结构
 
-    def __init__(self, c1 = 1024 ,c2 = 384,act='swish',k = (5,9,13)):
+    def __init__(self, c1 = 1024 ,c2 = 384,n = 3,act='swish',k = (5,9,13)):
         super(ResSPP, self).__init__()
         c_ = c2
         if c2 == 1024:
@@ -16,15 +16,22 @@ class ResSPP(nn.Module):   #res SPP 结构
         self.spp =nn.ModuleList([nn.MaxPool2d(kernel_size=x, stride=1, padding=x // 2) for x in k])
         self.conv2 = ConvBNLayer(c_*4, c_, 1, act=act)  # spp后CBR结构 1536-384
         self.basicBlock_spp3 = BasicBlock(c_, c_, shortcut=False)
+        self.n = n
+
 
 
     def forward(self, x):
         y1 = self.conv1(x)
-        y1 = self.basicBlock_spp1(y1)
-        y1 = self.basicBlock_spp2(y1)
-        y1 = torch.cat([y1] + [m(y1) for m in self.spp], 1)
-        y1 = self.conv2(y1)
-        y1 = self.basicBlock_spp3(y1)
+        if self.n == 3:
+            y1 = self.basicBlock_spp1(y1)
+            y1 = self.basicBlock_spp2(y1)
+            y1 = torch.cat([y1] + [m(y1) for m in self.spp], 1)
+            y1 = self.conv2(y1)
+            y1 = self.basicBlock_spp3(y1)
+        elif self.n == 1:
+            y1 = self.basicBlock_spp1(y1)
+            y1 = torch.cat([y1] + [m(y1) for m in self.spp], 1)
+            y1 = self.conv2(y1)
         return y1
 
 #https://github.com/Nioolek/PPYOLOE_pytorch
