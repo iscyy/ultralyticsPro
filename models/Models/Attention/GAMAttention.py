@@ -33,7 +33,7 @@ class GAMAttention(nn.Module):
         out = x * x_spatial_att
         return out  
 
-def channel_shuffle(x, groups=2):   ##shuffle channel  # AIEAGNY
+def channel_shuffle(x, groups=2):   ##shuffle channel 
         #RESHAPE----->transpose------->Flatten 
         B, C, H, W = x.size()
         out = x.view(B, groups, C // groups, H, W).permute(0, 2, 1, 3, 4).contiguous()

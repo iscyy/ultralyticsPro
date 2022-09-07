@@ -667,7 +667,7 @@ class SEBlock(nn.Module):
         x = x.view(-1, self.input_channels, 1, 1)
         return inputs * x
 
-# https://github.com/DingXiaoH/RepVGG
+
 class RepVGGBlock(nn.Module):
 
     def __init__(self, in_channels, out_channels, kernel_size=3,
@@ -744,8 +744,6 @@ class RepVGGBlock(nn.Module):
         return kernel * t, beta - running_mean * gamma / std
 
     def forward(self, inputs):
-        if self.deploy:
-            return self.nonlinearity(self.rbr_dense(inputs))
         if hasattr(self, 'rbr_reparam'):
             return self.nonlinearity(self.se(self.rbr_reparam(inputs)))
 
@@ -756,24 +754,8 @@ class RepVGGBlock(nn.Module):
 
         return self.nonlinearity(self.se(self.rbr_dense(inputs) + self.rbr_1x1(inputs) + id_out))
 
-    def switch_to_deploy(self):
-        if hasattr(self, 'rbr_1x1'):
-            kernel, bias = self.get_equivalent_kernel_bias()
-            self.rbr_reparam = nn.Conv2d(in_channels=self.rbr_dense.conv.in_channels, out_channels=self.rbr_dense.conv.out_channels,
-                                    kernel_size=self.rbr_dense.conv.kernel_size, stride=self.rbr_dense.conv.stride,
-                                    padding=self.rbr_dense.conv.padding, dilation=self.rbr_dense.conv.dilation, groups=self.rbr_dense.conv.groups, bias=True)
-            self.rbr_reparam.weight.data = kernel
-            self.rbr_reparam.bias.data = bias
-            for para in self.parameters():
-                para.detach_()
-            self.rbr_dense = self.rbr_reparam
-            # self.__delattr__('rbr_dense')
-            self.__delattr__('rbr_1x1')
-            if hasattr(self, 'rbr_identity'):
-                self.__delattr__('rbr_identity')
-            if hasattr(self, 'id_tensor'):
-                self.__delattr__('id_tensor')
-            self.deploy = True
+    def fusevggforward(self, x):
+        return self.nonlinearity(self.rbr_dense(x))
 
 
 # repvgg block end
@@ -782,7 +764,6 @@ class RepVGGBlock(nn.Module):
 # build mbv3 block
 # -----------------------------
 class mobilev3_bneck(nn.Module):
-    # OFUUSAE
     def __init__(self, inp, oup, hidden_dim, kernel_size, stride, use_se, use_hs):
         super(mobilev3_bneck, self).__init__()
         assert stride in [1, 2]

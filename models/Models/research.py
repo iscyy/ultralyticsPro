@@ -367,7 +367,7 @@ class Involution(nn.Module):
         return out
 
 class CARAFE(nn.Module):     
-    #CARAFE: Content-Aware ReAssembly of FEatures  # AIEAGNY      https://arxiv.org/pdf/1905.02188.pdf
+    #CARAFE: Content-Aware ReAssembly of FEatures       https://arxiv.org/pdf/1905.02188.pdf
     def __init__(self, c1, c2, kernel_size=3, up_factor=2):
         super(CARAFE, self).__init__()
         self.kernel_size = kernel_size
@@ -3374,15 +3374,3 @@ class Conv6(nn.Module):
 
     def forward_fuse(self, x):
         return self.act(self.conv(x))
-
-#EffectiveSELayer
-class EffectiveSELayer(nn.Module):
-    def __init__(self, channels, act='hardsigmoid'):
-        super(EffectiveSELayer, self).__init__()
-        self.fc = nn.Conv2d(channels, channels, kernel_size=1, padding=0)
-        self.act = nn.Hardsigmoid(inplace=True)
-
-    def forward(self, x):
-        x_se = x.mean((2, 3), keepdim=True)
-        x_se = self.fc(x_se)
-        return x * self.act(x_se)

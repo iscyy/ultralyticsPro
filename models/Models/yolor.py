@@ -671,7 +671,7 @@ class DNL(nn.Module):
 
 
 class GC(nn.Module):
-    # Spatial pyramid pooling layer used in YOLOv3-SPP # AIEAGNY
+    # Spatial pyramid pooling layer used in YOLOv3-SPP
     def __init__(self, c1, c2, k=3, s=1):
         super(GC, self).__init__()
         c_ = int(c1)  # hidden channels

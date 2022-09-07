@@ -5,12 +5,12 @@
 # Use >300 GB SSD
 
 cd home/ubuntu
-if [ ! -d yolov5 ]; then
+if [ ! -d yolor ]; then
   echo "Running first-time script." # install dependencies, download COCO, pull Docker
-  git clone https://github.com/ultralytics/yolov5 -b master && sudo chmod -R 777 yolov5
-  cd yolov5
-  bash data/scripts/get_coco.sh && echo "COCO done." &
-  sudo docker pull ultralytics/yolov5:latest && echo "Docker done." &
+  git clone -b paper https://github.com/WongKinYiu/yolor && sudo chmod -R 777 yolor
+  cd yolor
+  bash data/scripts/get_coco.sh && echo "Data done." &
+  sudo docker pull nvcr.io/nvidia/pytorch:21.08-py3 && echo "Docker done." &
   python -m pip install --upgrade pip && pip install -r requirements.txt && python detect.py && echo "Requirements done." &
   wait && echo "All tasks done." # finish background tasks
 else
