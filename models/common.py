@@ -52,6 +52,7 @@ from models.Models.Attention.SOCA import SOCA
 from models.Models.muitlbackbone import C3GC
 from models.Models.slimneck import GSConv, VoVGSCSP
 from models.Models.ppyolo import CSPResNet_CBS, CSPResNet, ConvBNLayer, ResSPP
+from models.Models.resnet import ResNet50vd,ResNet50vd_dcn,ResNet101vd,PPConvBlock,CoordConv
 
 
 

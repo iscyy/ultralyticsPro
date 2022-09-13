@@ -1,0 +1,43 @@
+# Parameters
+nc: 80  # number of classes
+depth_multiple: 1.0  # model depth multiple
+width_multiple: 1.0  # layer channel multiple
+anchors:
+  - [10,13, 16,30, 33,23]  # P3/8
+  - [30,61, 62,45, 59,119]  # P4/16
+  - [116,90, 156,198, 373,326]  # P5/32
+
+# YOLOv5 v6.0 backbone
+backbone:
+  # [from, number, module, args]
+  [
+  [-1, 1, CSPResNet_CBS, [3,48,True]],  #0 /2
+  [-1, 1, CSPResNet, [48,96,2,2,'backbone']],  #1  /4 
+  [-1, 1, CSPResNet, [96,192,4,2,'backbone']],  #2 cat /8 out 
+  [-1, 1, CSPResNet, [192,384,2,2,'backbone']],  #3 cat  /16 out
+  [-1, 1, CSPResNet, [384,768,2,2,'backbone']],  #4  /32
+  [-1, 1, ConvBNLayer, [768, 288, 1]],  #5
+  [4, 1, ResSPP, [768, 288, 2]],  # 6
+  [[-1, 5], 1, Concat, [1]],  # cat   7   out
+  [-1,1, ConvBNLayer,[576, 576, 1]],  #8
+  ]
+
+# YOLOv5 v6.0 head
+head:
+  [
+  [-1,1,ConvBNLayer,[576, 288, 1]],  #9
+  [-1, 1, nn.Upsample, [None, 2, 'nearest']],#10
+  [[-1, 3], 1, Concat, [1]],  # 11
+  [-1, 1, CSPResNet, [672,288,2,1,'neck']],  # 12   out
+  [-1,1,ConvBNLayer,[288, 144, 1]],  #13
+  [-1, 1, nn.Upsample, [None, 2, 'nearest']], #14
+  [[-1, 2], 1, Concat, [1]],  # 15
+  [-1, 1, CSPResNet, [336,144,2,1,'neck']],  # 16    output
+  [-1,1,ConvBNLayer,[144, 144, 3,2,1,1]],  #17    
+  [[-1, 12], 1, Concat, [1]],  # 18
+  [-1, 1, CSPResNet, [432,288,2,1,'neck']],  # 19    output
+  [-1,1,ConvBNLayer,[288, 288, 3,2,1,1]],  #20   
+  [[-1, 7], 1, Concat, [1]],  # 21
+  [-1, 1, CSPResNet, [864,576,2,1,'neck']],  # 22    output
+  [[16, 19, 22], 1, Detect, [nc, anchors]],  # Detect
+  ]

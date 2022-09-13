@@ -14,15 +14,15 @@ anchors:
 backbone:
   # [from, number, module, args]
   [
-  [-1, 1, CSPResNet_CBS, [3,32,True]],  #0 /2
-  [-1, 1, CSPResNet, [32,64,1,2,'backbone']],  #1  /4
-  [-1, 1, CSPResNet, [64,128,2,2,'backbone']],  #2 cat /8 out
-  [-1, 1, CSPResNet, [128,256,1,2,'backbone']],  #3 cat  /16 out
-  [-1, 1, CSPResNet, [256,512,1,2,'backbone']],  #4  /32
+  [-1, 1, CSPResNet_CBS, [3, 32, True]],  #0 /2
+  [-1, 1, CSPResNet, [32, 64, 1, 2, 'backbone']],  #1  /4
+  [-1, 1, CSPResNet, [64, 128, 2, 2, 'backbone']],  #2 cat /8 out
+  [-1, 1, CSPResNet, [128, 256,1,2, 'backbone']],  #3 cat  /16 out
+  [-1, 1, CSPResNet, [256, 512,1,2, 'backbone']],  #4  /32
   [-1, 1, ConvBNLayer, [512, 192, 1]],  #5
   [4, 1, ResSPP, [512, 192, 1]],  # 6
   [[-1, 5], 1, Concat, [1]],  # cat   7   out
-  [-1,1, ConvBNLayer,[384, 384, 1]],  #8
+  [-1, 1, ConvBNLayer,[384, 384, 1]],  #8
   ]
 
 # YOLOv5 v6.0 head
@@ -31,7 +31,7 @@ head:
   [-1,1,ConvBNLayer,[384, 192, 1]],  #9
   [-1, 1, nn.Upsample, [None, 2, 'nearest']],#10
   [[-1, 3], 1, Concat, [1]],  # 11
-  [-1, 1, CSPResNet, [448,192,1,1,'neck']],  # 12   out
+  [-1, 1, CSPResNet, [448, 192, 1, 1,'neck']],  # 12   out
   [-1,1,ConvBNLayer,[192, 96, 1]],  #13
   [-1, 1, nn.Upsample, [None, 2, 'nearest']], #14
   [[-1, 2], 1, Concat, [1]],  # 15

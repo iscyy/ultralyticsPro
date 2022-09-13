@@ -16,6 +16,7 @@ class ResSPP(nn.Module):   #res SPP
         self.spp =nn.ModuleList([nn.MaxPool2d(kernel_size=x, stride=1, padding=x // 2) for x in k])
         self.conv2 = ConvBNLayer(c_*4, c_, 1, act=act)
         self.basicBlock_spp3 = BasicBlock(c_, c_, shortcut=False)
+        self.basicBlock_spp4 = BasicBlock(c_, c_, shortcut=False)
         self.n = n
 
 
@@ -32,6 +33,18 @@ class ResSPP(nn.Module):   #res SPP
             y1 = self.basicBlock_spp1(y1)
             y1 = torch.cat([y1] + [m(y1) for m in self.spp], 1)
             y1 = self.conv2(y1)
+        elif self.n == 2:
+            y1 = self.basicBlock_spp1(y1)
+            y1 = torch.cat([y1] + [m(y1) for m in self.spp], 1)
+            y1 = self.conv2(y1)
+            y1 = self.basicBlock_spp2(y1)
+        elif self.n == 4:
+            y1 = self.basicBlock_spp1(y1)
+            y1 = self.basicBlock_spp2(y1)
+            y1 = torch.cat([y1] + [m(y1) for m in self.spp], 1)
+            y1 = self.conv2(y1)
+            y1 = self.basicBlock_spp3(y1)
+            y1 = self.basicBlock_spp4(y1)
         return y1
 
 #https://github.com/Nioolek/PPYOLOE_pytorch
