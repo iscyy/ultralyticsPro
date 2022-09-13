@@ -458,8 +458,10 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
             c2 = args[0]
         elif m is Expand:  # no
             c2 = ch[f] // args[0] ** 2
-        elif m in [CSPResNet_CBS,CSPResNet,ConvBNLayer,ResSPP]:
+        elif m in [CSPResNet_CBS,CSPResNet,ConvBNLayer,ResSPP,CoordConv]:
             c2 = args[1]
+        elif m in [ResNet50vd,ResNet50vd_dcn,ResNet101vd,PPConvBlock]:
+            c2 = args[0]
         else:
             c2 = ch[f]
 
