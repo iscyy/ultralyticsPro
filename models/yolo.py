@@ -4,6 +4,7 @@ YOLO-specific modules
 
 Usage:
     $ python path/to/models/yolo.py --cfg yolov5s.yaml
+    # OFUUSAE
 """
 
 import argparse
@@ -284,29 +285,7 @@ class Model(nn.Module):
                 m.fuse()
                 m.forward = m.fuseforward
             if type(m) is RepVGGBlock:
-                if hasattr(m, 'rbr_1x1'):
-                    # print(m)
-                    kernel, bias = m.get_equivalent_kernel_bias()
-                    rbr_reparam = nn.Conv2d(in_channels=m.rbr_dense.conv.in_channels,
-                                            out_channels=m.rbr_dense.conv.out_channels,
-                                            kernel_size=m.rbr_dense.conv.kernel_size,
-                                            stride=m.rbr_dense.conv.stride,
-                                            padding=m.rbr_dense.conv.padding, dilation=m.rbr_dense.conv.dilation,
-                                            groups=m.rbr_dense.conv.groups, bias=True)
-                    rbr_reparam.weight.data = kernel
-                    rbr_reparam.bias.data = bias
-                    for para in self.parameters():
-                        para.detach_()
-                    m.rbr_dense = rbr_reparam
-                    # m.__delattr__('rbr_dense')
-                    m.__delattr__('rbr_1x1')
-                    if hasattr(self, 'rbr_identity'):
-                        m.__delattr__('rbr_identity')
-                    if hasattr(self, 'id_tensor'):
-                        m.__delattr__('id_tensor')
-                    m.deploy = True
-                    delattr(m, 'se')
-                    m.forward = m.fusevggforward  # update forward
+                m.switch_to_deploy()
             if type(m) is CBH and hasattr(m, 'bn'):
                 m.conv = fuse_conv_and_bn(m.conv, m.bn)  # update conv
                 delattr(m, 'bn')  # remove batchnorm

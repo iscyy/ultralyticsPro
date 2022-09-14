@@ -1,0 +1,44 @@
+# YOLOv6 🚀, GPL-3.0 license
+# Parameters
+nc: 80  # number of classes
+depth_multiple: 0.33  # model depth multiple
+width_multiple: 0.25  # layer channel multiple
+anchors: 1  # number of anchors
+
+# YOLOv6-v2.0(Paper)
+# YOLOv6 backbone
+backbone:
+  # [from, number, module, args]
+  [[-1, 1, RepVGGBlockv6, [64, 3, 2]],
+   [-1, 1, RepVGGBlockv6, [128, 3, 2]],
+   [-1, 6, RepBlock, [64, 64]], 
+   [-1, 1, RepVGGBlockv6, [256, 3, 2]],
+   [-1, 12, RepBlock, [128, 128]],  
+   [-1, 1, RepVGGBlockv6, [512, 3, 2] ],
+   [-1, 18, RepBlock, [256, 256] ],  
+   [-1, 1, RepVGGBlockv6,[1024, 3, 2] ],
+   [-1, 6, RepBlock, [512, 512] ], 
+   [-1, 1, SimSPPF, [512, 512, 5]], 
+  ]
+
+# YOLOv6 head by yoloair
+head:
+  [[-1, 1, SimConv, [512, 128, 1, 1]], 
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 6], 1, Concat, [1]],          
+   [-1, 12, RepBlock, [384, 128]], 
+
+   [-1, 1, SimConv, [128, 64, 1, 1]],   
+   [-1, 1, nn.Upsample, [None, 2, 'nearest']],
+   [[-1, 4], 1, Concat, [1]],          
+   [-1, 12, RepBlock, [192, 64]],    
+
+   [-1, 1, SimConv, [64, 64, 3, 2]],   
+   [[-1, 14], 1, Concat, [1]],          
+   [-1, 12, RepBlock, [128, 128]],     
+
+   [-1, 1, SimConv, [128, 128, 3, 2]],  
+   [[-1, 10], 1, Concat, [1]],         
+   [-1, 12, RepBlock, [256, 256]],   
+   [[17, 20, 23], 1, EffDecHead, [nc, [64, 128, 256]]],  # EffDecHead(P3, P4, P5)
+  ]
