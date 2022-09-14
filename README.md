@@ -1,4 +1,4 @@
-## YOLO Air: Make the improvement of the YOLO model faster, more convenient
+## YOLO Air : Makes improvements easy again
 
 <div align="center">
 <p>YOLOAir 算法库🚀 
@@ -418,7 +418,7 @@ ______________________________________________________________________
 
 ```python
 @article{2022yoloair,
-  title={{YOLOAir}: Make the improvement of the YOLO model faster, more convenient},
+  title={{YOLOAir}: Makes improvements easy again},
   author={iscyy},
   repo={github https://github.com/iscyy/yoloair},
   year={2022}
