@@ -4,3 +4,4 @@ yolov5s.pt
 log_model
 runs
 *.idea
+yolov7/coco128.yaml
