@@ -729,7 +729,6 @@ class RepResXCSPC(ResXCSPC):
 
 ##### end of repvgg #####
 
-
 ##### transformer #####
 
 class TransformerLayer(nn.Module):
@@ -812,7 +811,6 @@ class SPPF(nn.Module):
 # delete
 ##### end of yolov5 ######
 
-
 ##### orepa #####
 
 def transI_fusebn(kernel, bn):
@@ -884,7 +882,6 @@ class OREPA_3x3_RepConv(nn.Module):
         self.weight_rbr_origin = nn.Parameter(torch.Tensor(out_channels, int(in_channels/self.groups), kernel_size, kernel_size))
         nn.init.kaiming_uniform_(self.weight_rbr_origin, a=math.sqrt(1.0))
         self.branch_counter += 1
-
 
         if groups < out_channels:
             self.weight_rbr_avg_conv = nn.Parameter(torch.Tensor(out_channels, int(in_channels/self.groups), 1, 1))
@@ -1044,7 +1041,6 @@ class RepConv_OREPA(nn.Module):
             self.rbr_dense = OREPA_3x3_RepConv(in_channels=self.in_channels, out_channels=self.out_channels, kernel_size=k, stride=s, padding=padding, groups=groups, dilation=1)
             self.rbr_1x1 = ConvBN(in_channels=self.in_channels, out_channels=self.out_channels, kernel_size=1, stride=s, padding=padding_11, groups=groups, dilation=1)
             print('RepVGG Block, identity = ', self.rbr_identity)
-
 
     def forward(self, inputs):
         if hasattr(self, 'rbr_reparam'):
@@ -1220,6 +1216,61 @@ class WindowAttention(nn.Module):
         x = self.proj_drop(x)
         return x
 
+class Swin_Transformer_A(nn.Module):
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(Swin_Transformer_A, self).__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(2 * c_, c2, 1, 1)
+        num_heads = c_ // 32
+        self.m = SwinTransformerBlock(c_, c_, num_heads, n)
+        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        y1 = self.m(self.cv1(x))
+        y2 = self.cv2(x)
+        return self.cv3(torch.cat((y1, y2), dim=1))
+
+
+class Swin_Transformer_B(nn.Module):
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(Swin_Transformer_B, self).__init__()
+        c_ = int(c2)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c_, c_, 1, 1)
+        self.cv3 = Conv(2 * c_, c2, 1, 1)
+        num_heads = c_ // 32
+        self.m = SwinTransformerBlock(c_, c_, num_heads, n)
+        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        x1 = self.cv1(x)
+        y1 = self.m(x1)
+        y2 = self.cv2(x1)
+        return self.cv3(torch.cat((y1, y2), dim=1))
+
+
+class Swin_Transformer_C(nn.Module):
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(Swin_Transformer_C, self).__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(c_, c_, 1, 1)
+        self.cv4 = Conv(2 * c_, c2, 1, 1)
+        num_heads = c_ // 32
+        self.m = SwinTransformerBlock(c_, c_, num_heads, n)
+        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        y1 = self.cv3(self.m(self.cv1(x)))
+        y2 = self.cv2(x)
+        return self.cv4(torch.cat((y1, y2), dim=1))
+
 class Mlp(nn.Module):
 
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.SiLU, drop=0.):
@@ -1366,7 +1417,6 @@ class SwinTransformerLayer(nn.Module):
 
         return x
 
-
 class SwinTransformerBlock(nn.Module):
     def __init__(self, c1, c2, num_heads, num_layers, window_size=8):
         super().__init__()
@@ -1383,62 +1433,6 @@ class SwinTransformerBlock(nn.Module):
             x = self.conv(x)
         x = self.blocks(x)
         return x
-
-
-class STCSPA(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
-    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(STCSPA, self).__init__()
-        c_ = int(c2 * e)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c1, c_, 1, 1)
-        self.cv3 = Conv(2 * c_, c2, 1, 1)
-        num_heads = c_ // 32
-        self.m = SwinTransformerBlock(c_, c_, num_heads, n)
-        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
-
-    def forward(self, x):
-        y1 = self.m(self.cv1(x))
-        y2 = self.cv2(x)
-        return self.cv3(torch.cat((y1, y2), dim=1))
-
-
-class STCSPB(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
-    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(STCSPB, self).__init__()
-        c_ = int(c2)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c_, c_, 1, 1)
-        self.cv3 = Conv(2 * c_, c2, 1, 1)
-        num_heads = c_ // 32
-        self.m = SwinTransformerBlock(c_, c_, num_heads, n)
-        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
-
-    def forward(self, x):
-        x1 = self.cv1(x)
-        y1 = self.m(x1)
-        y2 = self.cv2(x1)
-        return self.cv3(torch.cat((y1, y2), dim=1))
-
-
-class STCSPC(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
-    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(STCSPC, self).__init__()
-        c_ = int(c2 * e)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c1, c_, 1, 1)
-        self.cv3 = Conv(c_, c_, 1, 1)
-        self.cv4 = Conv(2 * c_, c2, 1, 1)
-        num_heads = c_ // 32
-        self.m = SwinTransformerBlock(c_, c_, num_heads, n)
-        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
-
-    def forward(self, x):
-        y1 = self.cv3(self.m(self.cv1(x)))
-        y2 = self.cv2(x)
-        return self.cv4(torch.cat((y1, y2), dim=1))
 
 ##### end of swin transformer #####   
 
@@ -1563,6 +1557,62 @@ class WindowAttention_v2(nn.Module):
         # x = self.proj(x)
         flops += N * self.dim * self.dim
         return flops
+    
+
+class Swin_v2_A(nn.Module):
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(Swin_v2_A, self).__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(2 * c_, c2, 1, 1)
+        num_heads = c_ // 32
+        self.m = SwinTransformer2Block(c_, c_, num_heads, n)
+        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        y1 = self.m(self.cv1(x))
+        y2 = self.cv2(x)
+        return self.cv3(torch.cat((y1, y2), dim=1))
+
+
+class Swin_v2_B(nn.Module):
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(Swin_v2_B, self).__init__()
+        c_ = int(c2)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c_, c_, 1, 1)
+        self.cv3 = Conv(2 * c_, c2, 1, 1)
+        num_heads = c_ // 32
+        self.m = SwinTransformer2Block(c_, c_, num_heads, n)
+        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        x1 = self.cv1(x)
+        y1 = self.m(x1)
+        y2 = self.cv2(x1)
+        return self.cv3(torch.cat((y1, y2), dim=1))
+
+
+class Swin_v2_C(nn.Module):
+    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
+        super(Swin_v2_C, self).__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(c_, c_, 1, 1)
+        self.cv4 = Conv(2 * c_, c2, 1, 1)
+        num_heads = c_ // 32
+        self.m = SwinTransformer2Block(c_, c_, num_heads, n)
+        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
+
+    def forward(self, x):
+        y1 = self.cv3(self.m(self.cv1(x)))
+        y2 = self.cv2(x)
+        return self.cv4(torch.cat((y1, y2), dim=1))
     
 class Mlp_v2(nn.Module):
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.SiLU, drop=0.):
@@ -1745,61 +1795,5 @@ class SwinTransformer2Block(nn.Module):
             x = self.conv(x)
         x = self.blocks(x)
         return x
-
-
-class ST2CSPA(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
-    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(ST2CSPA, self).__init__()
-        c_ = int(c2 * e)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c1, c_, 1, 1)
-        self.cv3 = Conv(2 * c_, c2, 1, 1)
-        num_heads = c_ // 32
-        self.m = SwinTransformer2Block(c_, c_, num_heads, n)
-        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
-
-    def forward(self, x):
-        y1 = self.m(self.cv1(x))
-        y2 = self.cv2(x)
-        return self.cv3(torch.cat((y1, y2), dim=1))
-
-
-class ST2CSPB(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
-    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(ST2CSPB, self).__init__()
-        c_ = int(c2)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c_, c_, 1, 1)
-        self.cv3 = Conv(2 * c_, c2, 1, 1)
-        num_heads = c_ // 32
-        self.m = SwinTransformer2Block(c_, c_, num_heads, n)
-        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
-
-    def forward(self, x):
-        x1 = self.cv1(x)
-        y1 = self.m(x1)
-        y2 = self.cv2(x1)
-        return self.cv3(torch.cat((y1, y2), dim=1))
-
-
-class ST2CSPC(nn.Module):
-    # CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks
-    def __init__(self, c1, c2, n=1, shortcut=True, g=1, e=0.5):  # ch_in, ch_out, number, shortcut, groups, expansion
-        super(ST2CSPC, self).__init__()
-        c_ = int(c2 * e)  # hidden channels
-        self.cv1 = Conv(c1, c_, 1, 1)
-        self.cv2 = Conv(c1, c_, 1, 1)
-        self.cv3 = Conv(c_, c_, 1, 1)
-        self.cv4 = Conv(2 * c_, c2, 1, 1)
-        num_heads = c_ // 32
-        self.m = SwinTransformer2Block(c_, c_, num_heads, n)
-        #self.m = nn.Sequential(*[Bottleneck(c_, c_, shortcut, g, e=1.0) for _ in range(n)])
-
-    def forward(self, x):
-        y1 = self.cv3(self.m(self.cv1(x)))
-        y2 = self.cv2(x)
-        return self.cv4(torch.cat((y1, y2), dim=1))
 
 ##### end of swin transformer v2 #####   
