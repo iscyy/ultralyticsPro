@@ -72,7 +72,7 @@ ______________________________________________________________________
 
 ### 🌟 To Do
 
-- [YOLOAir 🌟 To Do](https://github.com/iscyy/yoloair/discussions/60)
+- 更新支持多任务, 包括目标检测、分类、实例分割任务
 ______________________________________________________________________
 
 ### 主要特性🚀
@@ -82,9 +82,13 @@ ______________________________________________________________________
 YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集成多种模型: 
 - 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOv6 模型网络结构、PP-YOLO 模型网络结构、PP-YOLOv2 模型网络结构、PP-YOLOE 模型网络结构、PP-YOLOEPlus 模型网络结构、YOLOR 模型网络结构、YOLOX 模型网络结构、ScaledYOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、SPD-YOLO模型网络结构、SlimNeck-YOLO模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
 
-|||
+|Object detection|Object detection|
 :-------------------------:|:-------------------------:
 <img src='docs/image/test.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='500px'   alt='ingishvcn'>
+
+|Object classification|Detection and instance segmentation|
+:-------------------------:|:-------------------------:
+<img src='docs/image/class.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/seg.jpg' width='500px'   alt='ingishvcn'>
 
 - 以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
 
