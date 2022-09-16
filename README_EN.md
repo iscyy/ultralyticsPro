@@ -82,13 +82,13 @@ The YOLOAir algorithm library summarizes a variety of mainstream YOLO series det
 :-------------------------:|:-------------------------:
 <img src='docs/image/test.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='500px'   alt='ingishvcn'>
 
-|Object classification|Detection and instance segmentation|
+|Object classification|Detection and segmentation|
 :-------------------------:|:-------------------------:
 <img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/f0a70ccc62864f3996dc9b6ecbbd0c34.jpeg#pic_center' width='500px'   alt='ingishvcn'>
 
 |||
 :-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/a97a00ce43384f449302f0dee02da510.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='500px'   alt='ingishvcn'>
+<img src='https://img-blog.csdnimg.cn/e7f5b7c2bf974961a2183436b56c09a3.png#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='500px'   alt='ingishvcn'>
 
 - The above multiple detection algorithms use a unified model code framework, which is integrated in the YOLOAir library, with a unified task form and a unified application method. 🌟It is convenient for researchers to improve the algorithm model of the paper, compare models, and realize the diversification of network combinations. 🌟The deployment of engineering algorithms is more convenient, including lightweight models and models with higher accuracy, which can be reasonably selected according to the scene, and achieve a balance between accuracy and speed. At the same time, the library supports decoupling of different structures and module components to make modules componentized. By combining different module components, users can customize and build different detection models according to different data sets or different business scenarios.
 

@@ -71,7 +71,7 @@ ______________________________________________________________________
 
 ### 🌟 To Do
 
-- 更新支持多任务, 包括目标检测、分类、实例分割任务
+- 更新支持多任务, 包括目标检测、分类、分割任务
 ______________________________________________________________________
 
 ### 主要特性🚀
@@ -85,13 +85,13 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 :-------------------------:|:-------------------------:
 <img src='docs/image/test.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='500px'   alt='ingishvcn'>
 
-|目标分类|实例分割|
+|目标分类|目标分割|
 :-------------------------:|:-------------------------:
 <img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/f0a70ccc62864f3996dc9b6ecbbd0c34.jpeg#pic_center' width='500px'   alt='ingishvcn'>
 
 |||
 :-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/a97a00ce43384f449302f0dee02da510.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='500px'   alt='ingishvcn'>
+<img src='https://img-blog.csdnimg.cn/e7f5b7c2bf974961a2183436b56c09a3.png#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='500px'   alt='ingishvcn'>
 
 - 以上多种检测算法 和 其他相关任务 使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
 
