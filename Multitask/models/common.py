@@ -19,6 +19,7 @@ import torch
 import torch.nn as nn
 from PIL import Image
 from torch.cuda import amp
+import torch.nn.functional as F
 
 from utils.dataloaders import exif_transpose, letterbox
 from utils.general import (LOGGER, ROOT, Profile, check_requirements, check_suffix, check_version, colorstr,
@@ -63,6 +64,46 @@ class DWConvTranspose2d(nn.ConvTranspose2d):
     def __init__(self, c1, c2, k=1, s=1, p1=0, p2=0):  # ch_in, ch_out, kernel, stride, padding, padding_out
         super().__init__(c1, c2, k, s, p1, p2, groups=math.gcd(c1, c2))
 
+class SPPCSPC(nn.Module):
+    # CSP SPP https://github.com/WongKinYiu/CrossStagePartialNetworks
+    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5, k=(5, 9, 13)):
+        super(SPPCSPC, self).__init__()
+        c_ = int(2 * c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(c_, c_, 3, 1)
+        self.cv4 = Conv(c_, c_, 1, 1)
+        self.m = nn.ModuleList([nn.MaxPool2d(kernel_size=x, stride=1, padding=x // 2) for x in k])
+        self.cv5 = Conv(4 * c_, c_, 1, 1)
+        self.cv6 = Conv(c_, c_, 3, 1)
+        self.cv7 = Conv(2 * c_, c2, 1, 1)
+
+    def forward(self, x):
+        x1 = self.cv4(self.cv3(self.cv1(x)))
+        y1 = self.cv6(self.cv5(torch.cat([x1] + [m(x1) for m in self.m], 1)))
+        y2 = self.cv2(x)
+        return self.cv7(torch.cat((y1, y2), dim=1))
+
+class ImplicitA(nn.Module):
+    def __init__(self, channel):
+        super(ImplicitA, self).__init__()
+        self.channel = channel
+        self.implicit = nn.Parameter(torch.zeros(1, channel, 1, 1))
+        nn.init.normal_(self.implicit, std=.02)
+
+    def forward(self, x):
+        return self.implicit + x
+
+
+class ImplicitM(nn.Module):
+    def __init__(self, channel):
+        super(ImplicitM, self).__init__()
+        self.channel = channel
+        self.implicit = nn.Parameter(torch.ones(1, channel, 1, 1))
+        nn.init.normal_(self.implicit, mean=1., std=.02)
+
+    def forward(self, x):
+        return self.implicit * x
 
 class TransformerLayer(nn.Module):
     # Transformer layer https://arxiv.org/abs/2010.11929 (LayerNorm layers removed for better performance)
@@ -250,6 +291,26 @@ class GhostConv(nn.Module):
         y = self.cv1(x)
         return torch.cat((y, self.cv2(y)), 1)
 
+class Refine(nn.Module):
+    
+    def __init__(self, ch, c_=256, c2=32, k=3):  # ch_in, ch_out, kernel, stride, padding, groups
+        super().__init__()
+        self.refine = nn.ModuleList()
+        for c in ch:
+            self.refine.append(Conv(c, c_, k))
+        self.upsample = nn.Upsample(scale_factor=2, mode='nearest')
+        self.cv2 = Conv(c_, c_, k)
+        self.cv3 = Conv(c_, c2)
+
+    def forward(self, x):
+        for i, f in enumerate(x):
+            if i == 0:
+                r = self.refine[i](f)
+            else:
+                r_p = self.refine[i](f)
+                r_p = F.interpolate(r_p, r.size()[2:], mode="nearest")
+                r = r + r_p
+        return self.cv3(self.cv2(self.upsample(r)))
 
 class GhostBottleneck(nn.Module):
     # Ghost Bottleneck https://github.com/huawei-noah/ghostnet
@@ -337,7 +398,7 @@ class DetectMultiBackend(nn.Module):
             names = model.module.names if hasattr(model, 'module') else model.names  # get class names
             model.half() if fp16 else model.float()
             self.model = model  # explicitly assign for to(), cpu(), cuda(), half()
-            segmentation_model = type(model.model[-1]).__name__ == 'Segment'
+            segmentation_model = type(model.model[-1]).__name__ in ['Segment', 'ISegment', 'IRSegment']
         elif jit:  # TorchScript
             LOGGER.info(f'Loading {w} for TorchScript inference...')
             extra_files = {'config.txt': ''}  # model metadata
