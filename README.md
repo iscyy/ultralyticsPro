@@ -16,10 +16,10 @@
 
   #### **支持**
 
-![](https://img.shields.io/badge/Support-YOLOv5-red) ![](https://img.shields.io/badge/Support-YOLOv7-brightgreen) ![](https://img.shields.io/badge/Support-YOLOv6-blueviolet) ![](https://img.shields.io/badge/Support-YOLOX-yellow) ![](https://img.shields.io/badge/Support-PPYOLOE-007d65) ![](https://img.shields.io/badge/Support-YOLOv4-green) ![](https://img.shields.io/badge/Support-TOOD-6a6da9) 
-![](https://img.shields.io/badge/Support-YOLOv3-yellowgreen) ![](https://img.shields.io/badge/Support-YOLOR-lightgrey) ![](https://img.shields.io/badge/Support-Scaled_YOLOv4-ff96b4) ![](https://img.shields.io/badge/Support-Transformer-9cf) ![](https://img.shields.io/badge/Support-PPYOLO-lightgrey) ![](https://img.shields.io/badge/Support-PPYOLOv2-yellowgreen) ![](https://img.shields.io/badge/Support-PPYOLOEPlus-d5c59f) ![](https://img.shields.io/badge/Support-MLP-ff69b4) ![](https://img.shields.io/badge/Support-Attention-green)
+![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOv5-red) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOv7-brightgreen) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOv6-blueviolet) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOX-yellow) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-PPYOLOE-007d65) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOv4-green) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-TOOD-6a6da9) 
+![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOv3-yellowgreen) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-YOLOR-lightgrey) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-Scaled_YOLOv4-ff96b4) ![](https://img.shields.io/badge/Support-Transformer-9cf) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-PPYOLO-lightgrey) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-PPYOLOv2-yellowgreen) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-PPYOLOEPlus-d5c59f) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-MLP-ff69b4) ![https://github.com/iscyy/yoloair](https://img.shields.io/badge/Support-Attention-green)
 
-[特性🚀](#主要特性) • [使用🍉](#使用) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new) • [更新💪](#-to-do不定时更新) • [讨论✌️](https://github.com/iscyy/yoloair/discussions)
+[特性🚀](#主要特性) • [使用🍉](#使用) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new) • [更新💪](#-to-do) • [讨论✌️](https://github.com/iscyy/yoloair/discussions)
 
 </div>
 
@@ -33,7 +33,6 @@
 内置YOLOv5、YOLOv7、YOLOv6、YOLOX、YOLOR、Transformer、PP-YOLO、PP-YOLOv2、PP-YOLOE、PP-YOLOEPlus、Scaled_YOLOv4、YOLOv3、YOLOv4、YOLO-Facev2、TPH-YOLO、YOLOv5Lite、SPD-YOLO、SlimNeck-YOLO、PicoDet等模型网络结构(持续更新中🚀)...
 
 ```
-
 ██╗   ██╗ ██████╗ ██╗      ██████╗      █████╗     ██╗    ██████╗ 
 ╚██╗ ██╔╝██╔═══██╗██║     ██╔═══██╗    ██╔══██╗    ██║    ██╔══██╗
  ╚████╔╝ ██║   ██║██║     ██║   ██║    ███████║    ██║    ██████╔╝
@@ -44,7 +43,7 @@
 
 基于 YOLOv5 代码框架，并同步适配 **稳定的YOLOv5_v6.1更新**, 同步v6.1部署生态。使用这个项目之前, 您可以先了解YOLOv5库。  
 
-点 **Star🌟、Fork** 不迷路，同步更新。![](https://img.shields.io/github/stars/iscyy/yoloair?style=social)
+**Star🌟、Fork** 不迷路，同步更新。![](https://img.shields.io/github/stars/iscyy/yoloair?style=social)
 
 项目地址🌟: https://github.com/iscyy/yoloair
 
@@ -72,7 +71,7 @@ ______________________________________________________________________
 
 ### 🌟 To Do
 
-- [YOLOAir 🌟 To Do](https://github.com/iscyy/yoloair/discussions/60)
+- 更新支持多任务, 包括目标检测、分类、实例分割任务
 ______________________________________________________________________
 
 ### 主要特性🚀
@@ -82,13 +81,19 @@ ______________________________________________________________________
 YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集成多种模型: 
 - 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOv6 模型网络结构、PP-YOLO 模型网络结构、PP-YOLOv2 模型网络结构、PP-YOLOE 模型网络结构、PP-YOLOEPlus 模型网络结构、YOLOR 模型网络结构、YOLOX 模型网络结构、ScaledYOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、SPD-YOLO模型网络结构、SlimNeck-YOLO模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
 
-|||
+|目标检测|目标检测|
 :-------------------------:|:-------------------------:
 <img src='docs/image/test.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='500px'   alt='ingishvcn'>
 
-- 以上多种检测算法使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
+|目标分类|实例分割|
+:-------------------------:|:-------------------------:
+<img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/f0a70ccc62864f3996dc9b6ecbbd0c34.jpeg#pic_center' width='500px'   alt='ingishvcn'>
 
-- 🔥🔥🔥 重磅！！！作为开源项目补充，推荐一个注意力算法代码库[External-Attention](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，里面汇总整理很全面，包含各种Attention等代码，代码简洁易读，一行代码实现Attention机制。
+|||
+:-------------------------:|:-------------------------:
+<img src='https://img-blog.csdnimg.cn/a97a00ce43384f449302f0dee02da510.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='500px'   alt='ingishvcn'>
+
+- 以上多种检测算法 和 其他相关任务 使用统一模型代码框架，**集成在 YOLOAir 库中，统一任务形式、统一应用方式**。🌟便于科研者用于论文算法模型改进，模型对比，实现网络组合多样化。🌟工程算法部署落地更便捷，包含轻量化模型和精度更高的模型，根据场景合理选择，在精度和速度俩个方面取得平衡。同时该库支持解耦不同的结构和模块组件，让模块组件化，通过组合不同的模块组件，用户可以根据不同数据集或不同业务场景自行定制化构建不同检测模型。
 
 🚀支持加载YOLOv3、YOLOv4、YOLOv5、YOLOv7、YOLOR、Scaled_YOLO等网络的官方预训练权重进行迁移学习
 
@@ -109,21 +114,26 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 -  RepMLP系列  
 -  ACNet系列
 -  RepConv系列  
+-  OREPA系列
 -  Mobileone系列  
 -  自注意力Transformer系列  
 -  MobileViT系列
 -  BoTNet-Transfomrer  
 -  CoTNet-Transfomrer  
 -  Swin-Transfomrer  
+-  Swin-Transfomrer(v2)  
 -  以及其他trans系列
 持续更新中🎈🚀🚀🚀
-注: (YOLOAir(Beta版本内测)🔥 已经完成更新 20+ 种Transformer系列主干网络、多种MLP网络 以及 绝大部分重参数化结构模型网络)
+注: (YOLOAir(Beta版本)🔥 已经完成更新 20+ 种Transformer系列主干网络、多种MLP网络 以及 绝大部分重参数化结构模型网络)
 
 🚀支持更多Neck
 - FPN  
 - PANet  
 - RepPAN
-- BiFPN等主流结构。  
+- BiFPN
+- CSPPAN
+- SlimNeck
+- ELANPAN  
  持续更新中🎈
 
 🚀支持更多检测头Head  
@@ -156,7 +166,8 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 - SOCAttention  
 - SimAM Attention 
 持续更新中🎈  
-注: (YOLOAir(Beta版本内测)🔥 已经完成更新 30+ 种Attention注意力机制)
+
+- 🔥🔥🔥 重磅！！！作为开源项目补充，推荐一个注意力算法代码库[External-Attention](https://github.com/xmu-xiaoma666/External-Attention-pytorch)，里面汇总整理很全面，包含各种Attention等代码，代码简洁易读，一行代码实现Attention机制。
 
 🚀更多空间金字塔池化结构  
 - SPP
@@ -236,7 +247,7 @@ ______________________________________________________________________
 
 ### 内置网络模型配置支持✨
 
-🚀包括基于 YOLOv5、YOLOv7、YOLOX、YOLOR、YOLOv3、YOLOv4、Scaled_YOLOv4、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、SPD-YOLO等**其他多种改进网络结构等算法模型**的模型配置文件
+🚀包括基于 YOLOv5、YOLOv7、YOLOX、YOLOR、YOLOv3、YOLOv4、Scaled_YOLOv4、PPYOLO、PPYOLOE、PPYOLOEPlus、Transformer、YOLO-FaceV2、PicoDet、YOLOv5-Lite、TPH-YOLOv5、SPD-YOLO等**其他多种改进网络结构等算法模型**的模型配置文件
 ______________________________________________________________________
 
 
@@ -409,8 +420,7 @@ ______________________________________________________________________
 ### 未来增强✨
 后续会持续建设和完善 YOLOAir 生态  
 完善集成更多 YOLO 系列模型，持续结合不同模块，构建更多不同网络模型  
-横向拓展和引入关联技术等等  
-跟进：YOLO-mask & YOLO-pose  
+横向拓展和引入关联技术等等   
 
 ______________________________________________________________________
 
