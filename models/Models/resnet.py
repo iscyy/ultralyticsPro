@@ -402,7 +402,7 @@ class ResNet(nn.Module):
 
     def __init__(
             self, cout = 64,idx = 0,bool_DeformableConv2d = False,channels = [64, 128, 256, 512],block = Bottleneck, layers=[3, 4, 6, 3], num_classes=1000, in_chans=3, output_stride=32, global_pool='avg',
-            cardinality=1, base_width=32, stem_width=32, stem_type='deep', replace_stem_pool=False, block_reduce_first=1,
+            cardinality=1, base_width=64, stem_width=64, stem_type='', replace_stem_pool=False, block_reduce_first=1,
             down_kernel_size=1, avg_down=True, act_layer=nn.ReLU, norm_layer=nn.BatchNorm2d, aa_layer=None,
             drop_rate=0.0, drop_path_rate=0., drop_block_rate=0., zero_init_last=True, block_args=None):
         super(ResNet, self).__init__()
@@ -659,3 +659,108 @@ class CoordConv(nn.Module):
 
         y = self.conv(ins_feat)
         return y
+
+""" Res2Net and Res2NeXt
+Adapted from Official Pytorch impl at: https://github.com/gasvn/Res2Net/
+Paper: `Res2Net: A New Multi-scale Backbone Architecture` - https://arxiv.org/abs/1904.01169
+"""
+
+class Bottle2neck(nn.Module):
+    """ Res2Net/Res2NeXT Bottleneck
+    Adapted from https://github.com/gasvn/Res2Net/blob/master/res2net.py
+    """
+    expansion = 4
+
+    def __init__(
+            self, idx,net_block_idx,bool_DeformableConv2d,inplanes, planes, stride=1, downsample=None,
+            cardinality=1, base_width=26, scale=4, dilation=1, first_dilation=None,
+            act_layer=nn.ReLU, norm_layer=None, attn_layer=None, **_):
+        super(Bottle2neck, self).__init__()
+        self.scale = scale
+        self.is_first = stride > 1 or downsample is not None
+        self.num_scales = max(1, scale - 1)
+        width = int(math.floor(planes * (base_width / 64.0))) * cardinality
+        self.width = width
+        outplanes = planes * self.expansion
+        first_dilation = first_dilation or dilation
+
+        self.conv1 = nn.Conv2d(inplanes, width * scale, kernel_size=1, bias=False)
+        self.bn1 = norm_layer(width * scale)
+
+        convs = []
+        bns = []
+        for i in range(self.num_scales):
+            convs.append(nn.Conv2d(
+                width, width, kernel_size=3, stride=stride, padding=first_dilation,
+                dilation=first_dilation, groups=cardinality, bias=False))
+            bns.append(norm_layer(width))
+        self.convs = nn.ModuleList(convs)
+        self.bns = nn.ModuleList(bns)
+        if self.is_first:
+            # FIXME this should probably have count_include_pad=False, but hurts original weights
+            self.pool = nn.AvgPool2d(kernel_size=3, stride=stride, padding=1)
+        else:
+            self.pool = None
+
+        self.conv3 = nn.Conv2d(width * scale, outplanes, kernel_size=1, bias=False)
+        self.bn3 = norm_layer(outplanes)
+        self.se = attn_layer(outplanes) if attn_layer is not None else None
+
+        self.relu = act_layer(inplace=True)
+        self.downsample = downsample
+
+    def zero_init_last(self):
+        nn.init.zeros_(self.bn3.weight)
+
+    def forward(self, x):
+        shortcut = x
+
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+
+        spx = torch.split(out, self.width, 1)
+        spo = []
+        sp = spx[0]  # redundant, for torchscript
+        for i, (conv, bn) in enumerate(zip(self.convs, self.bns)):
+            if i == 0 or self.is_first:
+                sp = spx[i]
+            else:
+                sp = sp + spx[i]
+            sp = conv(sp)
+            sp = bn(sp)
+            sp = self.relu(sp)
+            spo.append(sp)
+        if self.scale > 1:
+            if self.pool is not None:  # self.is_first == True, None check for torchscript
+                spo.append(self.pool(spx[-1]))
+            else:
+                spo.append(spx[-1])
+        out = torch.cat(spo, 1)
+
+        out = self.conv3(out)
+        out = self.bn3(out)
+
+        if self.se is not None:
+            out = self.se(out)
+
+        if self.downsample is not None:
+            shortcut = self.downsample(x)
+
+        out += shortcut
+        out = self.relu(out)
+
+        return out
+
+class Res2net50(nn.Module):
+    """Constructs a Res2Net-50  model."""
+
+    def __init__(self,cout = 64,idx = 0):
+
+        super(Res2net50 , self).__init__()
+        self.cout = cout
+        self.idx = idx
+        self.res2net50  = ResNet(cout = cout,idx = idx,channels = [64, 128, 256, 512] ,block=Bottle2neck, layers=[3, 4, 6, 3], cardinality=8,base_width=4)
+    def forward(self, x):
+        x = self.res2net50(x)
+        return x
