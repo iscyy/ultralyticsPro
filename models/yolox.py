@@ -851,6 +851,8 @@ class DetectYoloX(nn.Module):
         ).permute(0, 2, 1)
         return outputs
 
+
+
     def get_output_and_grid(self, output, k, stride, dtype):
         grid = self.grids[k]
 
@@ -1306,3 +1308,13 @@ class DetectYoloX(nn.Module):
         en = (tl < br).type(tl.type()).prod(dim=2)
         area_i = torch.prod(br - tl, 2) * en  # * ((tl < br).all())
         return area_i / (area_a[:, None] + area_b - area_i)
+
+
+'''
+██╗   ██╗ ██████╗ ██╗      ██████╗      █████╗     ██╗    ██████╗ 
+╚██╗ ██╔╝██╔═══██╗██║     ██╔═══██╗    ██╔══██╗    ██║    ██╔══██╗
+ ╚████╔╝ ██║   ██║██║     ██║   ██║    ███████║    ██║    ██████╔╝
+  ╚██╔╝  ██║   ██║██║     ██║   ██║    ██╔══██║    ██║    ██╔══██╗
+   ██║   ╚██████╔╝███████╗╚██████╔╝    ██║  ██║    ██║    ██║  ██║
+   ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝     ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝
+'''

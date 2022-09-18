@@ -143,6 +143,16 @@ class ASFF_Detect(nn.Module):   #add ASFFV5 layer and Rfb
         #print(anchor_grid)
         return grid, anchor_grid
 
+
+'''
+██╗   ██╗ ██████╗ ██╗      ██████╗      █████╗     ██╗    ██████╗ 
+╚██╗ ██╔╝██╔═══██╗██║     ██╔═══██╗    ██╔══██╗    ██║    ██╔══██╗
+ ╚████╔╝ ██║   ██║██║     ██║   ██║    ███████║    ██║    ██████╔╝
+  ╚██╔╝  ██║   ██║██║     ██║   ██║    ██╔══██║    ██║    ██╔══██╗
+   ██║   ╚██████╔╝███████╗╚██████╔╝    ██║  ██║    ██║    ██║  ██║
+   ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝     ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝
+'''
+
 class IDetect(nn.Module):
     stride = None  # strides computed during build
     export = False  # onnx export

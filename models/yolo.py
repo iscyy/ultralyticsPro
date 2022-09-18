@@ -457,6 +457,15 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
     return nn.Sequential(*layers), sorted(save)
 
 
+'''
+██╗   ██╗ ██████╗ ██╗      ██████╗      █████╗     ██╗    ██████╗ 
+╚██╗ ██╔╝██╔═══██╗██║     ██╔═══██╗    ██╔══██╗    ██║    ██╔══██╗
+ ╚████╔╝ ██║   ██║██║     ██║   ██║    ███████║    ██║    ██████╔╝
+  ╚██╔╝  ██║   ██║██║     ██║   ██║    ██╔══██║    ██║    ██╔══██╗
+   ██║   ╚██████╔╝███████╗╚██████╔╝    ██║  ██║    ██║    ██║  ██║
+   ╚═╝    ╚═════╝ ╚══════╝ ╚═════╝     ╚═╝  ╚═╝    ╚═╝    ╚═╝  ╚═╝
+'''
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--cfg', type=str, default='yolov5s.yaml', help='model.yaml')

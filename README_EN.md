@@ -22,11 +22,29 @@
 
 </div>
 
+## Introduction
+
 **Model diversification**: Build different detection network models based on different network modules.
 
 **Module componentization**: Help users customize and quickly combine Backbone, Neck, Head, diversify network models, help scientific research improve detection algorithms, model improvements, and network permutation and combination 🏆. Build powerful network models.
 
-**Unified model code framework, unified application method, unified parameter adjustment, unified improvement, easy module combination, and more powerful network model building**.
+**Unified model code framework, unified application method, unified parameter adjustment, unified improvement, Integrated multitasking, easy module combination, and more powerful network model building**.
+
+|Object detection|Object detection|
+:-------------------------:|:-------------------------:
+<img src='docs/image/test.jpg' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='300px' height='180px'  alt='ingishvcn'>
+
+|Image classification|Detection and segmentation|
+:-------------------------:|:-------------------------:
+<img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
+
+|Detection and segmentation|Object tracking|
+:-------------------------:|:-------------------------:
+<img src='https://img-blog.csdnimg.cn/f0a70ccc62864f3996dc9b6ecbbd0c34.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/d9ae8953fb394a74a6b1096a401fc315.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
+
+|Pose Estimation|Face Detector|
+:-------------------------:|:-------------------------:
+<img src='https://img-blog.csdnimg.cn/01f41103dc6c416aaeeb4577b87bb363.gif#pic_center' width='300px' height='260px' alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/d18a095621b64da69d2a712fa5613976.gif#pic_center' width='300px' height='260px'   alt='ingishvcn'>
 
 
 Built-in YOLOv5, YOLOv7, YOLOv6, YOLOX, YOLOR, Transformer, PP-YOLO, PP-YOLOv2, PP-YOLOE, PP-YOLOEPlus, Scaled_YOLOv4, YOLOv3, YOLOv4, YOLO-Facev2, TPH-YOLO, YOLOv5Lite, SPD-YOLO, SlimNeck -Model network structures such as YOLO and PicoDet (continuously updated 🚀)...
@@ -77,18 +95,6 @@ ______________________________________________________________________
 
 The YOLOAir algorithm library summarizes a variety of mainstream YOLO series detection models, and a set of codes integrates multiple models:
 - Built-in integrated YOLOv5 model network structure, YOLOv7 model network structure, YOLOv6 model network structure, PP-YOLO model network structure, PP-YOLOv2 model network structure, PP-YOLOE model network structure, PP-YOLOEPlus model network structure, YOLOR model network structure , YOLOX model network structure, ScaledYOLOv4 model network structure, YOLOv4 model network structure, YOLOv3 model network structure, YOLO-FaceV2 model network structure, TPH-YOLOv5 model network structure, SPD-YOLO model network structure, SlimNeck-YOLO model network structure, YOLOv5 -Lite model network structure, PicoDet model network structure, etc. are continuously updated...
-
-|Object detection|Object detection|
-:-------------------------:|:-------------------------:
-<img src='docs/image/test.jpg' width='500px'   alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='500px'   alt='ingishvcn'>
-
-|Object classification|Detection and segmentation|
-:-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/f0a70ccc62864f3996dc9b6ecbbd0c34.jpeg#pic_center' width='500px'   alt='ingishvcn'>
-
-|||
-:-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/e7f5b7c2bf974961a2183436b56c09a3.png#pic_center' width='500px'   alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='500px'   alt='ingishvcn'>
 
 - The above multiple detection algorithms use a unified model code framework, which is integrated in the YOLOAir library, with a unified task form and a unified application method. 🌟It is convenient for researchers to improve the algorithm model of the paper, compare models, and realize the diversification of network combinations. 🌟The deployment of engineering algorithms is more convenient, including lightweight models and models with higher accuracy, which can be reasonably selected according to the scene, and achieve a balance between accuracy and speed. At the same time, the library supports decoupling of different structures and module components to make modules componentized. By combining different module components, users can customize and build different detection models according to different data sets or different business scenarios.
 
@@ -244,6 +250,11 @@ ______________________________________________________________________
 
 🚀 Including various improved networks based on YOLOv5, YOLOv7, YOLOX, YOLOR, YOLOv3, YOLOv4, Scaled_YOLOv4, PPYOLO, PPYOLOE, PPYOLOEPlus, Transformer, YOLO-FaceV2, PicoDet, YOLOv5-Lite, TPH-YOLOv5, SPD-YOLO, etc.** Model configuration files for algorithmic models such as structures**
 ______________________________________________________________________
+
+### Effect preview🚀
+
+![yolo](https://img-blog.csdnimg.cn/b962fcd1bfa841399226ca564f22a385.gif#pic_center)
+
 
 
 ### Pre-trained weights 🚀
