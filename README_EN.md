@@ -20,7 +20,7 @@
 
 [特性🚀](#main-features) • [使用🍉](#usage) • [文档📒](https://github.com/iscyy/yoloair) • [报告问题🌟](https://github.com/iscyy/yoloair/issues/new) • [更新💪](#-to-do) • [讨论✌️](https://github.com/iscyy/yoloair/discussions)
 
-![https://github.com/iscyy/yoloair](https://img-blog.csdnimg.cn/24eed5a38f5a40f9937a1b2fd07579ea.gif#pic_center)
+![https://github.com/iscyy/yoloair](https://img-blog.csdnimg.cn/f7045ecc4f90430cafc276540dddd702.gif#pic_center)
 
 </div>
 
@@ -36,6 +36,10 @@
 Built-in YOLOv5, YOLOv7, YOLOv6, YOLOX, YOLOR, Transformer, PP-YOLO, PP-YOLOv2, PP-YOLOE, PP-YOLOEPlus, Scaled_YOLOv4, YOLOv3, YOLOv4, YOLO-Facev2, TPH-YOLO, YOLOv5Lite, SPD-YOLO, SlimNeck -Model network structures such as YOLO and PicoDet (continuously updated 🚀)...
 
 The above multiple detection algorithms and related multi-task models use a unified model code framework, which is integrated in the YOLOAir library, and the application method is unified. It is convenient for researchers to improve the algorithm model of the paper, compare the models, and realize the diversification of the network combination. It includes lightweight models and models with higher accuracy, which are reasonably selected according to the scene, and strike a balance between accuracy and speed. At the same time, the library supports decoupling of different structures and module components to make modules componentized. By combining different module components, users can customize and build different detection models according to different data sets or different business scenarios.
+
+<img src='https://img-blog.csdnimg.cn/1589c7f744004401b9d88132de35abe8.jpeg#pic_center' alt='ingishvcn'>
+
+Support integrated multi-task, including object detection, instance segmentation, image classification, pose estimation, face detection, object tracking and other tasks
 
 ```
 
@@ -82,10 +86,6 @@ ______________________________________________________________________
 🚀 Support more YOLO series algorithm model improvements (continuous update...)
 
 The YOLOAir algorithm library summarizes a variety of mainstream YOLO series detection models, and a set of codes integrates multiple models:
-
-|Object detection|Object detection|
-:-------------------------:|:-------------------------:
-<img src='docs/image/test.jpg' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='300px' height='180px'  alt='ingishvcn'>
 
 - Built-in integrated YOLOv5 model network structure, YOLOv7 model network structure, YOLOv6 model network structure, PP-YOLO model network structure, PP-YOLOv2 model network structure, PP-YOLOE model network structure, PP-YOLOEPlus model network structure, YOLOR model network structure , YOLOX model network structure, ScaledYOLOv4 model network structure, YOLOv4 model network structure, YOLOv3 model network structure, YOLO-FaceV2 model network structure, TPH-YOLOv5 model network structure, SPD-YOLO model network structure, SlimNeck-YOLO model network structure, YOLOv5 -Lite model network structure, PicoDet model network structure, etc. are continuously updated...
 
@@ -244,21 +244,25 @@ ______________________________________________________________________
 
 ### Effect preview🚀
 
-|Object detection|Object detection|
+|Object detection|instance segmentation|
 :-------------------------:|:-------------------------:
-<img src='docs/image/test.jpg' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='docs/image/zebra.jpg' width='300px' height='180px'  alt='ingishvcn'>
+<img src='https://img-blog.csdnimg.cn/0b04579f80d145d7bd2e854753e9f367.jpeg' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/adb10e3c47e440f9acf4a183df9acf05.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
 
-|Image classification|Detection and segmentation|
+|Image classification|instance segmentation|
 :-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
+<img src='https://img-blog.csdnimg.cn/b1ca7795b70c4b6086b5e6b43b687c1b.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/d29f6d6fa0624c5cacf107bd5d1a5fa2.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
 
-|Detection and segmentation|Object tracking|
+|instance segmentation|Object tracking|
 :-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/f0a70ccc62864f3996dc9b6ecbbd0c34.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/d9ae8953fb394a74a6b1096a401fc315.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
+<img src='https://img-blog.csdnimg.cn/0ce7c7584f2149c980d7e292fc1fcd24.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/d9ae8953fb394a74a6b1096a401fc315.jpeg#pic_center' width='300px' height='180px'  alt='ingishvcn'>
+
+|pose estimation|face detection|
+:-------------------------:|:-------------------------:
+<img src='https://img-blog.csdnimg.cn/01f41103dc6c416aaeeb4577b87bb363.gif#pic_center' width='300px' height='260px' alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/d18a095621b64da69d2a712fa5613976.gif#pic_center' width='300px' height='260px'   alt='ingishvcn'>
 
 |Heatmap visualization01|Heatmap visualization02|
 :-------------------------:|:-------------------------:
-<img src='https://img-blog.csdnimg.cn/eef8f911702242a5bb3e10a2e3188ca6.jpeg#pic_center' width='300px' height='260px' alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/a22986632c25462cbe6abddc75a01ca5.jpeg#pic_center' width='300px' height='260px'   alt='ingishvcn'>
+<img src='https://img-blog.csdnimg.cn/eef8f911702242a5bb3e10a2e3188ca6.jpeg#pic_center' width='300px' height='180px' alt='ingishvcn'>  |  <img src='https://img-blog.csdnimg.cn/a22986632c25462cbe6abddc75a01ca5.jpeg#pic_center' width='300px' height='180px'   alt='ingishvcn'>
 
 ![yolo](https://img-blog.csdnimg.cn/b962fcd1bfa841399226ca564f22a385.gif#pic_center)
 
