@@ -8,8 +8,7 @@ anchors:
   - [30,61, 62,45, 59,119]  # P4/16
   - [116,90, 156,198, 373,326]  # P5/32
 
-# backbone ResNet50vd_dcn:resnet50vd with deformable conv
-# neck FPN with dropBlock,CoordConv
+# PPYOLO by yoloair
 backbone:
   # [from, number, module, args]
   [
@@ -23,10 +22,10 @@ backbone:
 head:
   [
     [-1, 1, CoordConv, [2048, 512, 1, 0]],
-    [-1, 1, PPConvBlock, [512, False, True]],  # arg[1]:use DropBlocks arg[2]:use CoordConv
+    [-1, 1, PPConvBlock, [512, False, True]],  # 
     [-1, 1, SPP, [512]],
     [-1, 1, PPConvBlock, [512, True, True]],
-    [-1 ,1, CoordConv, [512, 1024, 3, 1]],        #9 out 1024 channel
+    [-1 ,1, CoordConv, [512, 1024, 3, 1]],        #9 
 
     [8, 1, CoordConv, [512, 256, 1, 0]], #10
     [-1, 1, nn.Upsample, [None, 2, 'nearest']],
