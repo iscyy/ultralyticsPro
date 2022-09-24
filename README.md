@@ -62,7 +62,7 @@ ______________________________________________________________________
 - 集成支持 Adaptive Training Sample Selection 标签分配策略🌟
 - 集成支持 Task Alignment Learning 标签分配策略🌟
 - 完成更新集成 PPYOLOE 算法模型🌟
-- 完成更新集成 PPYOLOE Plus 算法模型🌟
+- 完成更新集成 PPYOLOE Plus 算法模型🌟  
 News:
 - 集成支持 AutoAssign Label Assignment🌟
 - 集成支持 Dual Weighting Label Assignment🌟
