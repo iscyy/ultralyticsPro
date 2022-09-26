@@ -54,7 +54,6 @@ ______________________________________________________________________
 - 完成更新支持 **图神经网络**🌟 在YOLO中的应用🌟
 - 完成更新支持 多模态🔥 在YOLO中的应用🌟
 - 完成更新支持 30+ 种 **Attention注意力机制**🌟
-- 完成更新支持 **多种Head检测头**🌟
 - 完成更新支持 YOLOv6模型-v2.0 paper 版本🌟
 - 完成更新支持 **YOLO系列网络模型热力图可视化**🌟
 (GardCAM、GardCAM++等)支持YOLOv3、YOLOv3-SPP、YOLOv4、YOLOv5、YOLOR、YOLOv7、Scaled_YOLOv4、TPH-YOLO、SPD-YOLO、PP-YOLO以及自定义网络模型等模型🌟
@@ -67,6 +66,7 @@ News:
 - 集成支持 AutoAssign Label Assignment🌟
 - 集成支持 Dual Weighting Label Assignment🌟
 - 集成支持 FreeAnchor 算法🌟
+- 集成支持 多种 Head 检测头 🌟
 - 其他 各种🌟
 ______________________________________________________________________
 
@@ -81,9 +81,307 @@ ______________________________________________________________________
 
 YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集成多种模型: 
 
-- 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOv6 模型网络结构、PP-YOLO 模型网络结构、PP-YOLOv2 模型网络结构、PP-YOLOE 模型网络结构、PP-YOLOEPlus 模型网络结构、YOLOR 模型网络结构、YOLOX 模型网络结构、ScaledYOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、SPD-YOLO模型网络结构、SlimNeck-YOLO模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
+- 内置集成 YOLOv5 模型网络结构、YOLOv7 模型网络结构、 YOLOv6 模型网络结构、PP-YOLO 模型网络结构、PP-YOLOE 模型网络结构、PP-YOLOEPlus 模型网络结构、YOLOR 模型网络结构、YOLOX 模型网络结构、ScaledYOLOv4 模型网络结构、YOLOv4 模型网络结构、YOLOv3 模型网络结构、YOLO-FaceV2模型网络结构、TPH-YOLOv5模型网络结构、SPD-YOLO模型网络结构、SlimNeck-YOLO模型网络结构、YOLOv5-Lite模型网络结构、PicoDet模型网络结构等持续更新中...
 
-🚀支持加载YOLOv3、YOLOv4、YOLOv5、YOLOv7、YOLOR、Scaled_YOLO等网络的官方预训练权重进行迁移学习
+
+🚀支持更多的网络模型组件
+- 如表
+
+<details open>
+<div align="center">
+  <b>YOLOAir Structural Module Components</b>
+</div>
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b>Backbones</b>
+      </td>
+      <td>
+        <b>Necks</b>
+      </td>
+      <td>
+        <b>Head</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+      <ul>
+        <li>CSPDarkNet系列</li>
+        <li>HorNet系列</li>
+        <li>ResNet系列</li>
+        <li>RegNet系列</li>
+        <li>ShuffleNet系列</li>
+        <li>RepLKNet系列</li>
+        <li>MobileNet系列</li>
+        <li>EfficientNet系列</li>
+        <li>ConvNext系列</li>
+        <li>Ghost系列</li>
+        <li>重参数化系列</li>
+        <li>RepVGG系列</li>
+        <li>RepMLP系列</li>
+        <li>ACNet系列</li>
+        <li>RepConv系列</li>
+        <li>OREPA系列</li>
+        <li>Mobileone系列</li>
+        <li>自注意力Transformer系列</li>
+        <li>MobileViT系列</li>
+        <li>BoTNet-Transfomrer</li>
+        <li>CoTNet-Transfomrer</li>
+        <li>Swin-Transfomrer</li>
+        <li>Swin-Transfomrer(v2)</li>
+        <li>CMT Transformer</li>
+        <li>PvT Transformer</li>
+        <li>PvT Transformer(v2)</li>
+        <li>XCiT Transformer</li>
+        <li>LVViT Transformer</li>
+        <li>Neighborhood-Attention-Transformer</li>
+        <li>其他 20种+ transformer系列</li>
+      </ul>
+      </td>
+      <td>
+      <ul>
+        <li>PANet</li>
+        <li>RepPAN</li>
+        <li>BiFPN</li>
+        <li>CSPPAN</li>
+        <li>SlimNeck</li>
+        <li>ELANPAN</li>
+        <li>GSNeck</li>
+      </ul>
+      </td>
+      <td>
+        <ul>
+          <li>YOLOv4Head</li>
+          <li>YOLOv5Head</li>
+          <li>YOLOv6 Efficient decoupled head </li>
+          <li>YOLOv7 IDetect Head</li>
+          <li>YOLOv7 IAuxDetect Head</li>
+          <li>PPYOLOE Efficient Task-aligned head with DFL and VFL</li>
+          <li>YOLOX DetectX Head</li>
+          <li>TOODHead</li>
+          <li>自适应空间特征融合 检测头ASFF Head</li>
+          <li>YOLOR 隐式学习 Head</li>
+          <li>EH-Head</li>
+          <li>Dual Weighting Head</li>
+          <li>FCOS Head</li>
+          <li>Dynamic Head</li>
+          ...
+        </ul>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+<details open>
+<div align="center">
+  <b>YOLOAir Module Components</b>
+</div>
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b>Attention注意力机制</b>
+      </td>
+      <td>
+        <b>标签分配策略</b>
+      </td>
+      <td>
+        <b>IoU损失函数</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+      <ul>
+        <li>Self Attention</li>
+        <li>Contextual Transformer</li>
+        <li>Bottleneck Transformer</li>
+        <li>S2-MLP Attention</li>
+        <li>AxialAttention</li>
+        <li>DANet</li>
+        <li>DoubleAttention</li>
+        <li>GlobalContextBlock</li>
+        <li>ParNetAttention</li>
+        <li>PolarizedSelfAttention</li>
+        <li>SpatialGroupEnhance copy</li>
+        <li>TripletAttention</li>
+        <li>SK Attention</li>
+        <li>CBAM Attention</li>
+        <li>SE Attention</li>
+        <li>Coordinate attention</li>
+        <li>NAM Attention</li>
+        <li>GAM Attention</li>
+        <li>ECA Attention</li>
+        <li>Shuffle Attention</li>
+        <li>CrissCrossAttention</li>
+        <li>SOCAttention</li>
+        <li>SimAM Attention</li>
+        <li>CrissCrossAttention</li>
+        <li>CrissCrossAttention</li>
+      </ul>
+      </td>
+      <td>
+      <ul>
+          <li>Multi Anchor策略</li>
+          <li>YOLOv5 标签分配策略</li>
+          <li>SimOTA 标签分配策略</li>
+          <li>YOLOv7 标签分配策略</li>
+          <li>Adaptive Training Sample Selection 标签分配策略</li>
+          <li>FreeAnchor 标签分配策略</li>
+          <li>AutoAssign 标签分配策略</li>
+          <li>Task Alignment Learning 标签分配策略</li>
+          <li>Dual Weighting 标签分配策略</li>
+          <li>Probabilistic Anchor Assignment 锚分配策略</li>
+          <li>其他改进的标签分配策略</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>CIoU</li>
+          <li>DIoU</li>
+          <li>GIoU</li>
+          <li>EIoU</li>
+          <li>SIoU</li>
+          <li>alpha IOU</li>      
+          ...
+        </ul>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+<details open>
+<div align="center">
+  <b>Module Components</b>
+</div>
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b>Loss</b>
+      </td>
+      <td>
+        <b>NMS</b>
+      </td>
+      <td>
+        <b>数据增强</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+      <ul>
+        <li>ComputeLoss(v3)</li>
+        <li>ComputeLoss(v4)</li>
+        <li>ComputeLoss(v5)</li>
+        <li>ComputeLoss(v6)</li>
+        <li>ComputeLoss(X)</li>
+        <li>ComputeLossAuxOTA(v7)</li>
+        <li>ComputeLossOTA(v7)</li>
+        <li>ComputeNWDLoss</li>
+        <li>ComputeLoss_PP</li>
+        <li>其他Loss</li>
+      </ul>
+      </td>
+      <td>
+      <ul>
+        <li>NMS</li>
+        <li>Merge-NMS</li>
+        <li>Soft-NMS</li>
+        <li>CIoU_NMS</li>
+        <li>DIoU_NMS</li>
+        <li>GIoU_NMS</li>
+        <li>EIoU_NMS</li>
+        <li>SIoU_NMS</li>
+        <li>Soft-SIoUNMS</li>
+        <li>Soft-CIoUNMS</li>
+        <li>Soft-DIoUNMS</li>
+        <li>Soft-EIoUNMS</li>
+        <li>Soft-GIoUNMS</li>
+        <li>SimSPPF</li>
+        <li>SimSPPF</li>
+        <li>SimSPPF</li>  
+      </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Mosaic</li>
+          <li>Copy paste</li>
+          <li>Random affine(Rotation, Scale, Translation and Shear)</li>
+          <li>MixUp</li>
+          <li>HSV</li>
+          <li>Random horizontal flip</li> 
+          ...
+        </ul>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+</details>
+
+
+<details open>
+<div align="center">
+  <b>YOLOAir Module Components</b>
+</div>
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b>空间金字塔池化结构</b>
+      </td>
+      <td>
+        <b>模块化组件</b>
+      </td>
+      <td>
+        <b>AnchorBased / AnchorFree</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <ul>
+        <li>SPP</li>
+        <li>SPPF</li>
+        <li>ASPP</li>
+        <li>RFB</li>
+        <li>SPPCSPC</li>
+        <li>SPPFCSPC</li>
+        <li>SimSPPF</li>
+      </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focus, CrossConv,BottleneckCSP, C3, C3TR, C3SPP, C3Ghost, C3HB, C3RFEM, MultiSEAM, SEAM, C3STR, SPPCSPC, RepConv, BoT3, Air, CA, CBAM, Involution, Stem, ResCSPC, ResCSPB, ResXCSPB, ResXCSPC, BottleneckCSPB, BottleneckCSPC, ASPP, BasicRFB, SPPCSPC_group, HorBlock, CNeB,C3GC ,C3C2, nn.ConvTranspose2d, DWConvblock, RepVGGBlock, CoT3, ConvNextBlock, SPPCSP, BottleneckCSP2, DownC, BottleneckCSPF, RepVGGBlock, ReOrg, DWT, MobileOne,HorNet...</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>YOLOv5、YOLOv7、YOLOv3、YOLOv4、YOLOR、ScaledYOLOv4、PPYOLO、PPYOLOv2、Improved-YOLOv5、Improved-YOLOv7</li> 
+          <li>YOLOX、YOLOv6 (Paper)、PPYOLOE、PPYOLOE+</li>
+          ...
+        </ul>
+      </td>
+    </tr>
+</td>
+    </tr>
+  </tbody>
+</table>
+</details>
+
+
+<details>
 
 🚀支持更多Backbone
 
@@ -224,6 +522,10 @@ Conv, GhostConv, Bottleneck, GhostBottleneck, SPP, SPPF, DWConv, MixConv2d, Focu
 
 🚀支持更多数据增强  
 - Mosaic、Copy paste、Random affine(Rotation, Scale, Translation and Shear)、MixUp、Augment HSV(Hue, Saturation, Value、Random horizontal flip  
+
+</details>
+
+🚀支持加载YOLOv3、YOLOv4、YOLOv5、YOLOv7、YOLOR、Scaled_YOLO等网络的官方预训练权重进行迁移学习
 
 🚀 YOLO系列网络模型热力图可视化(GardCAM、GardCAM++等)
 支持YOLOv3、、YOLOv3-SPP、YOLOv4、YOLOv5、YOLOR、YOLOv7Scaled_YOLOv4、TPH-YOLO、SPD-YOLO以及自定义网络模型等模型 (YOLOAir(Beta版本内测)🔥已支持)
