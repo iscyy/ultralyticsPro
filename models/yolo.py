@@ -374,11 +374,18 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 n = 1
         elif m in [ReOrg, DWT]:
             c2 = ch[f] * 4
-        elif m in [S2Attention, SimSPPF, ACmix, CrissCrossAttention, SOCA, ShuffleAttention, SEAttention, SimAM, SKAttention]:
+        elif m in [S2Attention, SimSPPF, ACmix, CrissCrossAttention, SOCA, ShuffleAttention, SEAttention, SKAttention]:
             c1, c2 = ch[f], args[0]
             if c2 != no:  # if not output
                 c2 = make_divisible(c2 * gw, 8)
             args = [c1, *args[1:]]
+        elif m is nn.BatchNorm2d:
+            args = [ch[f]]
+        elif m is SimAM:
+            c1, c2 = ch[f], args[0]
+            if c2 != no:  # if not output
+                c2 = make_divisible(c2 * gw, 8)
+            args = [c1, c2, *args[1:]]
         elif m is nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
