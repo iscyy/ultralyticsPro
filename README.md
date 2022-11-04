@@ -50,25 +50,7 @@ ______________________________________________________________________
 
 ### 🌟 Beta Supported Updates
 下列功能 YOLOAir-Beta版本内测 已支持🔥
-
-- 完成更新支持 **20+ 种 Transformer系列及其变种主干网络**🌟、**多种MLP网络🌟** 以及 **大部分重参数化结构模型网络** 
-- 完成更新支持 **图神经网络**🌟 在YOLO中的应用🌟
-- 完成更新支持 多模态🔥 在YOLO中的应用🌟
-- 完成更新支持 30+ 种 **Attention注意力机制**🌟
-- 完成更新支持 YOLOv6模型-v2.0 paper 版本🌟
-- 完成更新支持 **YOLO系列网络模型热力图可视化**🌟
-(GardCAM、GardCAM++等)支持YOLOv3、YOLOv3-SPP、YOLOv4、YOLOv5、YOLOR、YOLOv7、Scaled_YOLOv4、TPH-YOLO、SPD-YOLO、PP-YOLO以及自定义网络模型等模型🌟
-- 完成更新集成 TOOD 算法🌟
-- 集成支持 Adaptive Training Sample Selection 标签分配策略🌟
-- 集成支持 Task Alignment Learning 标签分配策略🌟
-- 完成更新集成 PPYOLOE 算法模型🌟
-- 完成更新集成 PPYOLOE Plus 算法模型🌟  
-News:
-- 集成支持 AutoAssign Label Assignment🌟
-- 集成支持 Dual Weighting Label Assignment🌟
-- 集成支持 FreeAnchor 算法🌟
-- 集成支持 多种 Head 检测头 🌟
-- 其他 各种🌟
+- 其他 功能🌟
 ______________________________________________________________________
 
 ### 🌟 To Do
@@ -118,26 +100,8 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
         <li>EfficientNet系列</li>
         <li>ConvNext系列</li>
         <li>Ghost系列</li>
-        <li>重参数化系列</li>
         <li>RepVGG系列</li>
-        <li>RepMLP系列</li>
-        <li>ACNet系列</li>
-        <li>RepConv系列</li>
-        <li>OREPA系列</li>
-        <li>Mobileone系列</li>
-        <li>自注意力Transformer系列</li>
-        <li>MobileViT系列</li>
-        <li>BoTNet-Transfomrer</li>
-        <li>CoTNet-Transfomrer</li>
-        <li>Swin-Transfomrer</li>
-        <li>Swin-Transfomrer(v2)</li>
-        <li>CMT Transformer</li>
-        <li>PvT Transformer</li>
-        <li>PvT Transformer(v2)</li>
-        <li>XCiT Transformer</li>
-        <li>LVViT Transformer</li>
-        <li>Neighborhood-Attention-Transformer</li>
-        <li>其他 20种+ transformer系列</li>
+        <li>transformer系列</li>
       </ul>
       </td>
       <td>
@@ -158,9 +122,7 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
           <li>YOLOv6 Efficient decoupled head </li>
           <li>YOLOv7 IDetect Head</li>
           <li>YOLOv7 IAuxDetect Head</li>
-          <li>PPYOLOE Efficient Task-aligned head with DFL and VFL</li>
           <li>YOLOX DetectX Head</li>
-          <li>TOODHead</li>
           <li>自适应空间特征融合 检测头ASFF Head</li>
           <li>YOLOR 隐式学习 Head</li>
           <li>EH-Head</li>
@@ -223,7 +185,6 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
         <li>SOCAttention</li>
         <li>SimAM Attention</li>
         <li>CrissCrossAttention</li>
-        <li>CrissCrossAttention</li>
       </ul>
       </td>
       <td>
@@ -232,10 +193,8 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
           <li>YOLOv5 标签分配策略</li>
           <li>SimOTA 标签分配策略</li>
           <li>YOLOv7 标签分配策略</li>
-          <li>Adaptive Training Sample Selection 标签分配策略</li>
           <li>FreeAnchor 标签分配策略</li>
           <li>AutoAssign 标签分配策略</li>
-          <li>Task Alignment Learning 标签分配策略</li>
           <li>Dual Weighting 标签分配策略</li>
           <li>Probabilistic Anchor Assignment 锚分配策略</li>
           <li>其他改进的标签分配策略</li>
@@ -288,9 +247,6 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
         <li>ComputeLoss(X)</li>
         <li>ComputeLossAuxOTA(v7)</li>
         <li>ComputeLossOTA(v7)</li>
-        <li>ComputeNWDLoss</li>
-        <li>ComputeLoss_PP</li>
-        <li>其他Loss</li>
       </ul>
       </td>
       <td>
@@ -430,7 +386,6 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 -  自适应空间特征融合 检测头ASFF Head;
 -  YOLOv6-v2.0 Efficient decoupled head;
 -  YOLOv7检测头IAuxDetect Head, IDetect Head等;
--  PPYOLOE Efficient Task-aligned head with DFL and VFL
 
 -  其他不同检测头
 
@@ -487,8 +442,6 @@ YOLOAir 算法库汇总了多种主流YOLO系列检测模型，一套代码集�
 - YOLOv5 标签分配策略
 - SimOTA 标签分配策略
 - YOLOv7 标签分配策略
-- Adaptive Training Sample Selection 标签分配策略
-- Task Alignment Learning 标签分配策略
 - AutoAssign 标签分配策略🌟
 - Dual Weighting 标签分配策略🌟
 - FreeAnchor 标签分配策略🌟
@@ -854,6 +807,5 @@ ______________________________________________________________________
 [https://github.com/positive666/yolov5_research/](https://github.com/positive666/yolov5_research)  
 [https://github.com/ppogg/YOLOv5-Lite](https://github.com/ppogg/YOLOv5-Lite)  
 [https://github.com/Gumpest/YOLOv5-Multibackbone](https://github.com/Gumpest/YOLOv5-Multibackbone-Compression)  
-[https://github.com/cv516Buaa/tph-yolov5](https://github.com/cv516Buaa/tph-yolov5)
 
 </details>
