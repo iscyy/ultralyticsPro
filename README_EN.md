@@ -5,7 +5,7 @@ English | [简体中文](./README.md)
 The YOLOAir algorithm library is a combination toolbox of a series of YOLO detection algorithms based on PyTorch. Used to **combine different modules to build different networks**.  
 
 <div align='center'>
-    <img src='docs/image/logo02.jpg' width='800px' alt='ingishvcn'>
+    <img width="850" src="https://img-blog.csdnimg.cn/11d5f1f403f74cff9c2f70a0c3b92de4.png"></a>
 </div>
 
 ✨Built-in model network structures such as YOLOv5, YOLOv7, YOLOX, YOLOR, Transformer, Scaled_YOLOv4, YOLOv3, YOLOv4, YOLO-Facev2, TPH-YOLOv5, YOLOv5Lite, PicoDet (continuously updated🚀)...
