@@ -1,5 +1,12 @@
 ## YOLO Air : Makes improvements easy again
 
+#### News
+更新 [🔗 YOLOAir2](https://github.com/iscyy/yoloair2) 目标检测代码库 ☁️💡🎈
+- **Based on the YOLOv7 framework, Pure for improving YOLOv7**
+
+- [YOLOAir2 ](https://github.com/iscyy/yoloair2) is the second version of the YOLOAir series, The framework is based on YOLOv7, including YOLOv7, YOLOv6, YOLOv5, YOLOX, YOLOR, YOLOv4, YOLOv3, Transformer, Attention and Improved-YOLOv7... 
+- As a supplement and perfection of YOLOAir
+
 <div align="center">
   <p>
     <a align="center" href="https://github.com/iscyy/yoloair" target="_blank">
@@ -584,11 +591,6 @@ $ python wbf.py
 ```
 ______________________________________________________________________
 
-### 论文分享 <img title="" src="https://user-images.githubusercontent.com/48054808/157800467-2a9946ad-30d1-49a9-b9db-ba33413d9c90.png" alt="" width="20">
-
-FightingCV公众号每天分享前沿论文动态  
-(公众号回复加群,添加小助手加交流群)      
-______________________________________________________________________
 
 ### Performance
 | Model                                                                                                | size<br><sup>(pixels) | mAP<sup>val<br>0.5:0.95 | mAP<sup>val<br>0.5 | Speed<br><sup>CPU b1<br>(ms) | Speed<br><sup>V100 b1<br>(ms) | Speed<br><sup>V100 b32<br>(ms) | params<br><sup>(M) | FLOPs<br><sup>@640 (B) | Weights
@@ -677,6 +679,10 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
+### 论文分享
+
+FightingCV公众号每天分享前沿论文动态 
+______________________________________________________________________
 
 ### 未来增强✨
 后续会持续建设和完善 YOLOAir 生态  
