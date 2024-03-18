@@ -1,4 +1,4 @@
-### 🌟 最新改进点更新🚀2024
+### 🌟 全新的YOLOAir2024版本来袭，最新改进点更新🚀2024
 2024.03
 
 新增Dysample上采样改进点：ICCV2023论文：[Dysample上采样改进](./configs2024/yolov5-other/yolov5-dysample.yaml)
