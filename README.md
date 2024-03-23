@@ -1,4 +1,40 @@
+## 全新的 UltralyticsPro 项目来袭🚀
+
+🔥🔥🔥专注于YOLOv8改进，NEW - YOLOv8 🚀 in PyTorch >, Support to improve Backbone, Neck, Head, Loss, IoU, LA, NMS and other modules🚀 Makes YOLOv8 improvements easy again
+
+🌟 全新的YOLOv8改进项目**ultralyticsPro**来袭，最新改进点更新🚀2024
+
+**一、 改进YOLOv8 免费内容**<br />本项目持续会更新一些免费的改进点，每周都会更新<br />
+
+3.22更新：
+注意力机制：[ultralytics/cfg/models/cfg2024/YOLOv8-Attention](https://github.com/iscyy/ultralyticsPro/tree/main/ultralytics/cfg/models/cfg2024/YOLOv8-Attention)  
+
+GAM 注意力机制、  
+SA 注意力机制、  
+SimAM 注意力机制、  
+SK 注意力机制、  
+SOCA 注意力机制、  
+CBAM 注意力机制、  
+
+3.23更新：
+金字塔结构：[ultralytics/cfg/models/cfg2024/YOLOv8-金字塔结构改进](https://github.com/iscyy/ultralyticsPro/blob/main/ultralytics/cfg/models/cfg2024/YOLOv8-%E9%87%91%E5%AD%97%E5%A1%94%E7%BB%93%E6%9E%84%E6%94%B9%E8%BF%9B/YOLOv8-ASPP.yaml)  
+
+SPPELAN、  
+SimSPPF、  
+BasicRFB、  
+ASPP、  
+SPPFCSPC  
+
+更多更新，详细点击👉：[https://github.com/iscyy/ultralyticsPro](https://github.com/iscyy/ultralyticsPro)
+
+----------------------------
+
 ### 🌟 全新的YOLOAir2024版本来袭，最新改进点更新🚀2024
+
+---------
+
+YOLOv5项目更新
+
 2024.03
 
 新增Dysample上采样改进点：ICCV2023论文：[Dysample上采样改进](./configs2024/yolov5-other/yolov5-dysample.yaml)
